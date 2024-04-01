@@ -5,28 +5,25 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.*;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
-import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import org.noble.helium.helpers.Coordinates;
+import org.noble.helium.helpers.Dimensions;
 
-import java.util.ArrayList;
+import java.util.Map;
 
 public class HeliumMain extends Game {
   private Environment m_environment;
 	private PerspectiveCamera m_camera;
   private CameraInputController m_cameraInput;
-  private ModelBuilder m_modelBuilder;
+  private ModelHandler m_modelHandler;
   private ModelBatch m_modelBatch;
-  private ArrayList<Model> m_models;
-  private ArrayList<ModelInstance> m_modelInstances;
 
   @Override
   public void create() {
-    m_models = new ArrayList<>();
-    m_modelInstances = new ArrayList<>();
+    m_modelHandler = ModelHandler.getInstance();
 
     m_camera = new PerspectiveCamera();
     m_camera.fieldOfView = 67;
@@ -40,12 +37,12 @@ public class HeliumMain extends Game {
     m_cameraInput = new CameraInputController(m_camera);
     Gdx.input.setInputProcessor(m_cameraInput);
 
-    m_modelBuilder = new ModelBuilder();
-    m_models.add(m_modelBuilder.createBox(5f, 5f, 5f,
-        new Material(ColorAttribute.createDiffuse(Color.GREEN)),
-        VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal));
-
-    m_models.forEach(model -> m_modelInstances.add(new ModelInstance(model)));
+    m_modelHandler.addNewShape(
+        "cube-01", ModelHandler.Shape.CUBE, Color.YELLOW,
+        new Coordinates(0f,0f,0f), new Dimensions(20f,10f,10f));
+    m_modelHandler.addNewShape(
+        "sphere-01", ModelHandler.Shape.SPHERE, Color.RED,
+        new Coordinates(20f,20f,20f), new Dimensions(10f,10f,10f));
 
     m_environment = new Environment();
     m_environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1.0f));
@@ -56,6 +53,7 @@ public class HeliumMain extends Game {
     m_camera.update();
   }
 
+  float a = 0.0f;
   @Override
   public void render() {
     m_cameraInput.update();
@@ -64,7 +62,12 @@ public class HeliumMain extends Game {
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
     m_modelBatch.begin(m_camera);
-		m_modelInstances.forEach(instance -> m_modelBatch.render(instance,m_environment));
+
+    for (Map.Entry<String, ModelInstance> entry : m_modelHandler.getModelInstances().entrySet()) {
+      m_modelBatch.render(entry.getValue(), m_environment);
+    }
+
+    a += 1.0f;
     m_modelBatch.end();
   }
 
