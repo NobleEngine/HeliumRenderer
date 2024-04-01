@@ -18,12 +18,12 @@ public class HeliumMain extends Game {
   private Environment m_environment;
 	private PerspectiveCamera m_camera;
   private CameraInputController m_cameraInput;
-  private ModelHandler m_modelHandler;
+  private SimpleModelHandler m_simpleModelHandler;
   private ModelBatch m_modelBatch;
 
   @Override
   public void create() {
-    m_modelHandler = ModelHandler.getInstance();
+    m_simpleModelHandler = SimpleModelHandler.getInstance();
 
     m_camera = new PerspectiveCamera();
     m_camera.fieldOfView = 67;
@@ -37,12 +37,14 @@ public class HeliumMain extends Game {
     m_cameraInput = new CameraInputController(m_camera);
     Gdx.input.setInputProcessor(m_cameraInput);
 
-    m_modelHandler.addNewShape(
-        "cube-01", ModelHandler.Shape.CUBE, Color.YELLOW,
+    m_simpleModelHandler.addNewShape(
+        "cube-01", SimpleModelHandler.Shape.CUBE, Color.YELLOW,
         new Coordinates(0f,0f,0f), new Dimensions(20f,10f,10f));
-    m_modelHandler.addNewShape(
-        "sphere-01", ModelHandler.Shape.SPHERE, Color.RED,
+    m_simpleModelHandler.addNewShape(
+        "sphere-01", SimpleModelHandler.Shape.SPHERE, Color.RED,
         new Coordinates(20f,20f,20f), new Dimensions(10f,10f,10f));
+    m_simpleModelHandler.addNewGLTFModel("slime", "models/Alien Slime/Alien Slime.gltf",
+        new Coordinates(10f, 10f, 10f));
 
     m_environment = new Environment();
     m_environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1.0f));
@@ -63,11 +65,13 @@ public class HeliumMain extends Game {
 
     m_modelBatch.begin(m_camera);
 
-    for (Map.Entry<String, ModelInstance> entry : m_modelHandler.getModelInstances().entrySet()) {
+    for (Map.Entry<String, ModelInstance> entry : m_simpleModelHandler.getModelInstances().entrySet()) {
       m_modelBatch.render(entry.getValue(), m_environment);
     }
 
-    a += 1.0f;
+    m_simpleModelHandler.getModelInstances().get("slime").transform.setToTranslation(a, 10f, 10f);
+
+    a += 0.25f;
     m_modelBatch.end();
   }
 
