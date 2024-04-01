@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.*;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
@@ -38,8 +39,8 @@ public class HeliumMain extends Game {
     Gdx.input.setInputProcessor(m_cameraInput);
 
     m_simpleModelHandler.addNewShape(
-        "cube-01", SimpleModelHandler.Shape.CUBE, Color.YELLOW,
-        new Coordinates(0f,0f,0f), new Dimensions(20f,10f,10f));
+        "cube-01", SimpleModelHandler.Shape.CUBE, new Texture(Gdx.files.internal("textures/dirt.png")),
+        new Coordinates(0f,0f,0f), new Dimensions(10f,10f,10f));
     m_simpleModelHandler.addNewShape(
         "sphere-01", SimpleModelHandler.Shape.SPHERE, Color.RED,
         new Coordinates(20f,20f,20f), new Dimensions(10f,10f,10f));
@@ -67,9 +68,6 @@ public class HeliumMain extends Game {
     for (Map.Entry<String, HeliumModelInstance> entry : m_simpleModelHandler.getModelInstances().entrySet()) {
       m_modelBatch.render(entry.getValue(), m_environment);
     }
-    HeliumModelInstance instance = m_simpleModelHandler.getModelInstances().get("slime");
-    Coordinates pos = instance.getPosition();
-    instance.setPosition(new Coordinates(pos.getX(), pos.getY() + 0.1f, pos.getZ()));
 
     m_modelBatch.end();
   }
