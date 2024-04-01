@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
-import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import net.mgsx.gltf.loaders.gltf.GLTFLoader;
@@ -18,7 +17,7 @@ public class SimpleModelHandler {
   private static SimpleModelHandler m_instance;
   private final ModelBuilder m_modelBuilder;
   private final GLTFLoader m_modelLoader;
-  private final HashMap<String, ModelInstance> m_modelInstances;
+  private final HashMap<String, HeliumModelInstance> m_modelInstances;
 
   private SimpleModelHandler() {
     m_modelBuilder = new ModelBuilder();
@@ -33,7 +32,7 @@ public class SimpleModelHandler {
     return m_instance;
   }
 
-  public HashMap<String, ModelInstance> getModelInstances() {
+  public HashMap<String, HeliumModelInstance> getModelInstances() {
     return m_modelInstances;
   }
 
@@ -51,16 +50,14 @@ public class SimpleModelHandler {
           VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
     }
 
-    ModelInstance instance = new ModelInstance(model);
-    instance.transform.setToTranslation(coords.getVector3());
+    HeliumModelInstance instance = new HeliumModelInstance(model, coords);
 
     m_modelInstances.put(name, instance);
   }
 
   public void addNewGLTFModel(String name, String path, Coordinates coords) {
     Model model = m_modelLoader.load(Gdx.files.internal(path)).scene.model;
-    m_modelInstances.put(name, new ModelInstance(model));
-    m_modelInstances.get(name).transform.setToTranslation(coords.getVector3());
+    m_modelInstances.put(name, new HeliumModelInstance(model, coords));
   }
 
   public enum Shape {

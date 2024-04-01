@@ -55,7 +55,6 @@ public class HeliumMain extends Game {
     m_camera.update();
   }
 
-  float a = 0.0f;
   @Override
   public void render() {
     m_cameraInput.update();
@@ -65,13 +64,13 @@ public class HeliumMain extends Game {
 
     m_modelBatch.begin(m_camera);
 
-    for (Map.Entry<String, ModelInstance> entry : m_simpleModelHandler.getModelInstances().entrySet()) {
+    for (Map.Entry<String, HeliumModelInstance> entry : m_simpleModelHandler.getModelInstances().entrySet()) {
       m_modelBatch.render(entry.getValue(), m_environment);
     }
+    HeliumModelInstance instance = m_simpleModelHandler.getModelInstances().get("slime");
+    Coordinates pos = instance.getPosition();
+    instance.setPosition(new Coordinates(pos.getX(), pos.getY() + 0.1f, pos.getZ()));
 
-    m_simpleModelHandler.getModelInstances().get("slime").transform.setToTranslation(a, 10f, 10f);
-
-    a += 0.25f;
     m_modelBatch.end();
   }
 
