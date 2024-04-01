@@ -14,6 +14,7 @@ import org.noble.helium.helpers.Coordinates;
 import org.noble.helium.helpers.Dimensions;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class SimpleModelHandler {
   private static SimpleModelHandler m_instance;
@@ -79,6 +80,13 @@ public class SimpleModelHandler {
   public void addNewGLTFModel(String name, String path, Coordinates coords) {
     Model model = m_modelLoader.load(Gdx.files.internal(path)).scene.model;
     m_modelInstances.put(name, new HeliumModelInstance(model, coords));
+  }
+
+  public void clear() {
+    for (Map.Entry<String, HeliumModelInstance> entry : getModelInstances().entrySet()) {
+      entry.getValue().model.dispose();
+    }
+    m_modelInstances.clear();
   }
 
   public enum Shape {

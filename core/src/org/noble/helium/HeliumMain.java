@@ -74,5 +74,6 @@ public class HeliumMain extends Game {
 
   @Override
   public void dispose() {
+    m_simpleModelHandler.clear();
   }
 }
