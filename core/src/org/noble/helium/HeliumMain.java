@@ -6,12 +6,14 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g3d.*;
+import com.badlogic.gdx.graphics.g3d.Environment;
+import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import org.noble.helium.helpers.Coordinates;
 import org.noble.helium.helpers.Dimensions;
+import org.noble.helium.logic.CopperValues;
 
 import java.util.Map;
 
@@ -60,6 +62,18 @@ public class HeliumMain extends Game {
     m_modelBatch = new ModelBatch();
 
     m_camera.update();
+
+    CopperValues values = new CopperValues();
+    values.setObjectVariable("test-01", "health", 3);
+    values.setObjectVariable("test-01", "dead", true);
+    values.setObjectVariable("test-02", "health", 2);
+    values.setObjectVariable("test-02", "dead", false);
+
+    System.out.println(values.getObjectVariable("test-01", "health"));
+    System.out.println(values.getObjectVariable("test-01", "dead"));
+    System.out.println(values.getObjectVariable("test-02", "health"));
+    System.out.println(values.getObjectVariable("test-02", "dead"));
+
   }
 
   @Override
