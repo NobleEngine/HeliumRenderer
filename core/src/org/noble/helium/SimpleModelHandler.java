@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
+import com.badlogic.gdx.graphics.g3d.loader.ObjLoader;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import net.mgsx.gltf.loaders.gltf.GLTFLoader;
 import org.noble.helium.helpers.Coordinates;
@@ -19,13 +20,15 @@ import java.util.Map;
 public class SimpleModelHandler {
   private static SimpleModelHandler m_instance;
   private final ModelBuilder m_modelBuilder;
-  private final GLTFLoader m_modelLoader;
+  private final GLTFLoader m_GLTFLoader;
+  private final ObjLoader m_objLoader;
   private final HashMap<String, HeliumModelInstance> m_modelInstances;
 
   private SimpleModelHandler() {
     m_modelBuilder = new ModelBuilder();
     m_modelInstances = new HashMap<>();
-    m_modelLoader = new GLTFLoader();
+    m_GLTFLoader = new GLTFLoader();
+    m_objLoader = new ObjLoader();
   }
 
   public static SimpleModelHandler getInstance() {
@@ -33,6 +36,10 @@ public class SimpleModelHandler {
       m_instance = new SimpleModelHandler();
     }
     return m_instance;
+  }
+
+  public HeliumModelInstance get(String name) {
+    return m_modelInstances.get(name);
   }
 
   public HashMap<String, HeliumModelInstance> getModelInstances() {
@@ -78,8 +85,28 @@ public class SimpleModelHandler {
   }
 
   public void addNewGLTFModel(String name, String path, Coordinates coords) {
-    Model model = m_modelLoader.load(Gdx.files.internal(path)).scene.model;
+    Model model = m_GLTFLoader.load(Gdx.files.internal(path)).scene.model;
     m_modelInstances.put(name, new HeliumModelInstance(model, coords));
+  }
+
+  public void addNewOBJModel(String name, String path, Coordinates coords) {
+    Model model = m_objLoader.loadModel(Gdx.files.internal(path));
+    m_modelInstances.put(name, new HeliumModelInstance(model, coords));
+  }
+
+  public void setTexture(String modelName, String path) {
+    HeliumModelInstance modelInstance = m_modelInstances.get(modelName);
+    Texture texture = new Texture(Gdx.files.internal(path));
+    Material material = new Material(TextureAttribute.createDiffuse(texture));
+
+    modelInstance.materials.forEach(materials -> materials.set(material));
+  }
+
+  public void setColor(String modelName, Color color) {
+    HeliumModelInstance modelInstance = m_modelInstances.get(modelName);
+    Material material = new Material(ColorAttribute.createDiffuse(color));
+
+    modelInstance.materials.forEach(materials -> materials.set(material));
   }
 
   public void clear() {

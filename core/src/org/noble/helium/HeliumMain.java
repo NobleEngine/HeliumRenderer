@@ -46,6 +46,12 @@ public class HeliumMain extends Game {
         new Coordinates(20f,20f,20f), new Dimensions(10f,10f,10f));
     m_simpleModelHandler.addNewGLTFModel("slime", "models/Alien Slime/Alien Slime.gltf",
         new Coordinates(10f, 10f, 10f));
+    m_simpleModelHandler.addNewOBJModel("pawn", "models/Pawn/pawn.obj",
+        new Coordinates(15f, 15f, 15f));
+
+    m_simpleModelHandler.setTexture("pawn", "textures/dirt.png");
+    m_simpleModelHandler.setColor("pawn", Color.SCARLET);
+    m_simpleModelHandler.setColor("cube-01", Color.FIREBRICK);
 
     m_environment = new Environment();
     m_environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1.0f));
