@@ -5,10 +5,10 @@ public class Dimensions {
   float m_depth;
   float m_height;
 
-  public Dimensions(float x, float y, float z) {
-    m_length = x;
-    m_depth = y;
-    m_height = z;
+  public Dimensions(float length, float depth, float height) {
+    m_length = length;
+    m_depth = depth;
+    m_height = height;
   }
 
   public float getDepth() {
