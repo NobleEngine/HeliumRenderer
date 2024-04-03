@@ -55,19 +55,26 @@ public class PlayerController extends Actor {
   private void updatePositionWithKeyboard() {
     // Move the camera based on keyboard input
     Vector3 tmp = new Vector3();
+    float speed;
+
+    if(m_input.isKeyDown(KeyInput.Action.MOVE_FASTER, false)) {
+      speed = 0.5f * 20f;
+    } else {
+      speed = m_speed;
+    }
 
     if (m_input.isKeyDown(KeyInput.Action.MOVE_FORWARD, false)) {
-      m_camera.translate(tmp.set(m_camera.direction).scl(m_speed * Gdx.graphics.getDeltaTime()));
+      m_camera.translate(tmp.set(m_camera.direction).scl(speed * Gdx.graphics.getDeltaTime()));
     }
     if (m_input.isKeyDown(KeyInput.Action.MOVE_BACKWARD, false)) {
-      m_camera.translate(tmp.set(m_camera.direction).scl(-m_speed * Gdx.graphics.getDeltaTime()));
+      m_camera.translate(tmp.set(m_camera.direction).scl(-speed * Gdx.graphics.getDeltaTime()));
     }
     if (m_input.isKeyDown(KeyInput.Action.MOVE_LEFT, false)) {
-      tmp.set(m_camera.direction).crs(m_camera.up).nor().scl(-m_speed * Gdx.graphics.getDeltaTime());
+      tmp.set(m_camera.direction).crs(m_camera.up).nor().scl(-speed * Gdx.graphics.getDeltaTime());
       m_camera.translate(tmp);
     }
     if (m_input.isKeyDown(KeyInput.Action.MOVE_RIGHT, false)) {
-      tmp.set(m_camera.direction).crs(m_camera.up).nor().scl(m_speed * Gdx.graphics.getDeltaTime());
+      tmp.set(m_camera.direction).crs(m_camera.up).nor().scl(speed * Gdx.graphics.getDeltaTime());
       m_camera.translate(tmp);
     }
     m_position = new Coordinates(m_camera.position);
@@ -76,6 +83,6 @@ public class PlayerController extends Actor {
   public void update() {
     changeCameraRotationWithMouseMovement();
     updatePositionWithKeyboard();
-    m_camera.update(true);
+    m_camera.update();
   }
 }
