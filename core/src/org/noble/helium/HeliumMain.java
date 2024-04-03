@@ -4,45 +4,35 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
-import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
+import org.noble.helium.Actors.PlayerController;
 import org.noble.helium.helpers.Coordinates;
 import org.noble.helium.helpers.Dimensions;
+import org.noble.helium.io.KeyInput;
 import org.noble.helium.logic.CopperValues;
 
 import java.util.Map;
 
 public class HeliumMain extends Game {
   private Environment m_environment;
-	private PerspectiveCamera m_camera;
-  private CameraInputController m_cameraInput;
+  private PlayerController m_player;
   private SimpleModelHandler m_simpleModelHandler;
+  private KeyInput m_input;
   private ModelBatch m_modelBatch;
 
   @Override
   public void create() {
     m_simpleModelHandler = SimpleModelHandler.getInstance();
-
-    m_camera = new PerspectiveCamera();
-    m_camera.fieldOfView = 67;
-    m_camera.viewportWidth = Gdx.graphics.getWidth();
-    m_camera.viewportHeight = Gdx.graphics.getHeight();
-    m_camera.position.set(10f, 10f, 10f);
-    m_camera.lookAt(0,0,0);
-    m_camera.near = 1f;
-    m_camera.far = 300f;
-
-    m_cameraInput = new CameraInputController(m_camera);
-    Gdx.input.setInputProcessor(m_cameraInput);
+    m_input = KeyInput.getInstance();
+    m_player = PlayerController.getInstance();
 
     m_simpleModelHandler.addNewShape(
         "cube-01", SimpleModelHandler.Shape.CUBE, new Texture(Gdx.files.internal("textures/dirt.png")),
-        new Coordinates(0f,0f,0f), new Dimensions(10f,10f,10f));
+        new Coordinates(0f,0f,0f), new Dimensions(100f,100f,10f));
     m_simpleModelHandler.addNewShape(
         "sphere-01", SimpleModelHandler.Shape.SPHERE, Color.RED,
         new Coordinates(20f,20f,20f), new Dimensions(10f,10f,10f));
@@ -61,8 +51,6 @@ public class HeliumMain extends Game {
 
     m_modelBatch = new ModelBatch();
 
-    m_camera.update();
-
     CopperValues values = new CopperValues();
     values.setObjectVariable("test-01", "health", 3);
     values.setObjectVariable("test-01", "dead", true);
@@ -73,23 +61,36 @@ public class HeliumMain extends Game {
     System.out.println(values.getObjectVariable("test-01", "dead"));
     System.out.println(values.getObjectVariable("test-02", "health"));
     System.out.println(values.getObjectVariable("test-02", "dead"));
-
   }
 
   @Override
   public void render() {
-    m_cameraInput.update();
-
     Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+    m_player.update();
 
-    m_modelBatch.begin(m_camera);
+    m_modelBatch.begin(m_player.getCamera());
 
     for (Map.Entry<String, HeliumModelInstance> entry : m_simpleModelHandler.getModelInstances().entrySet()) {
       m_modelBatch.render(entry.getValue(), m_environment);
     }
 
     m_modelBatch.end();
+
+    //TODO: Change resolution on window resize
+    if (m_input.isKeyDown(KeyInput.Action.TOGGLE_FULLSCREEN, true)) {
+      if (Gdx.graphics.isFullscreen()) {
+        Gdx.graphics.setWindowedMode(1600, 900);
+      } else {
+        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+      }
+    }
+
+    if(m_input.isKeyDown(KeyInput.Action.DEBUG_KILL, true)) {
+      System.exit(0);
+    }
+
+    Gdx.input.setCursorCatched(true);
   }
 
   @Override
