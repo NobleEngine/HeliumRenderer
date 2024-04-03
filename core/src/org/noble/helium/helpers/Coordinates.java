@@ -13,6 +13,12 @@ public class Coordinates {
     m_z = z;
   }
 
+  public Coordinates(Vector3 vector3) {
+    m_x = vector3.x;
+    m_y = vector3.y;
+    m_z = vector3.z;
+  }
+
   public float getX() {
     return m_x;
   }
