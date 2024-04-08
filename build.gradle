@@ -28,6 +28,7 @@ allprojects {
         gltfVersion = '2.1.0'
         aiVersion = '1.8.2'
         gdxControllersVersion = '2.2.1'
+        visuiVersion = '1.5.3'
     }
 
     repositories {
@@ -69,6 +70,6 @@ project(":core") {
         api "com.github.mgsx-dev.gdx-gltf:gltf:$gltfVersion"
         api "com.badlogicgames.gdx:gdx-bullet:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-ai:$aiVersion"
-        
+        api "com.kotcrab.vis:vis-ui:$visuiVersion"
     }
 }

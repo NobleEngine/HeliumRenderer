@@ -27,7 +27,7 @@ tasks.register('debug', JavaExec) {
     standardInput = System.in
     workingDir = project.assetsDir
     ignoreExitValue = true as JavaExecSpec
-    debug = true as JavaExec
+    debug = true
 }
 
 tasks.register('dist', Jar) {

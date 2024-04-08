@@ -23,16 +23,23 @@ public class HeliumMain extends Game {
   private SimpleModelHandler m_simpleModelHandler;
   private KeyInput m_input;
   private ModelBatch m_modelBatch;
+  private PhysicsHandler m_physics;
 
   @Override
   public void create() {
     m_simpleModelHandler = SimpleModelHandler.getInstance();
     m_input = KeyInput.getInstance();
     m_player = PlayerController.getInstance();
+    m_physics = PhysicsHandler.getInstance();
 
     m_simpleModelHandler.addNewShape(
         "cube-01", SimpleModelHandler.Shape.CUBE, new Texture(Gdx.files.internal("textures/dirt.png")),
         new Coordinates(0f,0f,0f), new Dimensions(100f,100f,10f));
+
+    m_simpleModelHandler.addNewShape(
+        "cube-physical", SimpleModelHandler.Shape.CUBE, Color.BLUE,
+        new Coordinates(5f, 50f, 5f), new Dimensions(5f, 5f, 5f));
+
     m_simpleModelHandler.addNewShape(
         "sphere-01", SimpleModelHandler.Shape.SPHERE, Color.RED,
         new Coordinates(20f,20f,20f), new Dimensions(10f,10f,10f));
@@ -61,6 +68,8 @@ public class HeliumMain extends Game {
     System.out.println(values.getObjectVariable("test-01", "dead"));
     System.out.println(values.getObjectVariable("test-02", "health"));
     System.out.println(values.getObjectVariable("test-02", "dead"));
+
+//    m_physics.addCubeModel(m_simpleModelHandler.get("cube-physical"));
   }
 
   @Override
@@ -68,6 +77,7 @@ public class HeliumMain extends Game {
     Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
     m_player.update();
+    m_physics.update();
 
     m_modelBatch.begin(m_player.getCamera());
 
@@ -87,7 +97,7 @@ public class HeliumMain extends Game {
     }
 
     if(m_input.isKeyDown(KeyInput.Action.DEBUG_KILL, true)) {
-      System.exit(0);
+      Gdx.app.exit();
     }
 
     Gdx.input.setCursorCatched(true);
@@ -96,5 +106,6 @@ public class HeliumMain extends Game {
   @Override
   public void dispose() {
     m_simpleModelHandler.clear();
+    m_physics.dispose();
   }
 }

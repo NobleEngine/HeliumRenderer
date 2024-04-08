@@ -42,8 +42,8 @@ public class PlayerController extends Actor {
 
   private void changeCameraRotationWithMouseMovement() {
     // Update camera rotation based on mouse movement
-    m_cameraYaw += -Gdx.input.getDeltaX() * m_speed;
-    m_cameraPitch += Gdx.input.getDeltaY() * m_speed;
+    m_cameraYaw += -Gdx.input.getDeltaX() * getSpeed();
+    m_cameraPitch += Gdx.input.getDeltaY() * getSpeed();
 
     // Clamp pitch angle to prevent flipping
     m_cameraPitch = MathUtils.clamp(m_cameraPitch, -89f, 89f);
@@ -60,7 +60,7 @@ public class PlayerController extends Actor {
     if(m_input.isKeyDown(KeyInput.Action.MOVE_FASTER, false)) {
       speed = 0.5f * 20f;
     } else {
-      speed = m_speed;
+      speed = getSpeed();
     }
 
     if (m_input.isKeyDown(KeyInput.Action.MOVE_FORWARD, false)) {
@@ -77,12 +77,16 @@ public class PlayerController extends Actor {
       tmp.set(m_camera.direction).crs(m_camera.up).nor().scl(speed * Gdx.graphics.getDeltaTime());
       m_camera.translate(tmp);
     }
-    m_position = new Coordinates(m_camera.position);
+    setPosition(new Coordinates(m_camera.position));
   }
 
   public void update() {
     changeCameraRotationWithMouseMovement();
     updatePositionWithKeyboard();
     m_camera.update();
+  }
+
+  @Override
+  public void dispose() {
   }
 }

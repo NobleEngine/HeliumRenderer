@@ -1,12 +1,13 @@
 package org.noble.helium.Actors;
 
+import com.badlogic.gdx.utils.Disposable;
 import org.noble.helium.helpers.Coordinates;
 
-public abstract class Actor {
-  public Coordinates m_position;
-  public int m_health;
-  public final float m_speed;
-  public boolean m_dead;
+public abstract class Actor implements Disposable {
+  private Coordinates m_position;
+  private int m_health;
+  private final float m_speed;
+  private boolean m_dead;
 
   public Actor(Coordinates startingPos, int startingHealth, float speed) {
     m_position = startingPos;
@@ -23,6 +24,10 @@ public abstract class Actor {
     return m_health;
   }
 
+  public float getSpeed() {
+    return m_speed;
+  }
+
   public float getX() {
     return m_position.getX();
   }
@@ -34,7 +39,6 @@ public abstract class Actor {
   public float getZ() {
     return m_position.getZ();
   }
-
   public Coordinates getPosition() {
     return m_position;
   }

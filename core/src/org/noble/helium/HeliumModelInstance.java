@@ -3,7 +3,9 @@ package org.noble.helium;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.BoundingBox;
 import org.noble.helium.helpers.Coordinates;
+import org.noble.helium.helpers.Dimensions;
 
 public class HeliumModelInstance extends ModelInstance {
   private Coordinates m_position;
@@ -25,5 +27,13 @@ public class HeliumModelInstance extends ModelInstance {
 
   public Coordinates getPosition() {
     return m_position;
+  }
+
+  public Vector3 getDimensions() {
+    BoundingBox box = new BoundingBox();
+    Vector3 dimensions = new Vector3();
+    this.calculateBoundingBox(box);
+    box.getDimensions(dimensions);
+    return dimensions;
   }
 }
