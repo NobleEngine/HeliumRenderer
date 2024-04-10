@@ -6,7 +6,7 @@ import org.noble.helium.world.WorldObject;
 
 import java.util.HashMap;
 
-public class PhysicsHandler {
+public class PhysicsHandler extends Subsystem {
   private static PhysicsHandler m_instance;
   private final btCollisionConfiguration  m_collisionConfig;
   private final btDispatcher m_dispatcher;
@@ -31,9 +31,11 @@ public class PhysicsHandler {
     return m_dispatcher;
   }
 
+  @Override
   public void update() {
   }
 
+  @Override
   public void dispose() {
   }
 }

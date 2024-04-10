@@ -20,12 +20,15 @@ import org.noble.helium.helpers.Coordinates;
 import org.noble.helium.helpers.Dimensions;
 import org.noble.helium.io.KeyInput;
 import org.noble.helium.subsystems.PhysicsHandler;
+import org.noble.helium.subsystems.Subsystem;
 import org.noble.helium.world.WorldObject;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 public class Helium extends Game {
   private static Helium m_instance = null;
+  private final ArrayList<Subsystem> m_subsystems;
   private Environment m_environment;
   private SimpleModelHandler m_simpleModelHandler;
   private ObjectHandler m_objectHandler;
@@ -38,6 +41,7 @@ public class Helium extends Game {
   private Stage m_2dStage;
 
   private Helium() {
+    m_subsystems = new ArrayList<>();
   }
 
   public static Helium getInstance() {
@@ -58,6 +62,7 @@ public class Helium extends Game {
     System.out.println("Done!");
     System.out.print("Setting up physics subsystem... ");
     m_physics = PhysicsHandler.getInstance();
+    m_subsystems.add(m_physics);
     System.out.println("Done!");
     System.out.print("Setting up object handler... ");
     m_objectHandler = ObjectHandler.getInstance();
@@ -103,7 +108,7 @@ public class Helium extends Game {
     Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
     m_player.update();
-    m_physics.update();
+    m_subsystems.forEach(Subsystem::update);
 
     WorldObject cube01 = m_objectHandler.get("cube-01");
     WorldObject cubePhysical = m_objectHandler.get("cube-physical");
@@ -141,6 +146,6 @@ public class Helium extends Game {
   @Override
   public void dispose() {
     m_simpleModelHandler.clear();
-    m_physics.dispose();
+    m_subsystems.forEach(Subsystem::dispose);
   }
 }
