@@ -1,4 +1,4 @@
-package org.noble.helium;
+package org.noble.helium.handling;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.loader.ObjLoader;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import net.mgsx.gltf.loaders.gltf.GLTFLoader;
+import org.noble.helium.HeliumModelInstance;
 import org.noble.helium.helpers.Coordinates;
 import org.noble.helium.helpers.Dimensions;
 

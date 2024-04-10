@@ -1,4 +1,4 @@
-package org.noble.helium.Actors;
+package org.noble.helium.actors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
@@ -15,7 +15,7 @@ public class PlayerController extends Actor {
   private float m_cameraPitch, m_cameraYaw;
 
   private PlayerController() {
-    super(new Coordinates(0f, 0f, 0f), 100, 0.5f);
+    super(new Coordinates(0f, 0f, 0f),100, 0.5f);
     m_input = KeyInput.getInstance();
 
     m_camera = new PerspectiveCamera();
@@ -58,9 +58,9 @@ public class PlayerController extends Actor {
     float speed;
 
     if(m_input.isKeyDown(KeyInput.Action.MOVE_FASTER, false)) {
-      speed = 0.5f * 20f;
+      speed = 0.5f * 40f;
     } else {
-      speed = getSpeed();
+      speed = 0.5f * 20f;
     }
 
     if (m_input.isKeyDown(KeyInput.Action.MOVE_FORWARD, false)) {

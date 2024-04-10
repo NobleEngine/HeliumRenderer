@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import org.noble.helium.helpers.Coordinates;
-import org.noble.helium.helpers.Dimensions;
 
 public class HeliumModelInstance extends ModelInstance {
   private Coordinates m_position;
@@ -18,11 +17,10 @@ public class HeliumModelInstance extends ModelInstance {
     m_position = coords;
     transform.setToTranslation(coords.getVector3());
   }
-  public void setPosition(Vector3 vector) {
-    transform.setToTranslation(vector);
-  }
+
   public void setPosition(float x, float y, float z) {
     transform.setToTranslation(x, y, z);
+    m_position = new Coordinates(x, y, z);
   }
 
   public Coordinates getPosition() {

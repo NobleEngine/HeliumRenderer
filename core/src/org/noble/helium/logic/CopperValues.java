@@ -5,7 +5,6 @@ import java.util.Map;
 
 public class CopperValues {
   private final Map<String, Map<String, Object>> m_objects;
-
   public CopperValues() {
     m_objects = new HashMap<>();
   }

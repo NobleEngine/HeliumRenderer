@@ -1,4 +1,4 @@
-package org.noble.helium.Actors;
+package org.noble.helium.actors;
 
 import com.badlogic.gdx.utils.Disposable;
 import org.noble.helium.helpers.Coordinates;
