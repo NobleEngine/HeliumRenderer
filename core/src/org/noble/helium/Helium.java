@@ -20,7 +20,8 @@ import org.noble.helium.world.WorldObject;
 
 import java.util.Map;
 
-public class HeliumMain extends Game {
+public class Helium extends Game {
+  private static Helium m_instance = null;
   private Environment m_environment;
   private SimpleModelHandler m_simpleModelHandler;
   private ObjectHandler m_objectHandler;
@@ -29,13 +30,36 @@ public class HeliumMain extends Game {
   private ModelBatch m_modelBatch;
   private PhysicsHandler m_physics;
 
+  private Helium() {
+  }
+
+  public static Helium getInstance() {
+    if(m_instance == null) {
+      m_instance = new Helium();
+    }
+    return m_instance;
+  }
+
   @Override
   public void create() {
+    System.out.println("Helium Renderer started!");
+    System.out.print("Setting up model handler... ");
     m_simpleModelHandler = SimpleModelHandler.getInstance();
+    System.out.println("Done!");
+    System.out.print("Setting up keyboard inputs... ");
     m_input = KeyInput.getInstance();
+    System.out.println("Done!");
+    System.out.print("Setting up physics subsystem... ");
     m_physics = PhysicsHandler.getInstance();
+    System.out.println("Done!");
+    System.out.print("Setting up object handler... ");
     m_objectHandler = ObjectHandler.getInstance();
+    System.out.println("Done!");
+    System.out.print("Setting up player controller... ");
     m_player = PlayerController.getInstance();
+    System.out.println("Done!");
+    System.out.println("\nInit complete");
+
 
     m_simpleModelHandler.addNewShape(
         "cube-01", SimpleModelHandler.Shape.CUBE, new Texture(Gdx.files.internal("textures/dirt.png")),
