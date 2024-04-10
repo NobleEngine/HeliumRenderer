@@ -24,6 +24,8 @@ public class PlayerController extends Actor {
     m_camera.viewportHeight = Gdx.graphics.getHeight();
     m_camera.position.set(10f, 10f, 10f);
     m_camera.lookAt(10f,10f,10f);
+    m_camera.near = 0.1f;
+    m_camera.far = 500f;
 
     m_cameraYaw = 0.0f;
     m_cameraPitch = 45.0f;

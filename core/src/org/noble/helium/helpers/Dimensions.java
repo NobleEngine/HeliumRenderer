@@ -1,22 +1,22 @@
 package org.noble.helium.helpers;
 
 public class Dimensions {
-  float m_length;
+  float m_width;
   float m_depth;
   float m_height;
 
-  public Dimensions(float length, float depth, float height) {
-    m_length = length;
-    m_depth = depth;
+  public Dimensions(float height, float width, float depth) {
     m_height = height;
+    m_width = width;
+    m_depth = depth;
   }
 
   public float getDepth() {
-    return m_length;
+    return m_depth;
   }
 
   public float getWidth() {
-    return m_depth;
+    return m_width;
   }
 
   public float getHeight() {

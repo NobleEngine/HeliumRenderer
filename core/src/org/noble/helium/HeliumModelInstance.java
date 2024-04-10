@@ -32,6 +32,7 @@ public class HeliumModelInstance extends ModelInstance {
     Vector3 dimensions = new Vector3();
     this.calculateBoundingBox(box);
     box.getDimensions(dimensions);
+    System.out.println(dimensions.x + " " + dimensions.y + " " + dimensions.z);
     return dimensions;
   }
 }

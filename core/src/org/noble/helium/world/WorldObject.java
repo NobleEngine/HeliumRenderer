@@ -71,7 +71,6 @@ public class WorldObject {
 
   public void setPosition(float x, float y, float z) {
     m_modelInstance.setPosition(x,y,z);
-    m_body.setWorldTransform(m_modelInstance.transform);
   }
 
   public float getX() {
@@ -84,6 +83,13 @@ public class WorldObject {
 
   public float getZ() {
     return m_modelInstance.getPosition().getZ();
+  }
+
+  public void update() {
+    if(m_type.equals(ObjectType.PHYSICS)) {
+
+    }
+    m_body.setWorldTransform(m_modelInstance.transform);
   }
 
   public enum ObjectType {

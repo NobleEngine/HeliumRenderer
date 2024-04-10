@@ -48,33 +48,19 @@ public class Helium extends Game {
 
   @Override
   public void create() {
-    System.out.println("Helium Renderer started!");
-    System.out.print("Setting up model handler... ");
     m_simpleModelHandler = SimpleModelHandler.getInstance();
-    System.out.println("Done!");
-    System.out.print("Setting up keyboard inputs... ");
     m_input = KeyInput.getInstance();
     Gdx.input.setCursorCatched(true);
-    System.out.println("Done!");
-    System.out.print("Setting up physics subsystem... ");
     m_physics = PhysicsHandler.getInstance();
     m_subsystems.add(m_physics);
-    System.out.println("Done!");
-    System.out.print("Setting up object handler... ");
     m_objectHandler = ObjectHandler.getInstance();
-    System.out.println("Done!");
-    System.out.print("Setting up player controller... ");
     m_player = PlayerController.getInstance();
-    System.out.println("Done!");
-    System.out.print("Setting up user interface... ");
     m_userInterface = UserInterface.getInstance();
     m_subsystems.add(m_userInterface);
-    System.out.println("Done!");
-    System.out.println("\nInit complete");
 
     m_simpleModelHandler.addNewShape(
         "cube-01", SimpleModelHandler.Shape.CUBE, new Texture(Gdx.files.internal("textures/dirt.png")),
-        new Coordinates(0f,0f,0f), new Dimensions(100f,100f,10f));
+        new Coordinates(0f,0f,0f), new Dimensions(10f,100f,100f));
     m_simpleModelHandler.addNewShape(
         "cube-physical", SimpleModelHandler.Shape.CUBE, Color.BLUE,
         new Coordinates(5f, 50f, 5f), new Dimensions(5f, 5f, 5f));
@@ -101,6 +87,7 @@ public class Helium extends Game {
     Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
     m_player.update();
+    m_objectHandler.updateAllObjects();
 
     WorldObject cube01 = m_objectHandler.get("cube-01");
     WorldObject cubePhysical = m_objectHandler.get("cube-physical");
