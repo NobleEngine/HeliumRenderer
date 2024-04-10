@@ -9,10 +9,6 @@ import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.kotcrab.vis.ui.VisUI;
-import com.kotcrab.vis.ui.widget.VisLabel;
 import org.noble.helium.actors.PlayerController;
 import org.noble.helium.handling.ObjectHandler;
 import org.noble.helium.handling.SimpleModelHandler;
@@ -21,6 +17,7 @@ import org.noble.helium.helpers.Dimensions;
 import org.noble.helium.io.KeyInput;
 import org.noble.helium.subsystems.PhysicsHandler;
 import org.noble.helium.subsystems.Subsystem;
+import org.noble.helium.subsystems.UserInterface;
 import org.noble.helium.world.WorldObject;
 
 import java.util.ArrayList;
@@ -36,9 +33,7 @@ public class Helium extends Game {
   private PlayerController m_player;
   private ModelBatch m_modelBatch;
   private PhysicsHandler m_physics;
-
-  private VisLabel m_fpsLabel;
-  private Stage m_2dStage;
+  private UserInterface m_userInterface;
 
   private Helium() {
     m_subsystems = new ArrayList<>();
@@ -59,6 +54,7 @@ public class Helium extends Game {
     System.out.println("Done!");
     System.out.print("Setting up keyboard inputs... ");
     m_input = KeyInput.getInstance();
+    Gdx.input.setCursorCatched(true);
     System.out.println("Done!");
     System.out.print("Setting up physics subsystem... ");
     m_physics = PhysicsHandler.getInstance();
@@ -71,13 +67,8 @@ public class Helium extends Game {
     m_player = PlayerController.getInstance();
     System.out.println("Done!");
     System.out.print("Setting up user interface... ");
-
-    VisUI.load(); //TODO: Make some handler or helper for this
-    m_fpsLabel = new VisLabel();
-    m_fpsLabel.setPosition(10,10);
-    m_2dStage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
-    m_2dStage.addActor(m_fpsLabel);
-
+    m_userInterface = UserInterface.getInstance();
+    m_subsystems.add(m_userInterface);
     System.out.println("Done!");
     System.out.println("\nInit complete");
 
@@ -95,6 +86,8 @@ public class Helium extends Game {
         new WorldObject(m_simpleModelHandler.get("cube-physical"),
             WorldObject.ShapeType.BOX, WorldObject.ObjectType.PHYSICS));
 
+    m_userInterface.addLabel("FPS", "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, 10, 100, 25);
+
     m_environment = new Environment();
     m_environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1.0f));
     m_environment.add(new DirectionalLight().set(0.8f,0.8f,0.8f,-1f,-0.8f,-0.2f));
@@ -108,7 +101,6 @@ public class Helium extends Game {
     Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
     m_player.update();
-    m_subsystems.forEach(Subsystem::update);
 
     WorldObject cube01 = m_objectHandler.get("cube-01");
     WorldObject cubePhysical = m_objectHandler.get("cube-physical");
@@ -123,9 +115,7 @@ public class Helium extends Game {
     }
     m_modelBatch.end();
 
-    m_fpsLabel.setText("FPS: " + Gdx.graphics.getFramesPerSecond());
-    m_2dStage.act();
-    m_2dStage.draw();
+    m_userInterface.setLabel("FPS", "FPS: " + Gdx.graphics.getFramesPerSecond());
 
     //TODO: Change resolution on window resize
     if (m_input.isKeyDown(KeyInput.Action.TOGGLE_FULLSCREEN, true)) {
@@ -140,7 +130,7 @@ public class Helium extends Game {
       Gdx.app.exit();
     }
 
-    Gdx.input.setCursorCatched(true);
+    m_subsystems.forEach(Subsystem::update);
   }
 
   @Override
