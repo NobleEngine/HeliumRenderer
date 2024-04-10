@@ -9,6 +9,10 @@ import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisLabel;
 import org.noble.helium.actors.PlayerController;
 import org.noble.helium.handling.ObjectHandler;
 import org.noble.helium.handling.SimpleModelHandler;
@@ -29,6 +33,9 @@ public class Helium extends Game {
   private PlayerController m_player;
   private ModelBatch m_modelBatch;
   private PhysicsHandler m_physics;
+
+  private VisLabel m_fpsLabel;
+  private Stage m_2dStage;
 
   private Helium() {
   }
@@ -58,8 +65,16 @@ public class Helium extends Game {
     System.out.print("Setting up player controller... ");
     m_player = PlayerController.getInstance();
     System.out.println("Done!");
-    System.out.println("\nInit complete");
+    System.out.print("Setting up user interface... ");
 
+    VisUI.load(); //TODO: Make some handler or helper for this
+    m_fpsLabel = new VisLabel();
+    m_fpsLabel.setPosition(10,10);
+    m_2dStage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+    m_2dStage.addActor(m_fpsLabel);
+
+    System.out.println("Done!");
+    System.out.println("\nInit complete");
 
     m_simpleModelHandler.addNewShape(
         "cube-01", SimpleModelHandler.Shape.CUBE, new Texture(Gdx.files.internal("textures/dirt.png")),
@@ -98,12 +113,14 @@ public class Helium extends Game {
     }
 
     m_modelBatch.begin(m_player.getCamera());
-
     for (Map.Entry<String, WorldObject> entry : m_objectHandler.getAllObjects().entrySet()) {
       m_modelBatch.render(entry.getValue().getModelInstance(), m_environment);
     }
-
     m_modelBatch.end();
+
+    m_fpsLabel.setText("FPS: " + Gdx.graphics.getFramesPerSecond());
+    m_2dStage.act();
+    m_2dStage.draw();
 
     //TODO: Change resolution on window resize
     if (m_input.isKeyDown(KeyInput.Action.TOGGLE_FULLSCREEN, true)) {

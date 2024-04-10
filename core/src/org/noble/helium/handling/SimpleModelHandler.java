@@ -118,6 +118,6 @@ public class SimpleModelHandler {
   }
 
   public enum Shape {
-    SPHERE, CUBE,
+    SPHERE, CUBE
   }
 }
