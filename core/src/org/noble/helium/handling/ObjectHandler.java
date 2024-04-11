@@ -35,4 +35,11 @@ public class ObjectHandler {
       object.update();
     }
   }
+
+  public void clear() {
+    for(WorldObject object : m_objects.values()) {
+      object.dispose();
+    }
+    m_objects.clear();
+  }
 }

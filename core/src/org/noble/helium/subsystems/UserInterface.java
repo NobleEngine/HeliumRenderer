@@ -40,6 +40,12 @@ public class UserInterface extends Subsystem {
     m_labels.get(labelName).setText(text);
   }
 
+  public void clear() {
+    m_2dStage.clear();
+    for(VisLabel label : m_labels.values()) {
+      label.clear();
+    }
+  }
 
   @Override
   public void update() {

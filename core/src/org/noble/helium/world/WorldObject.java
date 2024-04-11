@@ -2,10 +2,10 @@ package org.noble.helium.world;
 
 import com.badlogic.gdx.physics.bullet.collision.*;
 import org.noble.helium.HeliumModelInstance;
-import org.noble.helium.subsystems.PhysicsHandler;
+import org.noble.helium.subsystems.Physics;
 
 public class WorldObject {
-  private final PhysicsHandler m_physics;
+  private final Physics m_physics;
   private final btCollisionObject m_body;
   private final HeliumModelInstance m_modelInstance;
   private final ObjectType m_type;
@@ -15,7 +15,7 @@ public class WorldObject {
     m_body = new btCollisionObject();
     m_body.setCollisionShape(getShape(shape));
     m_body.setWorldTransform(m_modelInstance.transform);
-    m_physics = PhysicsHandler.getInstance();
+    m_physics = Physics.getInstance();
   }
 
   public HeliumModelInstance getModelInstance() {
@@ -90,6 +90,10 @@ public class WorldObject {
 
     }
     m_body.setWorldTransform(m_modelInstance.transform);
+  }
+
+  public void dispose() {
+    m_body.dispose();
   }
 
   public enum ObjectType {

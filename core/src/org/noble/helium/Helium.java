@@ -15,7 +15,7 @@ import org.noble.helium.handling.SimpleModelHandler;
 import org.noble.helium.helpers.Coordinates;
 import org.noble.helium.helpers.Dimensions;
 import org.noble.helium.io.KeyInput;
-import org.noble.helium.subsystems.PhysicsHandler;
+import org.noble.helium.subsystems.Physics;
 import org.noble.helium.subsystems.Subsystem;
 import org.noble.helium.subsystems.UserInterface;
 import org.noble.helium.world.WorldObject;
@@ -32,7 +32,7 @@ public class Helium extends Game {
   private KeyInput m_input;
   private PlayerController m_player;
   private ModelBatch m_modelBatch;
-  private PhysicsHandler m_physics;
+  private Physics m_physics;
   private UserInterface m_userInterface;
 
   private Helium() {
@@ -51,7 +51,7 @@ public class Helium extends Game {
     m_simpleModelHandler = SimpleModelHandler.getInstance();
     m_input = KeyInput.getInstance();
     Gdx.input.setCursorCatched(true);
-    m_physics = PhysicsHandler.getInstance();
+    m_physics = Physics.getInstance();
     m_subsystems.add(m_physics);
     m_objectHandler = ObjectHandler.getInstance();
     m_player = PlayerController.getInstance();
