@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import org.noble.helium.actors.PlayerController;
 import org.noble.helium.handling.ObjectHandler;
+import org.noble.helium.handling.ScreenHandler;
 import org.noble.helium.handling.SimpleModelHandler;
 import org.noble.helium.helpers.Coordinates;
 import org.noble.helium.helpers.Dimensions;
@@ -34,6 +35,7 @@ public class Helium extends Game {
   private ModelBatch m_modelBatch;
   private Physics m_physics;
   private UserInterface m_userInterface;
+  private ScreenHandler m_screenHandler;
 
   private Helium() {
     m_subsystems = new ArrayList<>();
@@ -44,6 +46,10 @@ public class Helium extends Game {
       m_instance = new Helium();
     }
     return m_instance;
+  }
+
+  public ModelBatch getModelBatch() {
+    return m_modelBatch;
   }
 
   @Override
@@ -57,6 +63,7 @@ public class Helium extends Game {
     m_player = PlayerController.getInstance();
     m_userInterface = UserInterface.getInstance();
     m_subsystems.add(m_userInterface);
+    m_screenHandler = ScreenHandler.getInstance();
 
     m_simpleModelHandler.addNewShape(
         "cube-01", SimpleModelHandler.Shape.CUBE, new Texture(Gdx.files.internal("textures/dirt.png")),
@@ -89,18 +96,18 @@ public class Helium extends Game {
     m_player.update();
     m_objectHandler.updateAllObjects();
 
-    WorldObject cube01 = m_objectHandler.get("cube-01");
-    WorldObject cubePhysical = m_objectHandler.get("cube-physical");
+//    WorldObject cube01 = m_objectHandler.get("cube-01");
+//    WorldObject cubePhysical = m_objectHandler.get("cube-physical");
 
-    if(!cubePhysical.isColliding(cube01)) {
-      cubePhysical.setPosition(cubePhysical.getX(), cubePhysical.getY() - (10f * delta), cubePhysical.getZ());
-    }
+//    if(!cubePhysical.isColliding(cube01)) {
+//      cubePhysical.setPosition(cubePhysical.getX(), cubePhysical.getY() - (10f * delta), cubePhysical.getZ());
+//    }
 
-    m_modelBatch.begin(m_player.getCamera());
-    for (Map.Entry<String, WorldObject> entry : m_objectHandler.getAllObjects().entrySet()) {
-      m_modelBatch.render(entry.getValue().getModelInstance(), m_environment);
-    }
-    m_modelBatch.end();
+//    m_modelBatch.begin(m_player.getCamera());
+//    for (Map.Entry<String, WorldObject> entry : m_objectHandler.getAllObjects().entrySet()) {
+//      m_modelBatch.render(entry.getValue().getModelInstance(), m_environment);
+//    }
+//    m_modelBatch.end();
 
     m_userInterface.setLabel("FPS", "FPS: " + Gdx.graphics.getFramesPerSecond());
 

@@ -15,7 +15,7 @@ public class PlayerController extends Actor {
   private float m_cameraPitch, m_cameraYaw;
 
   private PlayerController() {
-    super(new Coordinates(0f, 0f, 0f),100, 0.5f);
+    super(new Coordinates(0f, 0f, 0f),100,0.5f);
     m_input = KeyInput.getInstance();
 
     m_camera = new PerspectiveCamera();

@@ -10,14 +10,11 @@ public class Physics extends Subsystem {
   private static Physics m_instance;
   private final btCollisionConfiguration  m_collisionConfig;
   private final btDispatcher m_dispatcher;
-  private final HashMap<WorldObject, Boolean> m_objects;
-
 
   private Physics() {
     Bullet.init();
     m_collisionConfig = new btDefaultCollisionConfiguration();
     m_dispatcher = new btCollisionDispatcher(m_collisionConfig);
-    m_objects = new HashMap<>();
   }
 
   public static Physics getInstance() {
@@ -32,7 +29,7 @@ public class Physics extends Subsystem {
   }
 
   public void reset() {
-    m_objects.clear();
+//    m_objects.clear();
   }
 
   @Override
