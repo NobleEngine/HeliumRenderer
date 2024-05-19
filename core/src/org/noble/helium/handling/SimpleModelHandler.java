@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttributes;
+import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
@@ -14,6 +15,7 @@ import net.mgsx.gltf.loaders.gltf.GLTFLoader;
 import org.noble.helium.HeliumModelInstance;
 import org.noble.helium.helpers.Coordinates;
 import org.noble.helium.helpers.Dimensions;
+import org.noble.helium.logic.HeliumModelBatch;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -108,6 +110,12 @@ public class SimpleModelHandler {
     Material material = new Material(ColorAttribute.createDiffuse(color));
 
     modelInstance.materials.forEach(materials -> materials.set(material));
+  }
+
+  public void render(HeliumModelBatch batch, Environment environment) {
+    for (Map.Entry<String, HeliumModelInstance> entry : getInstance().getModelInstances().entrySet()) {
+      batch.render(entry.getValue(), environment);
+    }
   }
 
   public void clear() {
