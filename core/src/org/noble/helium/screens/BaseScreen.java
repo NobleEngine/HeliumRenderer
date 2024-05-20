@@ -76,7 +76,7 @@ public class BaseScreen implements Screen {
 
   @Override
   public void dispose() {
-//    m_simpleModelHandler.clear();
+    m_simpleModelHandler.clear();
     m_objectHandler.clear();
   }
 }

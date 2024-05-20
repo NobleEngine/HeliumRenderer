@@ -1,4 +1,4 @@
-package org.noble.helium.screens;
+package org.noble.helium.screens.tests;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import org.noble.helium.handling.SimpleModelHandler;
 import org.noble.helium.helpers.Coordinates;
 import org.noble.helium.helpers.Dimensions;
+import org.noble.helium.screens.BaseScreen;
 
 public class SimpleModels extends BaseScreen {
   public SimpleModels() {
@@ -21,6 +22,9 @@ public class SimpleModels extends BaseScreen {
   @Override
   public void render(float delta) {
     super.render(delta);
+    if(m_simpleModelHandler.get("cube-01") == null) {
+      System.err.println("hey loser");
+    }
     m_batch.end();
   }
 }
