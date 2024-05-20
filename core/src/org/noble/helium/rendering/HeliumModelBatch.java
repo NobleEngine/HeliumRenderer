@@ -1,10 +1,11 @@
-package org.noble.helium.logic;
+package org.noble.helium.rendering;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 
 public class HeliumModelBatch extends ModelBatch {
   private boolean m_working;
+
   public HeliumModelBatch() {
     super();
   }

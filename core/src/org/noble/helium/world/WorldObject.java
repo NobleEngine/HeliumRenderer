@@ -1,7 +1,7 @@
 package org.noble.helium.world;
 
 import com.badlogic.gdx.physics.bullet.collision.*;
-import org.noble.helium.HeliumModelInstance;
+import org.noble.helium.rendering.HeliumModelInstance;
 import org.noble.helium.subsystems.Physics;
 
 public class WorldObject {

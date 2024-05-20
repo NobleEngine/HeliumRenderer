@@ -8,7 +8,7 @@ import org.noble.helium.handling.ObjectHandler;
 import org.noble.helium.handling.ScreenHandler;
 import org.noble.helium.handling.SimpleModelHandler;
 import org.noble.helium.io.KeyInput;
-import org.noble.helium.logic.HeliumModelBatch;
+import org.noble.helium.rendering.HeliumModelBatch;
 import org.noble.helium.subsystems.Physics;
 import org.noble.helium.subsystems.Subsystem;
 import org.noble.helium.subsystems.UserInterface;

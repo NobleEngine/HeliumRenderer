@@ -22,9 +22,6 @@ public class SimpleModels extends BaseScreen {
   @Override
   public void render(float delta) {
     super.render(delta);
-    if(m_simpleModelHandler.get("cube-01") == null) {
-      System.err.println("hey loser");
-    }
     m_batch.end();
   }
 }

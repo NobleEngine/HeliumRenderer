@@ -12,10 +12,10 @@ import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.loader.ObjLoader;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import net.mgsx.gltf.loaders.gltf.GLTFLoader;
-import org.noble.helium.HeliumModelInstance;
+import org.noble.helium.rendering.HeliumModelInstance;
 import org.noble.helium.helpers.Coordinates;
 import org.noble.helium.helpers.Dimensions;
-import org.noble.helium.logic.HeliumModelBatch;
+import org.noble.helium.rendering.HeliumModelBatch;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package org.noble.helium;
+package org.noble.helium.rendering;
 
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;

@@ -9,7 +9,6 @@ import org.noble.helium.subsystems.UserInterface;
 public class ScreenHandler {
   private static ScreenHandler m_instance;
   private Screen m_currentScreen;
-  private final SimpleModelHandler m_simpleModelHandler;
   private final Helium m_helium;
   private final Physics m_physics;
   private final ObjectHandler m_objectHandler;
@@ -18,7 +17,6 @@ public class ScreenHandler {
 
   private ScreenHandler() {
     m_helium = Helium.getInstance();
-    m_simpleModelHandler = SimpleModelHandler.getInstance();
     m_physics = Physics.getInstance();
     m_objectHandler = ObjectHandler.getInstance();
     m_userInterface = UserInterface.getInstance();
@@ -48,7 +46,6 @@ public class ScreenHandler {
     }
     m_objectHandler.clear();
     m_physics.reset();
-    m_simpleModelHandler.clear();
     m_userInterface.clear();
     m_helium.setScreen(screen);
     if (m_currentScreen != null) {
