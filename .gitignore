@@ -25,3 +25,6 @@ replay_pid*
 
 #Build files
 .gradle/
+
+core/build
+desktop/build
