@@ -20,6 +20,7 @@ public class PhysicsTest extends BaseScreen {
         new Coordinates(5f, 50f, 5f), new Dimensions(5f, 5f, 5f));
     m_objectHandler.add("floor", new WorldObject(m_simpleModelHandler.get("cube-01"), WorldObject.ShapeType.BOX, WorldObject.ObjectType.STATIC));
     m_objectHandler.add("cube", new WorldObject(m_simpleModelHandler.get("cube-physical"), WorldObject.ShapeType.BOX, WorldObject.ObjectType.PHYSICS));
+    m_player.setDebug(true);
   }
 
   @Override
@@ -27,6 +28,8 @@ public class PhysicsTest extends BaseScreen {
     super.render(delta);
     WorldObject cube = m_objectHandler.get("cube");
     WorldObject floor = m_objectHandler.get("floor");
+    cube.update();
+    floor.update();
 
     if(!cube.isColliding(floor)) {
       cube.setPosition(cube.getX(), cube.getY() - (delta * 8f), cube.getZ());

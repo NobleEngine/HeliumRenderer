@@ -13,6 +13,7 @@ public class PlayerController extends Actor {
   private final KeyInput m_input;
   private static PlayerController m_instance;
   private float m_cameraPitch, m_cameraYaw;
+  private boolean m_debug;
 
   private PlayerController() {
     super(new Coordinates(0f, 0f, 0f),100,0.5f);
@@ -40,6 +41,10 @@ public class PlayerController extends Actor {
 
   public PerspectiveCamera getCamera() {
     return m_camera;
+  }
+
+  public void setDebug(boolean debug) {
+    m_debug = debug;
   }
 
   private void changeCameraRotationWithMouseMovement() {
@@ -79,6 +84,11 @@ public class PlayerController extends Actor {
       tmp.set(m_camera.direction).crs(m_camera.up).nor().scl(speed * Gdx.graphics.getDeltaTime());
       m_camera.translate(tmp);
     }
+
+    if(!m_debug) {
+      m_camera.position.y = 20;
+    }
+//    m_camera.translate();
     setPosition(new Coordinates(m_camera.position));
   }
 

@@ -9,6 +9,7 @@ public class WorldObject {
   private final btCollisionObject m_body;
   private final HeliumModelInstance m_modelInstance;
   private final ObjectType m_type;
+
   public WorldObject(HeliumModelInstance modelInstance, ShapeType shape, ObjectType type) {
     m_type = type;
     m_modelInstance = modelInstance;
@@ -25,7 +26,7 @@ public class WorldObject {
   private btCollisionShape getShape(ShapeType shape) {
     switch(shape) {
       case ShapeType.BOX -> {
-        return new btBoxShape(m_modelInstance.getDimensions());
+        return new btBoxShape(m_modelInstance.getDimensions().scl(0.5f));
       }
     }
 
@@ -38,18 +39,19 @@ public class WorldObject {
 
   public boolean isColliding(WorldObject object) {
     boolean finalResult = false;
-    CollisionObjectWrapper co0 = new CollisionObjectWrapper(m_body);
-    CollisionObjectWrapper co1 = new CollisionObjectWrapper(object.getBody());
+
+    CollisionObjectWrapper object0 = new CollisionObjectWrapper(m_body);
+    CollisionObjectWrapper object1 = new CollisionObjectWrapper(object.getBody());
 
     // For each pair of shape types, Bullet will dispatch a certain collision algorithm, by using the dispatcher.
     // So we use the dispatcher here to find the algorithm needed for the two shape types being checked, ex. btSphereBoxCollisionAlgorithm
-    btCollisionAlgorithm algorithm = m_physics.getDispatcher().findAlgorithm(co0.wrapper, co1.wrapper, null, ebtDispatcherQueryType.BT_CONTACT_POINT_ALGORITHMS);
+    btCollisionAlgorithm algorithm = m_physics.getDispatcher().findAlgorithm(object0.wrapper, object1.wrapper, null, ebtDispatcherQueryType.BT_CONTACT_POINT_ALGORITHMS);
 
     btDispatcherInfo info = new btDispatcherInfo();
-    btManifoldResult result = new btManifoldResult(co0.wrapper, co1.wrapper);
+    btManifoldResult result = new btManifoldResult(object0.wrapper, object1.wrapper);
 
     // Execute the algorithm using processCollision, this stores the result (the contact points) in the btManifoldResult
-    algorithm.processCollision(co0.wrapper, co1.wrapper, info, result);
+    algorithm.processCollision(object0.wrapper, object1.wrapper, info, result);
 
     // Free the algorithm back to a pool for reuse later
     m_physics.getDispatcher().freeCollisionAlgorithm(algorithm.getCPointer());
@@ -63,14 +65,15 @@ public class WorldObject {
 
     result.dispose();
     info.dispose();
-    co1.dispose();
-    co0.dispose();
+    object1.dispose();
+    object0.dispose();
 
     return finalResult;
   }
 
   public void setPosition(float x, float y, float z) {
     m_modelInstance.setPosition(x,y,z);
+    m_body.setWorldTransform(m_modelInstance.transform);
   }
 
   public float getX() {
