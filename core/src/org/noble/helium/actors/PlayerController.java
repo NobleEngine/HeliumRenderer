@@ -6,16 +6,19 @@ import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
+import org.noble.helium.handling.ObjectHandler;
 import org.noble.helium.handling.SimpleModelHandler;
 import org.noble.helium.helpers.Coordinates;
 import org.noble.helium.helpers.Dimensions;
 import org.noble.helium.io.KeyInput;
+import org.noble.helium.subsystems.Physics;
 import org.noble.helium.world.WorldObject;
 
 public class PlayerController extends Actor {
   private final PerspectiveCamera m_camera;
   private final KeyInput m_input;
   private final WorldObject m_playerBody;
+  private final Physics m_physics;
   private static PlayerController m_instance;
   private float m_cameraPitch, m_cameraYaw, m_verticalVelocity;
   private boolean m_debug;
@@ -23,6 +26,7 @@ public class PlayerController extends Actor {
   private PlayerController() {
     super(new Coordinates(0f, 0f, 0f),100,0.5f);
     m_input = KeyInput.getInstance();
+    m_physics = Physics.getInstance();
 
     m_camera = new PerspectiveCamera();
     m_camera.fieldOfView = 67;
@@ -38,7 +42,7 @@ public class PlayerController extends Actor {
 
     SimpleModelHandler modelHandler = SimpleModelHandler.getInstance();
     modelHandler.addNewShape("player", SimpleModelHandler.Shape.CUBE, Color.BLACK,
-        new Coordinates(0,0,0), new Dimensions(10,5,5));
+        new Coordinates(0,0,0), new Dimensions(15,5,5));
     m_playerBody = new WorldObject(modelHandler.get("player"), WorldObject.ShapeType.BOX);
 //    m_body = new btCollisionObject();
 //    m_body.setCollisionShape(new btBoxShape(new Vector3(5,5,5)));
@@ -78,6 +82,16 @@ public class PlayerController extends Actor {
     m_playerBody.setPosition(pos.getX(), pos.getY(), pos.getZ());
   }
 
+  private boolean isCollidingWithSomething() {
+    boolean colliding = false;
+    for(WorldObject object : ObjectHandler.getInstance().getAllObjects().values()) {
+      if (!object.equals(m_playerBody) && m_physics.checkCollision(m_playerBody.getBody(), object.getBody())) {
+        return true;
+      }
+    }
+    return colliding;
+  }
+
   private void changeCameraRotationWithMouseMovement() {
     // Update camera rotation based on mouse movement
     m_cameraYaw += -Gdx.input.getDeltaX() * getSpeed();
@@ -92,6 +106,7 @@ public class PlayerController extends Actor {
 
   private void updatePositionWithKeyboard() {
     // Move the camera based on keyboard input
+    Vector3 newPos = m_camera.position.cpy();
     Vector3 tmp = new Vector3();
     float speed;
 
@@ -117,7 +132,19 @@ public class PlayerController extends Actor {
     }
 
     if(!m_debug) {
-      m_camera.position.y = getY();
+      m_camera.position.y = getY() + (getVerticalVelocity() * Gdx.graphics.getDeltaTime());
+
+      if(KeyInput.getInstance().isKeyDown(KeyInput.Action.JUMP, false) && isCollidingWithSomething()) {
+        setVerticalVelocity(400f / Gdx.graphics.getDisplayMode().refreshRate);
+      }
+
+      if(!isCollidingWithSomething()) {
+        setVerticalVelocity(getVerticalVelocity() - (8f * Gdx.graphics.getDeltaTime()));
+      } else if(KeyInput.getInstance().isKeyDown(KeyInput.Action.JUMP, false) && isCollidingWithSomething()) {
+        setVerticalVelocity(400f / Gdx.graphics.getDisplayMode().refreshRate);
+      } else {
+        setVerticalVelocity(0);
+      }
     }
 //    m_camera.translate();
     setPosition(new Coordinates(m_camera.position));

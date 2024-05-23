@@ -1,10 +1,12 @@
 package org.noble.helium.screens.tests;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import org.noble.helium.handling.SimpleModelHandler;
 import org.noble.helium.helpers.Coordinates;
 import org.noble.helium.helpers.Dimensions;
+import org.noble.helium.io.KeyInput;
 import org.noble.helium.screens.BaseScreen;
 import org.noble.helium.subsystems.Physics;
 import org.noble.helium.world.WorldObject;
@@ -15,14 +17,23 @@ public class PhysicsTest extends BaseScreen {
   public PhysicsTest() {
     super();
     m_simpleModelHandler.addNewShape(
-        "cube-01", SimpleModelHandler.Shape.CUBE, new Texture(Gdx.files.internal("textures/dirt.png")),
-        new Coordinates(0f,0f,0f), new Dimensions(10f,100f,100f));
+        "cube-01", SimpleModelHandler.Shape.CUBE, Color.RED,
+        new Coordinates(0f,0f,0f), new Dimensions(10f,30f,100f));
     m_simpleModelHandler.addNewShape(
-        "cube-02", SimpleModelHandler.Shape.CUBE, new Texture(Gdx.files.internal("textures/dirt.png")),
-        new Coordinates(0f,60f,0f), new Dimensions(10f,50f,50f));
+        "cube-02", SimpleModelHandler.Shape.CUBE, Color.RED,
+        new Coordinates(50f,0f,0f), new Dimensions(10f,30f,100f));
+    m_simpleModelHandler.addNewShape(
+        "cube-03", SimpleModelHandler.Shape.CUBE, Color.RED,
+        new Coordinates(90f,0f,0f), new Dimensions(10f,30f,100f));
+    m_simpleModelHandler.addNewShape(
+        "cube-04", SimpleModelHandler.Shape.CUBE, Color.RED,
+        new Coordinates(130f,0f,0f), new Dimensions(10f,30f,100f));
 
     m_objectHandler.add("floor1", new WorldObject(m_simpleModelHandler.get("cube-01"), WorldObject.ShapeType.BOX));
     m_objectHandler.add("floor2", new WorldObject(m_simpleModelHandler.get("cube-02"), WorldObject.ShapeType.BOX));
+    m_objectHandler.add("floor3", new WorldObject(m_simpleModelHandler.get("cube-03"), WorldObject.ShapeType.BOX));
+    m_objectHandler.add("floor4", new WorldObject(m_simpleModelHandler.get("cube-04"), WorldObject.ShapeType.BOX));
+
     m_player.setDebug(false);
     m_player.setPosition(new Coordinates(0,100,0));
   }
@@ -30,10 +41,6 @@ public class PhysicsTest extends BaseScreen {
   @Override
   public void render(float delta) {
     super.render(delta);
-    WorldObject floor1 = m_objectHandler.get("floor1");
-    WorldObject floor2 = m_objectHandler.get("floor2");
-    floor1.update();
-    floor2.update();
 
 //    if(!cube.isColliding(floor)) {
 //      cube.setPosition(cube.getX(), cube.getY() - (delta * 8f), cube.getZ());
@@ -42,9 +49,13 @@ public class PhysicsTest extends BaseScreen {
 //      System.out.println("Floor X: " + floor.getX() + ", Y: " + floor.getY() + ", Z: " + floor.getZ());
 //    }
 
-    if(!(m_physics.checkCollision(floor1.getBody(), m_player.getObject().getBody()) || m_physics.checkCollision(floor2.getBody(), m_player.getObject().getBody()))) {
-      m_player.setPosition(new Coordinates(m_player.getX(), m_player.getY() - (8f * delta), m_player.getZ()));
-    }
+//    boolean falling = !(m_physics.checkCollision(floor1.getBody(), m_player.getObject().getBody()) || m_physics.checkCollision(floor2.getBody(), m_player.getObject().getBody()));
+//
+//    if(falling) {
+//      m_player.setVerticalVelocity(m_player.getVerticalVelocity() - (4f * delta));
+//    } else {
+//      m_player.setVerticalVelocity(0);
+//    }
 
     m_batch.end();
   }

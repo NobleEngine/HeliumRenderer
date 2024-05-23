@@ -30,6 +30,7 @@ public class ObjectHandler {
   public HashMap<String, WorldObject> getAllObjects() {
     return m_objects;
   }
+
   public void updateAllObjects() {
     for(WorldObject object : m_objects.values()) {
       object.update();
