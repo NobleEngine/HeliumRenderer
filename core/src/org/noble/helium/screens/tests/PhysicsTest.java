@@ -1,19 +1,14 @@
 package org.noble.helium.screens.tests;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
+
 import org.noble.helium.handling.SimpleModelHandler;
 import org.noble.helium.helpers.Coordinates;
 import org.noble.helium.helpers.Dimensions;
-import org.noble.helium.io.KeyInput;
 import org.noble.helium.screens.BaseScreen;
-import org.noble.helium.subsystems.Physics;
 import org.noble.helium.world.WorldObject;
 
 public class PhysicsTest extends BaseScreen {
-  Physics m_physics = Physics.getInstance();
-
   public PhysicsTest() {
     super();
     m_simpleModelHandler.addNewShape(
@@ -47,14 +42,6 @@ public class PhysicsTest extends BaseScreen {
 //    } else {
 //      System.out.println("Cube X: " + cube.getX() + ", Y: " + cube.getY() + ", Z: " + cube.getZ());
 //      System.out.println("Floor X: " + floor.getX() + ", Y: " + floor.getY() + ", Z: " + floor.getZ());
-//    }
-
-//    boolean falling = !(m_physics.checkCollision(floor1.getBody(), m_player.getObject().getBody()) || m_physics.checkCollision(floor2.getBody(), m_player.getObject().getBody()));
-//
-//    if(falling) {
-//      m_player.setVerticalVelocity(m_player.getVerticalVelocity() - (4f * delta));
-//    } else {
-//      m_player.setVerticalVelocity(0);
 //    }
 
     m_batch.end();

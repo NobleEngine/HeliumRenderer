@@ -17,7 +17,7 @@ import org.noble.helium.world.WorldObject;
 public class PlayerController extends Actor {
   private final PerspectiveCamera m_camera;
   private final KeyInput m_input;
-  private final WorldObject m_playerBody;
+  private final WorldObject m_playerWObject;
   private final Physics m_physics;
   private static PlayerController m_instance;
   private float m_cameraPitch, m_cameraYaw, m_verticalVelocity;
@@ -43,7 +43,7 @@ public class PlayerController extends Actor {
     SimpleModelHandler modelHandler = SimpleModelHandler.getInstance();
     modelHandler.addNewShape("player", SimpleModelHandler.Shape.CUBE, Color.BLACK,
         new Coordinates(0,0,0), new Dimensions(15,5,5));
-    m_playerBody = new WorldObject(modelHandler.get("player"), WorldObject.ShapeType.BOX);
+    m_playerWObject = new WorldObject(modelHandler.get("player"), WorldObject.ShapeType.BOX);
 //    m_body = new btCollisionObject();
 //    m_body.setCollisionShape(new btBoxShape(new Vector3(5,5,5)));
 //    setPosition(new Coordinates(0,0,0));
@@ -64,10 +64,6 @@ public class PlayerController extends Actor {
     return m_verticalVelocity;
   }
 
-  public WorldObject getObject() {
-    return m_playerBody;
-  }
-
   public void setDebug(boolean debug) {
     m_debug = debug;
   }
@@ -79,13 +75,13 @@ public class PlayerController extends Actor {
   @Override
   public void setPosition(Coordinates pos) {
     super.setPosition(pos);
-    m_playerBody.setPosition(pos.getX(), pos.getY(), pos.getZ());
+    m_playerWObject.setPosition(pos.getX(), pos.getY(), pos.getZ());
   }
 
   private boolean isCollidingWithSomething() {
     boolean colliding = false;
     for(WorldObject object : ObjectHandler.getInstance().getAllObjects().values()) {
-      if (!object.equals(m_playerBody) && m_physics.checkCollision(m_playerBody.getBody(), object.getBody())) {
+      if (!object.equals(m_playerWObject) && m_physics.checkCollision(m_playerWObject.getBody(), object.getBody())) {
         return true;
       }
     }
@@ -94,8 +90,8 @@ public class PlayerController extends Actor {
 
   private void changeCameraRotationWithMouseMovement() {
     // Update camera rotation based on mouse movement
-    m_cameraYaw += -Gdx.input.getDeltaX() * getSpeed();
-    m_cameraPitch += Gdx.input.getDeltaY() * getSpeed();
+    m_cameraYaw += -Gdx.input.getDeltaX() * Gdx.graphics.getDeltaTime() * 10f;
+    m_cameraPitch += Gdx.input.getDeltaY() * Gdx.graphics.getDeltaTime() * 10f;
 
     // Clamp pitch angle to prevent flipping
     m_cameraPitch = MathUtils.clamp(m_cameraPitch, -89f, 89f);
@@ -134,14 +130,14 @@ public class PlayerController extends Actor {
     if(!m_debug) {
       m_camera.position.y = getY() + (getVerticalVelocity() * Gdx.graphics.getDeltaTime());
 
-      if(KeyInput.getInstance().isKeyDown(KeyInput.Action.JUMP, false) && isCollidingWithSomething()) {
-        setVerticalVelocity(400f / Gdx.graphics.getDisplayMode().refreshRate);
-      }
+//      if(KeyInput.getInstance().isKeyDown(KeyInput.Action.JUMP, false) && isCollidingWithSomething()) {
+//        setVerticalVelocity(400f / Gdx.graphics.getDisplayMode().refreshRate);
+//      }
 
       if(!isCollidingWithSomething()) {
         setVerticalVelocity(getVerticalVelocity() - (8f * Gdx.graphics.getDeltaTime()));
-      } else if(KeyInput.getInstance().isKeyDown(KeyInput.Action.JUMP, false) && isCollidingWithSomething()) {
-        setVerticalVelocity(400f / Gdx.graphics.getDisplayMode().refreshRate);
+      } else if(KeyInput.getInstance().isKeyDown(KeyInput.Action.JUMP, false)) {
+        setVerticalVelocity(1600f / 144f);
       } else {
         setVerticalVelocity(0);
       }
