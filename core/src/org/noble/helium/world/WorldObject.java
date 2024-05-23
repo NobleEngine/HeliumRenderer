@@ -1,22 +1,18 @@
 package org.noble.helium.world;
 
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.*;
 import org.noble.helium.rendering.HeliumModelInstance;
-import org.noble.helium.subsystems.Physics;
 
 public class WorldObject {
-  private final Physics m_physics;
   private final btCollisionObject m_body;
   private final HeliumModelInstance m_modelInstance;
-  private final ObjectType m_type;
 
-  public WorldObject(HeliumModelInstance modelInstance, ShapeType shape, ObjectType type) {
-    m_type = type;
+  public WorldObject(HeliumModelInstance modelInstance, ShapeType shape) {
     m_modelInstance = modelInstance;
     m_body = new btCollisionObject();
     m_body.setCollisionShape(getShape(shape));
     m_body.setWorldTransform(m_modelInstance.transform);
-    m_physics = Physics.getInstance();
   }
 
   public HeliumModelInstance getModelInstance() {
@@ -28,6 +24,9 @@ public class WorldObject {
       case ShapeType.BOX -> {
         return new btBoxShape(m_modelInstance.getDimensions().scl(0.5f));
       }
+      case ShapeType.PLAYER -> {
+        return new btBoxShape(new Vector3(5,5,5).scl(0.5f));
+      }
     }
 
     return null;
@@ -35,40 +34,6 @@ public class WorldObject {
 
   public btCollisionObject getBody() {
     return m_body;
-  }
-
-  public boolean isColliding(WorldObject object) {
-    boolean finalResult = false;
-
-    CollisionObjectWrapper object0 = new CollisionObjectWrapper(m_body);
-    CollisionObjectWrapper object1 = new CollisionObjectWrapper(object.getBody());
-
-    // For each pair of shape types, Bullet will dispatch a certain collision algorithm, by using the dispatcher.
-    // So we use the dispatcher here to find the algorithm needed for the two shape types being checked, ex. btSphereBoxCollisionAlgorithm
-    btCollisionAlgorithm algorithm = m_physics.getDispatcher().findAlgorithm(object0.wrapper, object1.wrapper, null, ebtDispatcherQueryType.BT_CONTACT_POINT_ALGORITHMS);
-
-    btDispatcherInfo info = new btDispatcherInfo();
-    btManifoldResult result = new btManifoldResult(object0.wrapper, object1.wrapper);
-
-    // Execute the algorithm using processCollision, this stores the result (the contact points) in the btManifoldResult
-    algorithm.processCollision(object0.wrapper, object1.wrapper, info, result);
-
-    // Free the algorithm back to a pool for reuse later
-    m_physics.getDispatcher().freeCollisionAlgorithm(algorithm.getCPointer());
-
-    // btPersistentManifold is a contact point cache to store contact points for a given pair of objects.
-    btPersistentManifold man = result.getPersistentManifold();
-    if (man != null) {
-      // If the number of contact points is more than zero, then there is a collision.
-      finalResult = man.getNumContacts() > 0;
-    }
-
-    result.dispose();
-    info.dispose();
-    object1.dispose();
-    object0.dispose();
-
-    return finalResult;
   }
 
   public void setPosition(float x, float y, float z) {
@@ -88,10 +53,17 @@ public class WorldObject {
     return m_modelInstance.getPosition().getZ();
   }
 
-  public void update() {
-    if(m_type.equals(ObjectType.PHYSICS)) {
+  public float getDimX() {
+    return m_body.getWorldTransform().getScaleX();
+  }
+  public float getDimY() {
+    return m_body.getWorldTransform().getScaleY();
+  }
+  public float getDimZ() {
+    return m_body.getWorldTransform().getScaleZ();
+  }
 
-    }
+  public void update() {
     m_body.setWorldTransform(m_modelInstance.transform);
   }
 
@@ -99,11 +71,7 @@ public class WorldObject {
     m_body.dispose();
   }
 
-  public enum ObjectType {
-    STATIC, PHYSICS
-  }
-
   public enum ShapeType { //TODO: Add more
-    BOX
+    BOX, PLAYER
   }
 }

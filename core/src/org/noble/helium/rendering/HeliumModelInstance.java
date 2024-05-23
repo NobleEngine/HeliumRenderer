@@ -8,9 +8,11 @@ import org.noble.helium.helpers.Coordinates;
 
 public class HeliumModelInstance extends ModelInstance {
   private Coordinates m_position;
+  private boolean m_render;
   public HeliumModelInstance(Model model, Coordinates startingPosition) {
     super(model);
     setPosition(startingPosition);
+    m_render = true;
   }
 
   public void setPosition(Coordinates coords) {
@@ -21,6 +23,14 @@ public class HeliumModelInstance extends ModelInstance {
   public void setPosition(float x, float y, float z) {
     transform.setToTranslation(x, y, z);
     m_position = new Coordinates(x, y, z);
+  }
+
+  public void setShouldRender(boolean shouldRender) {
+    m_render = shouldRender;
+  }
+
+  public boolean shouldRender() {
+    return m_render;
   }
 
   public Coordinates getPosition() {

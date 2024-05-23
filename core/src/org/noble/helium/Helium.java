@@ -2,7 +2,9 @@ package org.noble.helium;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.utils.ScreenUtils;
 import org.noble.helium.actors.PlayerController;
 import org.noble.helium.handling.ObjectHandler;
 import org.noble.helium.handling.ScreenHandler;
@@ -76,8 +78,10 @@ public class Helium extends Game {
   public void render() {
     Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+    ScreenUtils.clear(Color.WHITE);
     m_player.update();
     m_objectHandler.updateAllObjects();
+    m_subsystems.forEach(Subsystem::update);
 
     m_userInterface.setLabel("FPS", "FPS: " + Gdx.graphics.getFramesPerSecond());
 
@@ -93,8 +97,6 @@ public class Helium extends Game {
     if(m_input.isKeyDown(KeyInput.Action.DEBUG_KILL, true)) {
       Gdx.app.exit();
     }
-
-    m_subsystems.forEach(Subsystem::update);
 
     super.render();
   }

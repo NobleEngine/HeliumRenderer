@@ -18,6 +18,7 @@ public class KeyInput {
     bindKey(Input.Keys.D, Action.MOVE_RIGHT);
     bindKey(Input.Keys.W, Action.MOVE_FORWARD);
     bindKey(Input.Keys.S, Action.MOVE_BACKWARD);
+    bindKey(Input.Keys.SPACE, Action.JUMP);
 
     //Misc.
 //    bindKey(Input.Keys.ESCAPE, Action.PAUSE);
@@ -68,5 +69,6 @@ public class KeyInput {
     int MOVE_FASTER = 4;
     int DEBUG_KILL = 5;
     int TOGGLE_FULLSCREEN = 6;
+    int JUMP = 7;
   }
 }

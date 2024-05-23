@@ -3,7 +3,6 @@ package org.noble.helium.handling;
 import com.badlogic.gdx.Screen;
 import org.noble.helium.Helium;
 import org.noble.helium.screens.tests.PhysicsTest;
-import org.noble.helium.screens.tests.SimpleModels;
 import org.noble.helium.subsystems.Physics;
 import org.noble.helium.subsystems.UserInterface;
 

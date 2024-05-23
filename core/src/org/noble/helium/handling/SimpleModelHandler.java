@@ -112,9 +112,16 @@ public class SimpleModelHandler {
     modelInstance.materials.forEach(materials -> materials.set(material));
   }
 
+  public void setRenderable(String modelName, boolean render) {
+    HeliumModelInstance modelInstance = m_modelInstances.get(modelName);
+    modelInstance.setShouldRender(render);
+  }
+
   public void render(HeliumModelBatch batch, Environment environment) {
     for (Map.Entry<String, HeliumModelInstance> entry : getInstance().getModelInstances().entrySet()) {
-      batch.render(entry.getValue(), environment);
+      if(entry.getValue().shouldRender()) {
+        batch.render(entry.getValue(), environment);
+      }
     }
   }
 

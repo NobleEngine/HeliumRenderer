@@ -1,18 +1,23 @@
 package org.noble.helium.actors;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
+import org.noble.helium.handling.SimpleModelHandler;
 import org.noble.helium.helpers.Coordinates;
+import org.noble.helium.helpers.Dimensions;
 import org.noble.helium.io.KeyInput;
+import org.noble.helium.world.WorldObject;
 
 public class PlayerController extends Actor {
   private final PerspectiveCamera m_camera;
   private final KeyInput m_input;
+  private final WorldObject m_playerBody;
   private static PlayerController m_instance;
-  private float m_cameraPitch, m_cameraYaw;
+  private float m_cameraPitch, m_cameraYaw, m_verticalVelocity;
   private boolean m_debug;
 
   private PlayerController() {
@@ -30,6 +35,14 @@ public class PlayerController extends Actor {
 
     m_cameraYaw = 0.0f;
     m_cameraPitch = 45.0f;
+
+    SimpleModelHandler modelHandler = SimpleModelHandler.getInstance();
+    modelHandler.addNewShape("player", SimpleModelHandler.Shape.CUBE, Color.BLACK,
+        new Coordinates(0,0,0), new Dimensions(10,5,5));
+    m_playerBody = new WorldObject(modelHandler.get("player"), WorldObject.ShapeType.BOX);
+//    m_body = new btCollisionObject();
+//    m_body.setCollisionShape(new btBoxShape(new Vector3(5,5,5)));
+//    setPosition(new Coordinates(0,0,0));
   }
 
   public static PlayerController getInstance() {
@@ -43,8 +56,26 @@ public class PlayerController extends Actor {
     return m_camera;
   }
 
+  public float getVerticalVelocity() {
+    return m_verticalVelocity;
+  }
+
+  public WorldObject getObject() {
+    return m_playerBody;
+  }
+
   public void setDebug(boolean debug) {
     m_debug = debug;
+  }
+
+  public void setVerticalVelocity(float velocity) {
+    m_verticalVelocity = velocity;
+  }
+
+  @Override
+  public void setPosition(Coordinates pos) {
+    super.setPosition(pos);
+    m_playerBody.setPosition(pos.getX(), pos.getY(), pos.getZ());
   }
 
   private void changeCameraRotationWithMouseMovement() {
@@ -65,9 +96,9 @@ public class PlayerController extends Actor {
     float speed;
 
     if(m_input.isKeyDown(KeyInput.Action.MOVE_FASTER, false)) {
-      speed = 0.5f * 40f;
-    } else {
       speed = 0.5f * 20f;
+    } else {
+      speed = 0.5f * 10f;
     }
 
     if (m_input.isKeyDown(KeyInput.Action.MOVE_FORWARD, false)) {
@@ -86,7 +117,7 @@ public class PlayerController extends Actor {
     }
 
     if(!m_debug) {
-      m_camera.position.y = 20;
+      m_camera.position.y = getY();
     }
 //    m_camera.translate();
     setPosition(new Coordinates(m_camera.position));
