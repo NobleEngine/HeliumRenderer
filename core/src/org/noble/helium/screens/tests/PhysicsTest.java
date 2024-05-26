@@ -30,19 +30,17 @@ public class PhysicsTest extends BaseScreen {
     m_objectHandler.add("floor4", new WorldObject(m_simpleModelHandler.get("cube-04"), WorldObject.ShapeType.BOX));
 
     m_player.setDebug(false);
-    m_player.setPosition(new Coordinates(0,100,0));
+    m_player.setPosition(new Coordinates(0,50,0));
   }
 
   @Override
   public void render(float delta) {
     super.render(delta);
 
-//    if(!cube.isColliding(floor)) {
-//      cube.setPosition(cube.getX(), cube.getY() - (delta * 8f), cube.getZ());
-//    } else {
-//      System.out.println("Cube X: " + cube.getX() + ", Y: " + cube.getY() + ", Z: " + cube.getZ());
-//      System.out.println("Floor X: " + floor.getX() + ", Y: " + floor.getY() + ", Z: " + floor.getZ());
-//    }
+    if(m_player.getPosition().getY() < -100f) {
+      m_player.setPosition(new Coordinates(0,50,0));
+      m_player.setVerticalVelocity(0);
+    }
 
     m_batch.end();
   }

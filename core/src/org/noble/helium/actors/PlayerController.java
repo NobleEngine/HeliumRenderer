@@ -14,6 +14,8 @@ import org.noble.helium.io.KeyInput;
 import org.noble.helium.subsystems.Physics;
 import org.noble.helium.world.WorldObject;
 
+import java.util.ArrayList;
+
 public class PlayerController extends Actor {
   private final PerspectiveCamera m_camera;
   private final KeyInput m_input;
@@ -35,7 +37,7 @@ public class PlayerController extends Actor {
     m_camera.position.set(10f, 10f, 10f);
     m_camera.lookAt(10f,10f,10f);
     m_camera.near = 0.1f;
-    m_camera.far = 500f;
+    m_camera.far = 5000f;
 
     m_cameraYaw = 0.0f;
     m_cameraPitch = 45.0f;
@@ -44,9 +46,6 @@ public class PlayerController extends Actor {
     modelHandler.addNewShape("player", SimpleModelHandler.Shape.CUBE, Color.BLACK,
         new Coordinates(0,0,0), new Dimensions(15,5,5));
     m_playerWObject = new WorldObject(modelHandler.get("player"), WorldObject.ShapeType.BOX);
-//    m_body = new btCollisionObject();
-//    m_body.setCollisionShape(new btBoxShape(new Vector3(5,5,5)));
-//    setPosition(new Coordinates(0,0,0));
   }
 
   public static PlayerController getInstance() {
@@ -78,17 +77,26 @@ public class PlayerController extends Actor {
     m_playerWObject.setPosition(pos.getX(), pos.getY(), pos.getZ());
   }
 
+  private ArrayList<WorldObject> getCollisions() {
+    ArrayList<WorldObject> collisions = new ArrayList<>();
+    for(WorldObject object : ObjectHandler.getInstance().getAllObjects().values()) {
+      if (!object.equals(m_playerWObject) && m_physics.checkCollision(m_playerWObject.getBody(), object.getBody())) {
+        collisions.add(object);
+      }
+    }
+    return collisions;
+  }
+
   private boolean isCollidingWithSomething() {
-    boolean colliding = false;
     for(WorldObject object : ObjectHandler.getInstance().getAllObjects().values()) {
       if (!object.equals(m_playerWObject) && m_physics.checkCollision(m_playerWObject.getBody(), object.getBody())) {
         return true;
       }
     }
-    return colliding;
+    return false;
   }
 
-  private void changeCameraRotationWithMouseMovement() {
+  private void rotate() {
     // Update camera rotation based on mouse movement
     m_cameraYaw += -Gdx.input.getDeltaX() * Gdx.graphics.getDeltaTime() * 10f;
     m_cameraPitch += Gdx.input.getDeltaY() * Gdx.graphics.getDeltaTime() * 10f;
@@ -100,9 +108,8 @@ public class PlayerController extends Actor {
     m_camera.direction.set(Vector3.Z).mul(quaternion);
   }
 
-  private void updatePositionWithKeyboard() {
+  private void translate() {
     // Move the camera based on keyboard input
-    Vector3 newPos = m_camera.position.cpy();
     Vector3 tmp = new Vector3();
     float speed;
 
@@ -119,36 +126,41 @@ public class PlayerController extends Actor {
       m_camera.translate(tmp.set(m_camera.direction).scl(-speed * Gdx.graphics.getDeltaTime()));
     }
     if (m_input.isKeyDown(KeyInput.Action.MOVE_LEFT, false)) {
-      tmp.set(m_camera.direction).crs(m_camera.up).nor().scl(-speed * Gdx.graphics.getDeltaTime());
-      m_camera.translate(tmp);
+      m_camera.translate(tmp.set(m_camera.direction).crs(m_camera.up).nor().scl(-speed * Gdx.graphics.getDeltaTime()));
     }
     if (m_input.isKeyDown(KeyInput.Action.MOVE_RIGHT, false)) {
-      tmp.set(m_camera.direction).crs(m_camera.up).nor().scl(speed * Gdx.graphics.getDeltaTime());
-      m_camera.translate(tmp);
+      m_camera.translate(tmp.set(m_camera.direction).crs(m_camera.up).nor().scl(speed * Gdx.graphics.getDeltaTime()));
     }
 
     if(!m_debug) {
       m_camera.position.y = getY() + (getVerticalVelocity() * Gdx.graphics.getDeltaTime());
-
-//      if(KeyInput.getInstance().isKeyDown(KeyInput.Action.JUMP, false) && isCollidingWithSomething()) {
-//        setVerticalVelocity(400f / Gdx.graphics.getDisplayMode().refreshRate);
-//      }
 
       if(!isCollidingWithSomething()) {
         setVerticalVelocity(getVerticalVelocity() - (8f * Gdx.graphics.getDeltaTime()));
       } else if(KeyInput.getInstance().isKeyDown(KeyInput.Action.JUMP, false)) {
         setVerticalVelocity(1600f / 144f);
       } else {
-        setVerticalVelocity(0);
+//        setVerticalVelocity(0);
+      }
+
+      for(WorldObject object : getCollisions()) {
+        Vector3 objectDim = object.getModelInstance().getDimensions();
+        Coordinates objectPos = object.getModelInstance().getPosition();
+        Vector3 playerDim = m_playerWObject.getModelInstance().getDimensions();
+        Coordinates playerPos = m_playerWObject.getModelInstance().getPosition();
+
+//        m_camera.position.x += object.getModelInstance().getDimensions().x - m_camera.position.x;
+        m_camera.position.y += objectDim.y - (playerPos.getY() - (playerDim.x / 2f));
+//        m_camera.position.z -= object.getModelInstance().getDimensions().z + m_camera.position.z;
       }
     }
-//    m_camera.translate();
+
     setPosition(new Coordinates(m_camera.position));
   }
 
   public void update() {
-    changeCameraRotationWithMouseMovement();
-    updatePositionWithKeyboard();
+    rotate();
+    translate();
     m_camera.update();
   }
 
