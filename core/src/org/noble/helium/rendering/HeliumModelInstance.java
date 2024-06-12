@@ -4,25 +4,25 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
-import org.noble.helium.helpers.Coordinates;
+import org.noble.helium.helpers.Dimensions;
 
 public class HeliumModelInstance extends ModelInstance {
-  private Coordinates m_position;
+  private Vector3 m_position;
   private boolean m_render;
-  public HeliumModelInstance(Model model, Coordinates startingPosition) {
+  public HeliumModelInstance(Model model, Vector3 startingPosition) {
     super(model);
     setPosition(startingPosition);
     m_render = true;
   }
 
-  public void setPosition(Coordinates coords) {
+  public void setPosition(Vector3 coords) {
+    transform.setToTranslation(coords);
     m_position = coords;
-    transform.setToTranslation(coords.getVector3());
   }
 
   public void setPosition(float x, float y, float z) {
     transform.setToTranslation(x, y, z);
-    m_position = new Coordinates(x, y, z);
+    m_position = new Vector3(x, y, z);
   }
 
   public void setShouldRender(boolean shouldRender) {
@@ -33,16 +33,15 @@ public class HeliumModelInstance extends ModelInstance {
     return m_render;
   }
 
-  public Coordinates getPosition() {
+  public Vector3 getPosition() {
     return m_position;
   }
 
-  public Vector3 getDimensions() {
+  public Dimensions getDimensions() {
     BoundingBox box = new BoundingBox();
     Vector3 dimensions = new Vector3();
     this.calculateBoundingBox(box);
     box.getDimensions(dimensions);
-    System.out.println(dimensions.x + " " + dimensions.y + " " + dimensions.z);
-    return dimensions;
+    return new Dimensions(dimensions.x, dimensions.y, dimensions.z);
   }
 }

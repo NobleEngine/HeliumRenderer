@@ -22,7 +22,7 @@ public class WorldObject {
   private btCollisionShape getShape(ShapeType shape) {
     switch(shape) {
       case ShapeType.BOX -> {
-        return new btBoxShape(m_modelInstance.getDimensions().scl(0.5f));
+        return new btBoxShape(m_modelInstance.getDimensions().getVector3().scl(0.5f));
       }
       case ShapeType.PLAYER -> {
         return new btBoxShape(new Vector3(5,5,5).scl(0.5f));
@@ -42,15 +42,15 @@ public class WorldObject {
   }
 
   public float getX() {
-    return m_modelInstance.getPosition().getX();
+    return m_modelInstance.getPosition().x;
   }
 
   public float getY() {
-    return m_modelInstance.getPosition().getY();
+    return m_modelInstance.getPosition().y;
   }
 
   public float getZ() {
-    return m_modelInstance.getPosition().getZ();
+    return m_modelInstance.getPosition().z;
   }
 
   public float getDimX() {

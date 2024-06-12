@@ -11,10 +11,10 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.loader.ObjLoader;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.math.Vector3;
 import net.mgsx.gltf.loaders.gltf.GLTFLoader;
-import org.noble.helium.rendering.HeliumModelInstance;
-import org.noble.helium.helpers.Coordinates;
 import org.noble.helium.helpers.Dimensions;
+import org.noble.helium.rendering.HeliumModelInstance;
 import org.noble.helium.rendering.HeliumModelBatch;
 
 import java.util.HashMap;
@@ -49,7 +49,7 @@ public class SimpleModelHandler {
     return m_modelInstances;
   }
 
-  public void addNewShape(String name, Shape shape, Color color, Coordinates coords, Dimensions dimensions) {
+  public void addNewShape(String name, Shape shape, Color color, Vector3 position, Dimensions dimensions) {
     Model model = null;
 
     switch(shape) {
@@ -63,12 +63,12 @@ public class SimpleModelHandler {
           VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
     }
 
-    HeliumModelInstance instance = new HeliumModelInstance(model, coords);
+    HeliumModelInstance instance = new HeliumModelInstance(model, position);
 
     m_modelInstances.put(name, instance);
   }
 
-  public void addNewShape(String name, Shape shape, Texture texture, Coordinates coords, Dimensions dimensions) {
+  public void addNewShape(String name, Shape shape, Texture texture, Vector3 position, Dimensions dimensions) {
     Model model = null;
 
     switch(shape) {
@@ -82,19 +82,19 @@ public class SimpleModelHandler {
           VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates);
     }
 
-    HeliumModelInstance instance = new HeliumModelInstance(model, coords);
+    HeliumModelInstance instance = new HeliumModelInstance(model, position);
 
     m_modelInstances.put(name, instance);
   }
 
-  public void addNewGLTFModel(String name, String path, Coordinates coords) {
+  public void addNewGLTFModel(String name, String path, Vector3 position) {
     Model model = m_GLTFLoader.load(Gdx.files.internal(path)).scene.model;
-    m_modelInstances.put(name, new HeliumModelInstance(model, coords));
+    m_modelInstances.put(name, new HeliumModelInstance(model, position));
   }
 
-  public void addNewOBJModel(String name, String path, Coordinates coords) {
+  public void addNewOBJModel(String name, String path, Vector3 position) {
     Model model = m_objLoader.loadModel(Gdx.files.internal(path));
-    m_modelInstances.put(name, new HeliumModelInstance(model, coords));
+    m_modelInstances.put(name, new HeliumModelInstance(model, position));
   }
 
   public void setTexture(String modelName, String path) {

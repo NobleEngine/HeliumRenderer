@@ -8,7 +8,6 @@ import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import org.noble.helium.handling.ObjectHandler;
 import org.noble.helium.handling.SimpleModelHandler;
-import org.noble.helium.helpers.Coordinates;
 import org.noble.helium.helpers.Dimensions;
 import org.noble.helium.io.KeyInput;
 import org.noble.helium.subsystems.Physics;
@@ -26,7 +25,7 @@ public class PlayerController extends Actor {
   private boolean m_debug;
 
   private PlayerController() {
-    super(new Coordinates(0f, 0f, 0f),100,0.5f);
+    super(new Vector3(),100,0.5f);
     m_input = KeyInput.getInstance();
     m_physics = Physics.getInstance();
 
@@ -44,7 +43,7 @@ public class PlayerController extends Actor {
 
     SimpleModelHandler modelHandler = SimpleModelHandler.getInstance();
     modelHandler.addNewShape("player", SimpleModelHandler.Shape.CUBE, Color.BLACK,
-        new Coordinates(0,0,0), new Dimensions(15,5,5));
+        new Vector3(), new Dimensions(5,15,5));
     m_playerWObject = new WorldObject(modelHandler.get("player"), WorldObject.ShapeType.BOX);
   }
 
@@ -72,9 +71,9 @@ public class PlayerController extends Actor {
   }
 
   @Override
-  public void setPosition(Coordinates pos) {
+  public void setPosition(Vector3 pos) {
     super.setPosition(pos);
-    m_playerWObject.setPosition(pos.getX(), pos.getY(), pos.getZ());
+    m_playerWObject.setPosition(pos.x, pos.y, pos.z);
   }
 
   private ArrayList<WorldObject> getCollisions() {
@@ -133,29 +132,18 @@ public class PlayerController extends Actor {
     }
 
     if(!m_debug) {
-      m_camera.position.y = getY() + (getVerticalVelocity() * Gdx.graphics.getDeltaTime());
-
       if(!isCollidingWithSomething()) {
         setVerticalVelocity(getVerticalVelocity() - (8f * Gdx.graphics.getDeltaTime()));
       } else if(KeyInput.getInstance().isKeyDown(KeyInput.Action.JUMP, false)) {
         setVerticalVelocity(1600f / 144f);
       } else {
-//        setVerticalVelocity(0);
-      }
-
-      for(WorldObject object : getCollisions()) {
-        Vector3 objectDim = object.getModelInstance().getDimensions();
-        Coordinates objectPos = object.getModelInstance().getPosition();
-        Vector3 playerDim = m_playerWObject.getModelInstance().getDimensions();
-        Coordinates playerPos = m_playerWObject.getModelInstance().getPosition();
-
-//        m_camera.position.x += object.getModelInstance().getDimensions().x - m_camera.position.x;
-        m_camera.position.y += objectDim.y - (playerPos.getY() - (playerDim.x / 2f));
-//        m_camera.position.z -= object.getModelInstance().getDimensions().z + m_camera.position.z;
+        setVerticalVelocity(0);
       }
     }
 
-    setPosition(new Coordinates(m_camera.position));
+    m_camera.position.y = getY() + (getVerticalVelocity() * Gdx.graphics.getDeltaTime());
+
+    setPosition(m_camera.position);
   }
 
   public void update() {
