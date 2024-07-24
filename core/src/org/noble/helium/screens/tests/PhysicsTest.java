@@ -16,20 +16,23 @@ public class PhysicsTest extends BaseScreen {
         new Vector3(), new Dimensions(30f,10f,50f));
     m_simpleModelHandler.addNewShape(
         "cube-02", SimpleModelHandler.Shape.CUBE, Color.OLIVE,
-        new Vector3(50f,0f,0f), new Dimensions(30f,10f,50f));
+        new Vector3(50f,0f,0f), new Dimensions(30f,1f,50f));
     m_simpleModelHandler.addNewShape(
         "cube-03", SimpleModelHandler.Shape.CUBE, Color.CHARTREUSE,
-        new Vector3(90f,0f,0f), new Dimensions(30f,10f,50f));
+        new Vector3(90f,0f,0f), new Dimensions(30f,1f,50f));
     m_simpleModelHandler.addNewShape(
         "cube-04", SimpleModelHandler.Shape.CUBE, Color.RED,
-        new Vector3(130f,0f,0f), new Dimensions(30f,10f,50f));
+        new Vector3(130f,0f,0f), new Dimensions(30f,1f,50f));
 
-    m_objectHandler.add("floor1", new WorldObject(m_simpleModelHandler.get("cube-01"), WorldObject.ShapeType.BOX));
-    m_objectHandler.add("floor2", new WorldObject(m_simpleModelHandler.get("cube-02"), WorldObject.ShapeType.BOX));
-    m_objectHandler.add("floor3", new WorldObject(m_simpleModelHandler.get("cube-03"), WorldObject.ShapeType.BOX));
-    m_objectHandler.add("floor4", new WorldObject(m_simpleModelHandler.get("cube-04"), WorldObject.ShapeType.BOX));
+    m_objectHandler.add("floor1", new WorldObject(m_simpleModelHandler.get("cube-01"),
+        WorldObject.ShapeType.BOX, WorldObject.CollisionType.FLOOR));
+    m_objectHandler.add("floor2", new WorldObject(m_simpleModelHandler.get("cube-02"),
+        WorldObject.ShapeType.BOX, WorldObject.CollisionType.FLOOR));
+    m_objectHandler.add("floor3", new WorldObject(m_simpleModelHandler.get("cube-03"),
+        WorldObject.ShapeType.BOX, WorldObject.CollisionType.FLOOR));
+    m_objectHandler.add("floor4", new WorldObject(m_simpleModelHandler.get("cube-04"),
+        WorldObject.ShapeType.BOX, WorldObject.CollisionType.FLOOR));
 
-    m_player.setDebug(false);
     m_player.setPosition(new Vector3(0,50,0));
   }
 

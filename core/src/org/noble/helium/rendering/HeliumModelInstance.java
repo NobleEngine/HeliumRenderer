@@ -38,10 +38,10 @@ public class HeliumModelInstance extends ModelInstance {
   }
 
   public Dimensions getDimensions() {
-    BoundingBox box = new BoundingBox();
+    BoundingBox boundingBox = new BoundingBox();
     Vector3 dimensions = new Vector3();
-    this.calculateBoundingBox(box);
-    box.getDimensions(dimensions);
+    this.calculateBoundingBox(boundingBox);
+    boundingBox.getDimensions(dimensions);
     return new Dimensions(dimensions.x, dimensions.y, dimensions.z);
   }
 }

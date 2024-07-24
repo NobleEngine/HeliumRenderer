@@ -13,7 +13,7 @@ public class SimpleModels extends BaseScreen {
     super();
     m_simpleModelHandler.addNewShape(
         "cube-01", SimpleModelHandler.Shape.CUBE, new Texture(Gdx.files.internal("textures/dirt.png")),
-        new Vector3(), new Dimensions(10f,100f,100f));
+        new Vector3(), new Dimensions(100f,10f,100f));
     m_simpleModelHandler.addNewShape(
         "cube-physical", SimpleModelHandler.Shape.CUBE, Color.BLUE,
         new Vector3(5f, 50f, 5f), new Dimensions(5f, 5f, 5f));

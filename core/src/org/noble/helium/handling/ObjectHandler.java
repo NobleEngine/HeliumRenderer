@@ -31,16 +31,7 @@ public class ObjectHandler {
     return m_objects;
   }
 
-  public void updateAllObjects() {
-    for(WorldObject object : m_objects.values()) {
-      object.update();
-    }
-  }
-
   public void clear() {
-    for(WorldObject object : m_objects.values()) {
-      object.dispose();
-    }
     m_objects.clear();
   }
 }

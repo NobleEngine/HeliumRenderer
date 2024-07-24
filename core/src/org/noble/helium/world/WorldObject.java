@@ -1,44 +1,28 @@
 package org.noble.helium.world;
 
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.bullet.collision.*;
+import org.noble.helium.helpers.Dimensions;
 import org.noble.helium.rendering.HeliumModelInstance;
 
 public class WorldObject {
-  private final btCollisionObject m_body;
   private final HeliumModelInstance m_modelInstance;
+  private final int m_collisionType;
 
-  public WorldObject(HeliumModelInstance modelInstance, ShapeType shape) {
+  public WorldObject(HeliumModelInstance modelInstance, ShapeType shape, int collision) {
     m_modelInstance = modelInstance;
-    m_body = new btCollisionObject();
-    m_body.setCollisionShape(getShape(shape));
-    m_body.setWorldTransform(m_modelInstance.transform);
+    m_collisionType = collision;
   }
 
   public HeliumModelInstance getModelInstance() {
     return m_modelInstance;
   }
 
-  private btCollisionShape getShape(ShapeType shape) {
-    switch(shape) {
-      case ShapeType.BOX -> {
-        return new btBoxShape(m_modelInstance.getDimensions().getVector3().scl(0.5f));
-      }
-      case ShapeType.PLAYER -> {
-        return new btBoxShape(new Vector3(5,5,5).scl(0.5f));
-      }
-    }
-
-    return null;
-  }
-
-  public btCollisionObject getBody() {
-    return m_body;
+  public int getCollisionType() {
+    return m_collisionType;
   }
 
   public void setPosition(float x, float y, float z) {
     m_modelInstance.setPosition(x,y,z);
-    m_body.setWorldTransform(m_modelInstance.transform);
   }
 
   public float getX() {
@@ -53,25 +37,47 @@ public class WorldObject {
     return m_modelInstance.getPosition().z;
   }
 
-  public float getDimX() {
-    return m_body.getWorldTransform().getScaleX();
-  }
-  public float getDimY() {
-    return m_body.getWorldTransform().getScaleY();
-  }
-  public float getDimZ() {
-    return m_body.getWorldTransform().getScaleZ();
+  public float getWidth() {
+    return m_modelInstance.getDimensions().getWidth();
   }
 
-  public void update() {
-    m_body.setWorldTransform(m_modelInstance.transform);
+  public float getHeight() {
+    return m_modelInstance.getDimensions().getHeight();
   }
 
-  public void dispose() {
-    m_body.dispose();
+  public float getDepth() {
+    return m_modelInstance.getDimensions().getDepth();
+  }
+
+  public boolean isColliding(WorldObject object) {
+    Dimensions thisDimensions = m_modelInstance.getDimensions();
+    Vector3 thisPosition = m_modelInstance.getPosition();
+    Dimensions comparedDimensions = object.getModelInstance().getDimensions();
+    Vector3 comparedPosition = object.getModelInstance().getPosition();
+
+    double extentA_x = thisDimensions.getWidth() / 2.0;
+    double extentA_y = thisDimensions.getHeight() / 2.0;
+    double extentA_z = thisDimensions.getDepth() / 2.0;
+
+    double extentB_x = comparedDimensions.getWidth() / 2.0;
+    double extentB_y = comparedDimensions.getHeight() / 2.0;
+    double extentB_z = comparedDimensions.getDepth() / 2.0;
+
+    boolean xOverlap = Math.abs(thisPosition.x - comparedPosition.x) <= (extentA_x + extentB_x);
+    boolean yOverlap = Math.abs(thisPosition.y - comparedPosition.y) <= (extentA_y + extentB_y);
+    boolean zOverlap = Math.abs(thisPosition.z - comparedPosition.z) <= (extentA_z + extentB_z);
+
+    return xOverlap && yOverlap && zOverlap;
   }
 
   public enum ShapeType { //TODO: Add more
-    BOX, PLAYER
+    BOX
+  }
+
+  public interface CollisionType {
+    int FLOOR = 0;
+    int CEILING = 1;
+    int WALL = 2;
+    int NONE = 3;
   }
 }

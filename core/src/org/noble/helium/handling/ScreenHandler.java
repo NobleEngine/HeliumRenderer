@@ -3,22 +3,17 @@ package org.noble.helium.handling;
 import com.badlogic.gdx.Screen;
 import org.noble.helium.Helium;
 import org.noble.helium.screens.tests.PhysicsTest;
-import org.noble.helium.subsystems.Physics;
 import org.noble.helium.subsystems.UserInterface;
 
 public class ScreenHandler {
   private static ScreenHandler m_instance;
   private Screen m_currentScreen;
   private final Helium m_helium;
-  private final Physics m_physics;
-  private final ObjectHandler m_objectHandler;
   private final UserInterface m_userInterface;
 
 
   private ScreenHandler() {
     m_helium = Helium.getInstance();
-    m_physics = Physics.getInstance();
-    m_objectHandler = ObjectHandler.getInstance();
     m_userInterface = UserInterface.getInstance();
     changeScreen(new PhysicsTest());
   }
@@ -44,7 +39,6 @@ public class ScreenHandler {
     } else {
       System.out.println("Starting game on " + screen.getClass().getSimpleName());
     }
-    m_physics.reset();
     m_userInterface.clear();
     m_helium.setScreen(screen);
     if (m_currentScreen != null) {
