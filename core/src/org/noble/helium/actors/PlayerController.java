@@ -116,10 +116,13 @@ public class PlayerController extends Actor {
       switch (collision.getCollisionType()) {
         case WorldObject.CollisionType.FLOOR -> {
           float topFaceOfObj = collision.getY() + collision.getHeight() / 2f;
-          nextPos.y = topFaceOfObj + m_playerWObject.getHeight() / 2f;
+          float translation = topFaceOfObj + m_playerWObject.getHeight() / 2f;
+          if(translation > nextPos.y) {
+            nextPos.y = translation;
+          }
           setVerticalVelocity(0f);
           if (m_input.isKeyDown(KeyInput.Action.JUMP, false)) {
-            setVerticalVelocity(20 * Gdx.graphics.getDeltaTime());
+            setVerticalVelocity(12 * Gdx.graphics.getDeltaTime());
           }
         }
         case WorldObject.CollisionType.WALL -> {

@@ -1,7 +1,9 @@
 package org.noble.helium.screens.tests;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector3;
 import org.noble.helium.handling.SimpleModelHandler;
 import org.noble.helium.helpers.Dimensions;
@@ -13,8 +15,7 @@ public class PhysicsTest extends BaseScreen {
     super();
     m_simpleModelHandler.addNewShape(
         "wall-01", SimpleModelHandler.Shape.CUBE, Color.CORAL,
-        new Vector3(0, 10, 20), new Dimensions(50,100,5)
-    );
+        new Vector3(0, 10, 20), new Dimensions(50,100,5));
     m_simpleModelHandler.addNewShape(
         "cube-01", SimpleModelHandler.Shape.CUBE, Color.FIREBRICK,
         new Vector3(), new Dimensions(30f,10f,50f));
@@ -25,8 +26,16 @@ public class PhysicsTest extends BaseScreen {
         "cube-03", SimpleModelHandler.Shape.CUBE, Color.CHARTREUSE,
         new Vector3(90f,0f,0f), new Dimensions(30f,1f,50f));
     m_simpleModelHandler.addNewShape(
-        "cube-04", SimpleModelHandler.Shape.CUBE, Color.RED,
+        "cube-04", SimpleModelHandler.Shape.CUBE, new Texture(Gdx.files.internal("textures/dirt.png")),
         new Vector3(130f,0f,0f), new Dimensions(30f,1f,50f));
+
+    for(int i = 0; i < 200; i++) {
+      m_simpleModelHandler.addNewShape(
+          "stair-" + i, SimpleModelHandler.Shape.CUBE, Color.BLUE,
+          new Vector3(170 + (i * 3), i * 0.4f, 0), new Dimensions(10, 1, 30));
+      m_objectHandler.add("stair" + i, new WorldObject(m_simpleModelHandler.get("stair-" + i),
+          WorldObject.ShapeType.BOX, WorldObject.CollisionType.FLOOR));
+    }
 
     m_objectHandler.add("wall1", new WorldObject(m_simpleModelHandler.get("wall-01"),
         WorldObject.ShapeType.BOX, WorldObject.CollisionType.WALL));
