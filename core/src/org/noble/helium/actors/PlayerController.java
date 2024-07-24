@@ -120,7 +120,6 @@ public class PlayerController extends Actor {
           setVerticalVelocity(0f);
           if (m_input.isKeyDown(KeyInput.Action.JUMP, false)) {
             setVerticalVelocity(20 * Gdx.graphics.getDeltaTime());
-            System.out.println("HEYYY!");
           }
         }
         case WorldObject.CollisionType.WALL -> {
@@ -184,8 +183,7 @@ public class PlayerController extends Actor {
       nextPos.add(tmp.set(m_camera.direction).crs(m_camera.up).nor().scl(speed * Gdx.graphics.getDeltaTime()));
     }
 
-    nextPos.y = tempY;
-    nextPos.y += getVerticalVelocity();
+    nextPos.y = tempY + getVerticalVelocity();
 
     setPosition(nextPos);
   }
