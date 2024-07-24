@@ -56,7 +56,7 @@ public class PhysicsTest extends BaseScreen {
     super.render(delta);
 
     if(m_player.getPosition().y < -100f) {
-      m_player.setPosition(new Vector3(0,50,0));
+      m_player.setPosition(new Vector3(m_player.getX(),50,m_player.getX()));
       m_player.setVerticalVelocity(0);
     }
 
