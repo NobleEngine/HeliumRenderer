@@ -110,9 +110,6 @@ public class PlayerController extends Actor {
 
     if(getFloorCollisions().isEmpty()) {
       setVerticalVelocity(getVerticalVelocity() - (Gdx.graphics.getDeltaTime() * 0.07f));
-    } else if (m_input.isKeyDown(KeyInput.Action.JUMP, false)) {
-      setVerticalVelocity(1600f * Gdx.graphics.getDeltaTime());
-      System.out.println("HEYYY!");
     }
 
     for (WorldObject collision : collisions) {
@@ -120,7 +117,11 @@ public class PlayerController extends Actor {
         case WorldObject.CollisionType.FLOOR -> {
           float topFaceOfObj = collision.getY() + collision.getHeight() / 2f;
           nextPos.y = topFaceOfObj + m_playerWObject.getHeight() / 2f;
-          setVerticalVelocity(0);
+          setVerticalVelocity(0f);
+          if (m_input.isKeyDown(KeyInput.Action.JUMP, false)) {
+            setVerticalVelocity(20 * Gdx.graphics.getDeltaTime());
+            System.out.println("HEYYY!");
+          }
         }
         case WorldObject.CollisionType.WALL -> {
           float extentA_x = m_playerWObject.getWidth() / 2.0f;
@@ -149,6 +150,7 @@ public class PlayerController extends Actor {
             } else {
               nextPos.y = collision.getY() + (extentA_y + extentB_y);
             }
+            setVerticalVelocity(0);
           } else {
             // Smallest overlap is in the z-axis
             if (m_playerWObject.getZ() < collision.getZ()) {
@@ -167,6 +169,8 @@ public class PlayerController extends Actor {
       speed = 0.5f * 10f;
     }
 
+    float tempY = nextPos.y;
+
     if (m_input.isKeyDown(KeyInput.Action.MOVE_FORWARD, false)) {
       nextPos.add(tmp.set(m_camera.direction).scl(speed * Gdx.graphics.getDeltaTime()));
     }
@@ -180,6 +184,7 @@ public class PlayerController extends Actor {
       nextPos.add(tmp.set(m_camera.direction).crs(m_camera.up).nor().scl(speed * Gdx.graphics.getDeltaTime()));
     }
 
+    nextPos.y = tempY;
     nextPos.y += getVerticalVelocity();
 
     setPosition(nextPos);
