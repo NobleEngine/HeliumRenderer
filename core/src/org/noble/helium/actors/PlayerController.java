@@ -22,7 +22,7 @@ public class PlayerController extends Actor {
   private float m_cameraPitch, m_cameraYaw, m_verticalVelocity;
 
   private PlayerController() {
-    super(new Vector3(),100,0.5f);
+    super(new Vector3(), 100, 0.5f);
     m_input = KeyInput.getInstance();
 
     m_camera = new PerspectiveCamera();
@@ -30,7 +30,7 @@ public class PlayerController extends Actor {
     m_camera.viewportWidth = Gdx.graphics.getWidth();
     m_camera.viewportHeight = Gdx.graphics.getHeight();
     m_camera.position.set(10f, 10f, 10f);
-    m_camera.lookAt(10f,10f,10f);
+    m_camera.lookAt(10f, 10f, 10f);
     m_camera.near = 0.1f;
     m_camera.far = 5000f;
 
@@ -39,12 +39,12 @@ public class PlayerController extends Actor {
 
     SimpleModelHandler modelHandler = SimpleModelHandler.getInstance();
     modelHandler.addNewShape("player", SimpleModelHandler.Shape.CUBE, Color.BLACK,
-        new Vector3(), new Dimensions(5,15,5));
+        new Vector3(), new Dimensions(5, 15, 5));
     m_playerWObject = new WorldObject(modelHandler.get("player"), WorldObject.ShapeType.BOX, WorldObject.CollisionType.NONE);
   }
 
   public static PlayerController getInstance() {
-    if(m_instance == null) {
+    if (m_instance == null) {
       m_instance = new PlayerController();
     }
     return m_instance;
@@ -71,8 +71,18 @@ public class PlayerController extends Actor {
 
   private ArrayList<WorldObject> getCollisions() {
     ArrayList<WorldObject> collisions = new ArrayList<>();
-    for(WorldObject object : ObjectHandler.getInstance().getAllObjects().values()) {
+    for (WorldObject object : ObjectHandler.getInstance().getAllObjects().values()) {
       if (!object.equals(m_playerWObject) && m_playerWObject.isColliding(object)) {
+        collisions.add(object);
+      }
+    }
+    return collisions;
+  }
+
+  private ArrayList<WorldObject> getFloorCollisions() {
+    ArrayList<WorldObject> collisions = new ArrayList<>();
+    for (WorldObject object : ObjectHandler.getInstance().getAllObjects().values()) {
+      if (object.getCollisionType() == WorldObject.CollisionType.FLOOR && m_playerWObject.isColliding(object)) {
         collisions.add(object);
       }
     }
@@ -96,8 +106,62 @@ public class PlayerController extends Actor {
     Vector3 nextPos = m_camera.position.cpy();
     Vector3 tmp = new Vector3();
     float speed;
+    ArrayList<WorldObject> collisions = getCollisions();
 
-    if(m_input.isKeyDown(KeyInput.Action.MOVE_FASTER, false)) {
+    if(getFloorCollisions().isEmpty()) {
+      setVerticalVelocity(getVerticalVelocity() - (Gdx.graphics.getDeltaTime() * 0.07f));
+    } else if (m_input.isKeyDown(KeyInput.Action.JUMP, false)) {
+      setVerticalVelocity(1600f * Gdx.graphics.getDeltaTime());
+      System.out.println("HEYYY!");
+    }
+
+    for (WorldObject collision : collisions) {
+      switch (collision.getCollisionType()) {
+        case WorldObject.CollisionType.FLOOR -> {
+          float topFaceOfObj = collision.getY() + collision.getHeight() / 2f;
+          nextPos.y = topFaceOfObj + m_playerWObject.getHeight() / 2f;
+          setVerticalVelocity(0);
+        }
+        case WorldObject.CollisionType.WALL -> {
+          float extentA_x = m_playerWObject.getWidth() / 2.0f;
+          float extentA_y = m_playerWObject.getHeight() / 2.0f;
+          float extentA_z = m_playerWObject.getDepth() / 2.0f;
+
+          float extentB_x = collision.getWidth() / 2.0f;
+          float extentB_y = collision.getHeight() / 2.0f;
+          float extentB_z = collision.getDepth() / 2.0f;
+
+          float overlapX = (extentA_x + extentB_x) - Math.abs(m_playerWObject.getX() - collision.getX());
+          float overlapY = (extentA_y + extentB_y) - Math.abs(m_playerWObject.getY() - collision.getY());
+          float overlapZ = (extentA_z + extentB_z) - Math.abs(m_playerWObject.getZ() - collision.getZ());
+
+          if (overlapX < overlapY && overlapX < overlapZ) {
+            // Smallest overlap is in the x-axis
+            if (m_playerWObject.getX() < collision.getX()) {
+              nextPos.x = collision.getX() - (extentA_x + extentB_x);
+            } else {
+              nextPos.x = collision.getX() + (extentA_x + extentB_x);
+            }
+          } else if (overlapY < overlapX && overlapY < overlapZ) {
+            // Smallest overlap is in the y-axis
+            if (m_playerWObject.getY() < collision.getY()) {
+              nextPos.y = collision.getY() - (extentA_y + extentB_y);
+            } else {
+              nextPos.y = collision.getY() + (extentA_y + extentB_y);
+            }
+          } else {
+            // Smallest overlap is in the z-axis
+            if (m_playerWObject.getZ() < collision.getZ()) {
+              nextPos.z = collision.getZ() - (extentA_z + extentB_z);
+            } else {
+              nextPos.z = collision.getZ() + (extentA_z + extentB_z);
+            }
+          }
+        }
+      }
+    }
+
+    if (m_input.isKeyDown(KeyInput.Action.MOVE_FASTER, false)) {
       speed = 0.5f * 20f;
     } else {
       speed = 0.5f * 10f;
@@ -116,26 +180,7 @@ public class PlayerController extends Actor {
       nextPos.add(tmp.set(m_camera.direction).crs(m_camera.up).nor().scl(speed * Gdx.graphics.getDeltaTime()));
     }
 
-    nextPos.y = getY() + (getVerticalVelocity() * Gdx.graphics.getDeltaTime());
-
-    ArrayList<WorldObject> collisions = getCollisions();
-    if(collisions.isEmpty()) {
-      setVerticalVelocity(getVerticalVelocity() - (8f * Gdx.graphics.getDeltaTime()));
-    } else if(KeyInput.getInstance().isKeyDown(KeyInput.Action.JUMP, false)) {
-      setVerticalVelocity(1600f / 144f);
-    } else {
-      setVerticalVelocity(0);
-
-      for (WorldObject collision : collisions) {
-        switch (collision.getCollisionType()) {
-          case WorldObject.CollisionType.FLOOR -> {
-            float topFaceOfObj = collision.getY() + collision.getHeight() / 2;
-            nextPos.y = topFaceOfObj + m_playerWObject.getHeight() / 2;
-          }
-        }
-      }
-    }
-
+    nextPos.y += getVerticalVelocity();
 
     setPosition(nextPos);
   }

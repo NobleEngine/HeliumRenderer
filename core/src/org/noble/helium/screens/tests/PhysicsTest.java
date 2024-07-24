@@ -12,6 +12,10 @@ public class PhysicsTest extends BaseScreen {
   public PhysicsTest() {
     super();
     m_simpleModelHandler.addNewShape(
+        "wall-01", SimpleModelHandler.Shape.CUBE, Color.CORAL,
+        new Vector3(0, 10, 20), new Dimensions(50,100,5)
+    );
+    m_simpleModelHandler.addNewShape(
         "cube-01", SimpleModelHandler.Shape.CUBE, Color.FIREBRICK,
         new Vector3(), new Dimensions(30f,10f,50f));
     m_simpleModelHandler.addNewShape(
@@ -24,6 +28,8 @@ public class PhysicsTest extends BaseScreen {
         "cube-04", SimpleModelHandler.Shape.CUBE, Color.RED,
         new Vector3(130f,0f,0f), new Dimensions(30f,1f,50f));
 
+    m_objectHandler.add("wall1", new WorldObject(m_simpleModelHandler.get("wall-01"),
+        WorldObject.ShapeType.BOX, WorldObject.CollisionType.WALL));
     m_objectHandler.add("floor1", new WorldObject(m_simpleModelHandler.get("cube-01"),
         WorldObject.ShapeType.BOX, WorldObject.CollisionType.FLOOR));
     m_objectHandler.add("floor2", new WorldObject(m_simpleModelHandler.get("cube-02"),
