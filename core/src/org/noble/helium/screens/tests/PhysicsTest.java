@@ -32,7 +32,7 @@ public class PhysicsTest extends BaseScreen {
     for(int i = 0; i < 200; i++) {
       m_simpleModelHandler.addNewShape(
           "stair-" + i, SimpleModelHandler.Shape.CUBE, Color.BLUE,
-          new Vector3(170 + (i * 3), i * 0.4f, 0), new Dimensions(10, 1, 30));
+          new Vector3(170 + (i * 3), i * 0.7f, 0), new Dimensions(2, 1, 30));
       m_objectHandler.add("stair" + i, new WorldObject(m_simpleModelHandler.get("stair-" + i),
           WorldObject.ShapeType.BOX, WorldObject.CollisionType.FLOOR));
     }
