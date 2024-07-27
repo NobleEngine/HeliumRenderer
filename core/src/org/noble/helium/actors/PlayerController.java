@@ -109,7 +109,7 @@ public class PlayerController extends Actor {
     ArrayList<WorldObject> collisions = getCollisions();
 
     if(getFloorCollisions().isEmpty()) {
-      setVerticalVelocity(getVerticalVelocity() - (Gdx.graphics.getDeltaTime() * 0.07f));
+      setVerticalVelocity(getVerticalVelocity() - 7f * Gdx.graphics.getDeltaTime());
     }
 
     for (WorldObject collision : collisions) {
@@ -118,11 +118,11 @@ public class PlayerController extends Actor {
           float topFaceOfObj = collision.getY() + collision.getHeight() / 2f;
           float translation = topFaceOfObj + m_playerWObject.getHeight() / 2f;
           if(translation > nextPos.y) {
-            nextPos.y += (translation - nextPos.y) * (Gdx.graphics.getDeltaTime() * 3);
+            nextPos.y += (translation - nextPos.y) * (Gdx.graphics.getDeltaTime() * 4);
           }
           setVerticalVelocity(0f);
           if (m_input.isKeyDown(KeyInput.Action.JUMP, false)) {
-            setVerticalVelocity(12f * Gdx.graphics.getDeltaTime());
+            setVerticalVelocity(10f);
           }
         }
         case WorldObject.CollisionType.WALL -> {
@@ -186,7 +186,7 @@ public class PlayerController extends Actor {
       nextPos.add(tmp.set(m_camera.direction).crs(m_camera.up).nor().scl(speed * Gdx.graphics.getDeltaTime()));
     }
 
-    nextPos.y = tempY + getVerticalVelocity();
+    nextPos.y = tempY + (getVerticalVelocity() * Gdx.graphics.getDeltaTime());
 
     setPosition(nextPos);
   }

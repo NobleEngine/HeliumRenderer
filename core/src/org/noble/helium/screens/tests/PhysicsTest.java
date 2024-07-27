@@ -32,7 +32,7 @@ public class PhysicsTest extends BaseScreen {
     for(int i = 0; i < 200; i++) {
       m_simpleModelHandler.addNewShape(
           "stair-" + i, SimpleModelHandler.Shape.CUBE, Color.BLUE,
-          new Vector3(170 + (i * 3), i * 0.7f, 0), new Dimensions(2, 1, 30));
+          new Vector3(170 + (i), i, 0), new Dimensions(2, 1, 30));
       m_objectHandler.add("stair" + i, new WorldObject(m_simpleModelHandler.get("stair-" + i),
           WorldObject.ShapeType.BOX, WorldObject.CollisionType.FLOOR));
     }
@@ -56,7 +56,7 @@ public class PhysicsTest extends BaseScreen {
     super.render(delta);
 
     if(m_player.getPosition().y < -100f) {
-      m_player.setPosition(new Vector3(m_player.getX(),50,m_player.getX()));
+      m_player.setPosition(new Vector3(m_player.getX(),50,m_player.getZ()));
       m_player.setVerticalVelocity(0);
     }
 
