@@ -49,7 +49,7 @@ public class PhysicsTest extends BaseScreen {
     m_objectHandler.add("floor2", new WorldObject(m_simpleModelHandler.get("cube-02"),
         WorldObject.ShapeType.BOX, WorldObject.CollisionType.STANDARD));
     m_objectHandler.add("floor3", new WorldObject(m_simpleModelHandler.get("cube-03"),
-        WorldObject.ShapeType.BOX, WorldObject.CollisionType.STANDARD));
+        WorldObject.ShapeType.BOX, WorldObject.CollisionType.NONE));
     m_objectHandler.add("floor4", new WorldObject(m_simpleModelHandler.get("cube-04"),
         WorldObject.ShapeType.BOX, WorldObject.CollisionType.STANDARD));
 

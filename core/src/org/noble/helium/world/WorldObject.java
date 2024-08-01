@@ -50,6 +50,10 @@ public class WorldObject {
   }
 
   public boolean isColliding(WorldObject object) {
+    if(object.getCollisionType() == CollisionType.NONE) {
+      return false;
+    }
+
     Dimensions thisDimensions = m_modelInstance.getDimensions();
     Vector3 thisPosition = m_modelInstance.getPosition();
     Dimensions comparedDimensions = object.getModelInstance().getDimensions();
@@ -76,8 +80,7 @@ public class WorldObject {
 
   public interface CollisionType {
     int CLIMBABLE = 0;
-    int CEILING = 1;
-    int STANDARD = 2;
-    int NONE = 3;
+    int STANDARD = 1;
+    int NONE = 2;
   }
 }
