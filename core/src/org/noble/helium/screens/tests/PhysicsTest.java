@@ -28,25 +28,30 @@ public class PhysicsTest extends BaseScreen {
     m_simpleModelHandler.addNewShape(
         "cube-04", SimpleModelHandler.Shape.CUBE, new Texture(Gdx.files.internal("textures/dirt.png")),
         new Vector3(130f,0f,0f), new Dimensions(30f,1f,50f));
+    m_simpleModelHandler.addNewShape(
+        "ladder", SimpleModelHandler.Shape.CUBE, Color.WHITE,
+        new Vector3(5,10,25), new Dimensions(5f,100.1f,16f));
 
     for(int i = 0; i < 200; i++) {
       m_simpleModelHandler.addNewShape(
           "stair-" + i, SimpleModelHandler.Shape.CUBE, Color.BLUE,
           new Vector3(170 + (i), i, 0), new Dimensions(2, 1, 30));
       m_objectHandler.add("stair" + i, new WorldObject(m_simpleModelHandler.get("stair-" + i),
-          WorldObject.ShapeType.BOX, WorldObject.CollisionType.FLOOR));
+          WorldObject.ShapeType.BOX, WorldObject.CollisionType.CLIMBABLE));
     }
 
     m_objectHandler.add("wall1", new WorldObject(m_simpleModelHandler.get("wall-01"),
-        WorldObject.ShapeType.BOX, WorldObject.CollisionType.WALL));
+        WorldObject.ShapeType.BOX, WorldObject.CollisionType.STANDARD));
+    m_objectHandler.add("ladder", new WorldObject(m_simpleModelHandler.get("ladder"),
+        WorldObject.ShapeType.BOX, WorldObject.CollisionType.CLIMBABLE));
     m_objectHandler.add("floor1", new WorldObject(m_simpleModelHandler.get("cube-01"),
-        WorldObject.ShapeType.BOX, WorldObject.CollisionType.FLOOR));
+        WorldObject.ShapeType.BOX, WorldObject.CollisionType.STANDARD));
     m_objectHandler.add("floor2", new WorldObject(m_simpleModelHandler.get("cube-02"),
-        WorldObject.ShapeType.BOX, WorldObject.CollisionType.FLOOR));
+        WorldObject.ShapeType.BOX, WorldObject.CollisionType.STANDARD));
     m_objectHandler.add("floor3", new WorldObject(m_simpleModelHandler.get("cube-03"),
-        WorldObject.ShapeType.BOX, WorldObject.CollisionType.FLOOR));
+        WorldObject.ShapeType.BOX, WorldObject.CollisionType.STANDARD));
     m_objectHandler.add("floor4", new WorldObject(m_simpleModelHandler.get("cube-04"),
-        WorldObject.ShapeType.BOX, WorldObject.CollisionType.FLOOR));
+        WorldObject.ShapeType.BOX, WorldObject.CollisionType.STANDARD));
 
     m_player.setPosition(new Vector3(0,50,0));
   }
@@ -56,8 +61,8 @@ public class PhysicsTest extends BaseScreen {
     super.render(delta);
 
     if(m_player.getPosition().y < -100f) {
-      m_player.setPosition(new Vector3(m_player.getX(),50,m_player.getZ()));
-      m_player.setVerticalVelocity(0);
+      m_player.setPosition(new Vector3(m_player.getX(),150,m_player.getZ()));
+//      m_player.setVerticalVelocity(0);
     }
 
     m_batch.end();

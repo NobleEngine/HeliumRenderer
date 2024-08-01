@@ -75,9 +75,9 @@ public class WorldObject {
   }
 
   public interface CollisionType {
-    int FLOOR = 0;
+    int CLIMBABLE = 0;
     int CEILING = 1;
-    int WALL = 2;
+    int STANDARD = 2;
     int NONE = 3;
   }
 }

@@ -82,7 +82,7 @@ public class PlayerController extends Actor {
   private ArrayList<WorldObject> getFloorCollisions() {
     ArrayList<WorldObject> collisions = new ArrayList<>();
     for (WorldObject object : ObjectHandler.getInstance().getAllObjects().values()) {
-      if (object.getCollisionType() == WorldObject.CollisionType.FLOOR && m_playerWObject.isColliding(object)) {
+      if (object.getCollisionType() == WorldObject.CollisionType.CLIMBABLE && m_playerWObject.isColliding(object)) {
         collisions.add(object);
       }
     }
@@ -107,62 +107,68 @@ public class PlayerController extends Actor {
     Vector3 tmp = new Vector3();
     float speed;
     ArrayList<WorldObject> collisions = getCollisions();
+    ArrayList<WorldObject> floorCollisions = getFloorCollisions();
 
-    if(getFloorCollisions().isEmpty()) {
-      setVerticalVelocity(getVerticalVelocity() - 7f * Gdx.graphics.getDeltaTime());
+    if (floorCollisions.isEmpty()) {
+      setVerticalVelocity(getVerticalVelocity() - 15f * Gdx.graphics.getDeltaTime());
     }
 
     for (WorldObject collision : collisions) {
-      switch (collision.getCollisionType()) {
-        case WorldObject.CollisionType.FLOOR -> {
-          float topFaceOfObj = collision.getY() + collision.getHeight() / 2f;
-          float translation = topFaceOfObj + m_playerWObject.getHeight() / 2f;
-          if(translation > nextPos.y) {
-            nextPos.y += (translation - nextPos.y) * (Gdx.graphics.getDeltaTime() * 4);
-          }
-          setVerticalVelocity(0f);
-          if (m_input.isKeyDown(KeyInput.Action.JUMP, false)) {
-            setVerticalVelocity(10f);
-          }
+      if(collision.getCollisionType() == WorldObject.CollisionType.CLIMBABLE) {
+        float topFaceOfObj = collision.getY() + collision.getHeight() / 2f;
+        float translation = topFaceOfObj + m_playerWObject.getHeight() / 2f;
+        float yMovement = translation - nextPos.y;
+        if (translation > nextPos.y) {
+          System.out.println(yMovement);
+          nextPos.y += (yMovement) * (Gdx.graphics.getDeltaTime() * 2f);
         }
-        case WorldObject.CollisionType.WALL -> {
-          float extentA_x = m_playerWObject.getWidth() / 2.0f;
-          float extentA_y = m_playerWObject.getHeight() / 2.0f;
-          float extentA_z = m_playerWObject.getDepth() / 2.0f;
-
-          float extentB_x = collision.getWidth() / 2.0f;
-          float extentB_y = collision.getHeight() / 2.0f;
-          float extentB_z = collision.getDepth() / 2.0f;
-
-          float overlapX = (extentA_x + extentB_x) - Math.abs(m_playerWObject.getX() - collision.getX());
-          float overlapY = (extentA_y + extentB_y) - Math.abs(m_playerWObject.getY() - collision.getY());
-          float overlapZ = (extentA_z + extentB_z) - Math.abs(m_playerWObject.getZ() - collision.getZ());
-
-          if (overlapX < overlapY && overlapX < overlapZ) {
-            // Smallest overlap is in the x-axis
-            if (m_playerWObject.getX() < collision.getX()) {
-              nextPos.x = collision.getX() - (extentA_x + extentB_x);
-            } else {
-              nextPos.x = collision.getX() + (extentA_x + extentB_x);
-            }
-          } else if (overlapY < overlapX && overlapY < overlapZ) {
-            // Smallest overlap is in the y-axis
-            if (m_playerWObject.getY() < collision.getY()) {
-              nextPos.y = collision.getY() - (extentA_y + extentB_y);
-            } else {
-              nextPos.y = collision.getY() + (extentA_y + extentB_y);
-            }
-            setVerticalVelocity(0);
-          } else {
-            // Smallest overlap is in the z-axis
-            if (m_playerWObject.getZ() < collision.getZ()) {
-              nextPos.z = collision.getZ() - (extentA_z + extentB_z);
-            } else {
-              nextPos.z = collision.getZ() + (extentA_z + extentB_z);
-            }
-          }
+        setVerticalVelocity(0f);
+        if (m_input.isKeyDown(KeyInput.Action.JUMP, false)) {
+          setVerticalVelocity(10f);
         }
       }
+
+      float extentA_x = m_playerWObject.getWidth() / 2.0f;
+      float extentA_y = m_playerWObject.getHeight() / 2.0f;
+      float extentA_z = m_playerWObject.getDepth() / 2.0f;
+
+      float extentB_x = collision.getWidth() / 2.0f;
+      float extentB_y = collision.getHeight() / 2.0f;
+      float extentB_z = collision.getDepth() / 2.0f;
+
+      float overlapX = (extentA_x + extentB_x) - Math.abs(m_playerWObject.getX() - collision.getX());
+      float overlapY = (extentA_y + extentB_y) - Math.abs(m_playerWObject.getY() - collision.getY());
+      float overlapZ = (extentA_z + extentB_z) - Math.abs(m_playerWObject.getZ() - collision.getZ());
+
+      if (overlapX < overlapY && overlapX < overlapZ) {
+        // Smallest overlap is in the x-axis
+        if (m_playerWObject.getX() < collision.getX()) {
+          nextPos.x = collision.getX() - (extentA_x + extentB_x);
+        } else {
+          nextPos.x = collision.getX() + (extentA_x + extentB_x);
+        }
+      } else if (overlapY < overlapX && overlapY < overlapZ) {
+        // Smallest overlap is in the y-axis
+        if (m_playerWObject.getY() < collision.getY()) {
+          nextPos.y = collision.getY() - (extentA_y + extentB_y);
+        } else {
+          nextPos.y = collision.getY() + (extentA_y + extentB_y);
+        }
+        nextPos.y -= 0.0001f;
+        setVerticalVelocity(0);
+        if (m_input.isKeyDown(KeyInput.Action.JUMP, false)) {
+          setVerticalVelocity(10f);
+        }
+      } else {
+        // Smallest overlap is in the z-axis
+        if (m_playerWObject.getZ() < collision.getZ()) {
+          nextPos.z = collision.getZ() - (extentA_z + extentB_z);
+        } else {
+          nextPos.z = collision.getZ() + (extentA_z + extentB_z);
+        }
+      }
+
+
     }
 
     if (m_input.isKeyDown(KeyInput.Action.MOVE_FASTER, false)) {
