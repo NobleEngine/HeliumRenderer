@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 public class Helium extends Game {
   private int m_status;
+  private float m_delta;
   private static Helium m_instance;
   private final ArrayList<Subsystem> m_subsystems;
   private SimpleModelHandler m_simpleModelHandler;
@@ -50,6 +51,10 @@ public class Helium extends Game {
     return m_status;
   }
 
+  public float getDelta() {
+    return m_delta;
+  }
+
   @Override
   public void create() {
     m_simpleModelHandler = SimpleModelHandler.getInstance();
@@ -67,6 +72,7 @@ public class Helium extends Game {
 
   @Override
   public void render() {
+    m_delta = Gdx.graphics.getDeltaTime();
     Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
     m_player.update();

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
+import org.noble.helium.Helium;
 import org.noble.helium.handling.ObjectHandler;
 import org.noble.helium.handling.SimpleModelHandler;
 import org.noble.helium.helpers.Dimensions;
@@ -18,12 +19,14 @@ public class PlayerController extends Actor {
   private final PerspectiveCamera m_camera;
   private final KeyInput m_input;
   private final WorldObject m_playerWObject;
+  private final Helium m_engine;
   private static PlayerController m_instance;
   private float m_cameraPitch, m_cameraYaw, m_verticalVelocity;
 
   private PlayerController() {
     super(new Vector3(), 100, 0.5f);
     m_input = KeyInput.getInstance();
+    m_engine = Helium.getInstance();
 
     m_camera = new PerspectiveCamera();
     m_camera.fieldOfView = 67;
@@ -81,8 +84,8 @@ public class PlayerController extends Actor {
 
   private void rotate() {
     // Update camera rotation based on mouse movement
-    m_cameraYaw += -Gdx.input.getDeltaX() * Gdx.graphics.getDeltaTime() * 10f;
-    m_cameraPitch += Gdx.input.getDeltaY() * Gdx.graphics.getDeltaTime() * 10f;
+    m_cameraYaw += -Gdx.input.getDeltaX() * m_engine.getDelta() * 10f;
+    m_cameraPitch += Gdx.input.getDeltaY() * m_engine.getDelta() * 10f;
 
     // Clamp pitch angle to prevent flipping
     m_cameraPitch = MathUtils.clamp(m_cameraPitch, -89f, 89f);
@@ -98,14 +101,14 @@ public class PlayerController extends Actor {
     float speed;
     ArrayList<WorldObject> collisions = getCollisions();
 
-    setVerticalVelocity(getVerticalVelocity() - 15f * Gdx.graphics.getDeltaTime());
+    setVerticalVelocity(getVerticalVelocity() - 15f * m_engine.getDelta());
 
     boolean shouldCalculate = true;
     for (WorldObject collision : collisions) {
       if (collision.getCollisionType() == WorldObject.CollisionType.CLIMBABLE) {
         float topFaceOfObj = collision.getY() + collision.getHeight() / 2f;
         float translation = topFaceOfObj + m_playerWObject.getHeight() / 2f;
-        float movementSpeed = (Gdx.graphics.getDeltaTime() * 2f);
+        float movementSpeed = (m_engine.getDelta() * 2f);
         float yMovement = translation - nextPos.y;
         if (translation > nextPos.y) {
           System.out.println(yMovement);
@@ -173,19 +176,19 @@ public class PlayerController extends Actor {
     float tempY = nextPos.y;
 
     if (m_input.isKeyDown(KeyInput.Action.MOVE_FORWARD, false)) {
-      nextPos.add(tmp.set(m_camera.direction).scl(speed * Gdx.graphics.getDeltaTime()));
+      nextPos.add(tmp.set(m_camera.direction).scl(speed * m_engine.getDelta()));
     }
     if (m_input.isKeyDown(KeyInput.Action.MOVE_BACKWARD, false)) {
-      nextPos.add(tmp.set(m_camera.direction).scl(-speed * Gdx.graphics.getDeltaTime()));
+      nextPos.add(tmp.set(m_camera.direction).scl(-speed * m_engine.getDelta()));
     }
     if (m_input.isKeyDown(KeyInput.Action.MOVE_LEFT, false)) {
-      nextPos.add(tmp.set(m_camera.direction).crs(m_camera.up).nor().scl(-speed * Gdx.graphics.getDeltaTime()));
+      nextPos.add(tmp.set(m_camera.direction).crs(m_camera.up).nor().scl(-speed * m_engine.getDelta()));
     }
     if (m_input.isKeyDown(KeyInput.Action.MOVE_RIGHT, false)) {
-      nextPos.add(tmp.set(m_camera.direction).crs(m_camera.up).nor().scl(speed * Gdx.graphics.getDeltaTime()));
+      nextPos.add(tmp.set(m_camera.direction).crs(m_camera.up).nor().scl(speed * m_engine.getDelta()));
     }
 
-    nextPos.y = tempY + (getVerticalVelocity() * Gdx.graphics.getDeltaTime());
+    nextPos.y = tempY + (getVerticalVelocity() * m_engine.getDelta());
 
     setPosition(nextPos);
   }
