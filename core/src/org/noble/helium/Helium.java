@@ -66,6 +66,7 @@ public class Helium extends Game {
     m_subsystems.add(m_userInterface);
 
     m_userInterface.addLabel("FPS", "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, 10, 100, 25);
+    m_userInterface.addLabel("PlayerController-Position", "", 10, 30, 100, 25);
 
     m_modelBatch = new HeliumModelBatch();
   }

@@ -11,6 +11,7 @@ import org.noble.helium.handling.ObjectHandler;
 import org.noble.helium.handling.SimpleModelHandler;
 import org.noble.helium.helpers.Dimensions;
 import org.noble.helium.io.KeyInput;
+import org.noble.helium.subsystems.UserInterface;
 import org.noble.helium.world.WorldObject;
 
 import java.util.ArrayList;
@@ -111,7 +112,6 @@ public class PlayerController extends Actor {
         float movementSpeed = (m_engine.getDelta() * 2f);
         float yMovement = translation - nextPos.y;
         if (translation > nextPos.y) {
-          System.out.println(yMovement);
           if(yMovement < 3f) {
             movementSpeed *= 4f;
             shouldCalculate = false;
@@ -197,6 +197,7 @@ public class PlayerController extends Actor {
     rotate();
     translate();
     m_camera.update();
+    UserInterface.getInstance().setLabel("PlayerController-Position", "Position: " + getX() + ", " + getY() + ", " + getZ());
   }
 
   @Override
