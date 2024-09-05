@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import org.noble.helium.Helium;
 import org.noble.helium.handling.ObjectHandler;
-import org.noble.helium.handling.SimpleModelHandler;
+import org.noble.helium.handling.ModelHandler;
 import org.noble.helium.helpers.Dimensions;
 import org.noble.helium.io.KeyInput;
 import org.noble.helium.subsystems.UserInterface;
@@ -41,9 +41,10 @@ public class PlayerController extends Actor {
     m_cameraYaw = 0.0f;
     m_cameraPitch = 45.0f;
 
-    SimpleModelHandler modelHandler = SimpleModelHandler.getInstance();
-    modelHandler.addNewShape("player", SimpleModelHandler.Shape.CUBE, Color.BLACK,
+    ModelHandler modelHandler = ModelHandler.getInstance();
+    modelHandler.addNewShape("player", ModelHandler.Shape.CUBE, Color.BLACK,
         new Vector3(), new Dimensions(5, 15, 5));
+    modelHandler.setRenderable("player", false);
     m_playerWObject = new WorldObject(modelHandler.get("player"), WorldObject.ShapeType.BOX, WorldObject.CollisionType.NONE);
   }
 
@@ -56,6 +57,10 @@ public class PlayerController extends Actor {
 
   public PerspectiveCamera getCamera() {
     return m_camera;
+  }
+
+  public WorldObject getWorldObject() {
+    return m_playerWObject;
   }
 
   public float getVerticalVelocity() {

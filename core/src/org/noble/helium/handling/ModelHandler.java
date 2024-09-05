@@ -20,23 +20,23 @@ import org.noble.helium.rendering.HeliumModelBatch;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SimpleModelHandler {
-  private static SimpleModelHandler m_instance;
+public class ModelHandler {
+  private static ModelHandler m_instance;
   private final ModelBuilder m_modelBuilder;
   private final GLTFLoader m_GLTFLoader;
   private final ObjLoader m_objLoader;
   private final HashMap<String, HeliumModelInstance> m_modelInstances;
 
-  private SimpleModelHandler() {
+  private ModelHandler() {
     m_modelBuilder = new ModelBuilder();
     m_modelInstances = new HashMap<>();
     m_GLTFLoader = new GLTFLoader();
     m_objLoader = new ObjLoader();
   }
 
-  public static SimpleModelHandler getInstance() {
+  public static ModelHandler getInstance() {
     if(m_instance == null) {
-      m_instance = new SimpleModelHandler();
+      m_instance = new ModelHandler();
     }
     return m_instance;
   }
@@ -47,6 +47,15 @@ public class SimpleModelHandler {
 
   public HashMap<String, HeliumModelInstance> getModelInstances() {
     return m_modelInstances;
+  }
+
+  public String getName(HeliumModelInstance modelInstance) {
+    for(Map.Entry<String, HeliumModelInstance> entry : m_modelInstances.entrySet()) {
+      if(entry.getValue() == modelInstance) {
+        return entry.getKey();
+      }
+    }
+    return null;
   }
 
   public void addNewShape(String name, Shape shape, Color color, Vector3 position, Dimensions dimensions) {

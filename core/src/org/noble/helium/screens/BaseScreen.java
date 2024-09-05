@@ -7,14 +7,14 @@ import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import org.noble.helium.Helium;
 import org.noble.helium.actors.PlayerController;
 import org.noble.helium.handling.ObjectHandler;
-import org.noble.helium.handling.SimpleModelHandler;
+import org.noble.helium.handling.ModelHandler;
 import org.noble.helium.rendering.HeliumModelBatch;
 
 public class BaseScreen implements Screen {
   public final Helium m_game;
   public final HeliumModelBatch m_batch;
   public final PlayerController m_player;
-  public final SimpleModelHandler m_simpleModelHandler;
+  public final ModelHandler m_modelHandler;
   public final ObjectHandler m_objectHandler;
   public Environment m_environment;
 
@@ -27,7 +27,7 @@ public class BaseScreen implements Screen {
     m_game = Helium.getInstance();
     m_batch = m_game.getModelBatch();
     m_player = PlayerController.getInstance();
-    m_simpleModelHandler = SimpleModelHandler.getInstance();
+    m_modelHandler = ModelHandler.getInstance();
     m_objectHandler = ObjectHandler.getInstance();
     m_game.setStatus(gameStatus.PLAY);
 
@@ -53,7 +53,7 @@ public class BaseScreen implements Screen {
     }
 
     m_batch.begin(m_player.getCamera());
-    m_simpleModelHandler.render(m_batch, m_environment);
+    m_modelHandler.render(m_batch, m_environment);
   }
 
   @Override
@@ -77,7 +77,7 @@ public class BaseScreen implements Screen {
 
   @Override
   public void dispose() {
-    m_simpleModelHandler.clear();
+    m_modelHandler.clear();
     m_objectHandler.clear();
   }
 }

@@ -5,7 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import org.noble.helium.actors.PlayerController;
 import org.noble.helium.handling.ScreenHandler;
-import org.noble.helium.handling.SimpleModelHandler;
+import org.noble.helium.handling.ModelHandler;
 import org.noble.helium.io.KeyInput;
 import org.noble.helium.rendering.HeliumModelBatch;
 import org.noble.helium.subsystems.Subsystem;
@@ -18,7 +18,7 @@ public class Helium extends Game {
   private float m_delta;
   private static Helium m_instance;
   private final ArrayList<Subsystem> m_subsystems;
-  private SimpleModelHandler m_simpleModelHandler;
+  private ModelHandler m_modelHandler;
   private KeyInput m_input;
   private PlayerController m_player;
   private HeliumModelBatch m_modelBatch;
@@ -57,7 +57,7 @@ public class Helium extends Game {
 
   @Override
   public void create() {
-    m_simpleModelHandler = SimpleModelHandler.getInstance();
+    m_modelHandler = ModelHandler.getInstance();
     m_input = KeyInput.getInstance();
     Gdx.input.setCursorCatched(true);
     m_player = PlayerController.getInstance();
@@ -99,7 +99,7 @@ public class Helium extends Game {
 
   @Override
   public void dispose() {
-    m_simpleModelHandler.clear();
+    m_modelHandler.clear();
     m_subsystems.forEach(Subsystem::dispose);
     m_screenHandler.dispose();
   }
