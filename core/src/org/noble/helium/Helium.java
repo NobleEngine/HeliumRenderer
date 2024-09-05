@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import org.noble.helium.actors.PlayerController;
 import org.noble.helium.handling.ScreenHandler;
 import org.noble.helium.handling.ModelHandler;
+import org.noble.helium.handling.TextureHandler;
 import org.noble.helium.io.KeyInput;
 import org.noble.helium.rendering.HeliumModelBatch;
 import org.noble.helium.subsystems.Subsystem;
@@ -99,6 +100,7 @@ public class Helium extends Game {
 
   @Override
   public void dispose() {
+    TextureHandler.getInstance().clear();
     m_modelHandler.clear();
     m_subsystems.forEach(Subsystem::dispose);
     m_screenHandler.dispose();
