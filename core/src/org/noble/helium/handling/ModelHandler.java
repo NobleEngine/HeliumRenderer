@@ -22,6 +22,7 @@ import java.util.Map;
 
 public class ModelHandler {
   private static ModelHandler m_instance;
+  private final TextureHandler m_textureHandler;
   private final ModelBuilder m_modelBuilder;
   private final GLTFLoader m_GLTFLoader;
   private final ObjLoader m_objLoader;
@@ -32,6 +33,7 @@ public class ModelHandler {
     m_modelInstances = new HashMap<>();
     m_GLTFLoader = new GLTFLoader();
     m_objLoader = new ObjLoader();
+    m_textureHandler = TextureHandler.getInstance();
   }
 
   public static ModelHandler getInstance() {
@@ -77,8 +79,9 @@ public class ModelHandler {
     m_modelInstances.put(name, instance);
   }
 
-  public void addNewShape(String name, Shape shape, Texture texture, Vector3 position, Dimensions dimensions) {
+  public void addNewShape(String name, Shape shape, String textureName, Vector3 position, Dimensions dimensions) {
     Model model = null;
+    Texture texture = m_textureHandler.getTexture(textureName);
 
     switch(shape) {
       case CUBE -> model = m_modelBuilder.createBox(
@@ -106,9 +109,9 @@ public class ModelHandler {
     m_modelInstances.put(name, new HeliumModelInstance(model, position));
   }
 
-  public void setTexture(String modelName, String path) {
+  public void setTexture(String modelName, String textureName) {
     HeliumModelInstance modelInstance = m_modelInstances.get(modelName);
-    Texture texture = new Texture(Gdx.files.internal(path));
+    Texture texture = m_textureHandler.getTexture(textureName);
     Material material = new Material(TextureAttribute.createDiffuse(texture));
 
     modelInstance.materials.forEach(materials -> materials.set(material));

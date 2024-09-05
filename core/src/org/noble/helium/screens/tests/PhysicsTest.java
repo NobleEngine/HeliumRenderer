@@ -1,9 +1,7 @@
 package org.noble.helium.screens.tests;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector3;
 import org.noble.helium.handling.ModelHandler;
 import org.noble.helium.helpers.Dimensions;
@@ -26,7 +24,7 @@ public class PhysicsTest extends BaseScreen {
         "cube-03", ModelHandler.Shape.CUBE, Color.CHARTREUSE,
         new Vector3(90f,0f,0f), new Dimensions(30f,1f,50f));
     m_modelHandler.addNewShape(
-        "cube-04", ModelHandler.Shape.CUBE, new Texture(Gdx.files.internal("textures/dirt.png")),
+        "cube-04", ModelHandler.Shape.CUBE, "textures/dirt.png",
         new Vector3(130f,0f,0f), new Dimensions(30f,1f,50f));
     m_modelHandler.addNewShape(
         "ladder", ModelHandler.Shape.CUBE, Color.WHITE,
