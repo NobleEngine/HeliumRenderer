@@ -1,7 +1,7 @@
 package org.noble.helium.world;
 
 import com.badlogic.gdx.math.Vector3;
-import org.noble.helium.helpers.Dimensions;
+import org.noble.helium.helpers.Dimensions3;
 import org.noble.helium.rendering.HeliumModelInstance;
 
 public class WorldObject {
@@ -54,9 +54,9 @@ public class WorldObject {
       return false;
     }
 
-    Dimensions thisDimensions = m_modelInstance.getDimensions();
+    Dimensions3 thisDimensions = m_modelInstance.getDimensions();
     Vector3 thisPosition = m_modelInstance.getPosition();
-    Dimensions comparedDimensions = object.getModelInstance().getDimensions();
+    Dimensions3 comparedDimensions = object.getModelInstance().getDimensions();
     Vector3 comparedPosition = object.getModelInstance().getPosition();
 
     double extentA_x = thisDimensions.getWidth() / 2.0;

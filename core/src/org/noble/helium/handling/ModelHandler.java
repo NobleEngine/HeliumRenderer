@@ -13,7 +13,7 @@ import com.badlogic.gdx.graphics.g3d.loader.ObjLoader;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
 import net.mgsx.gltf.loaders.gltf.GLTFLoader;
-import org.noble.helium.helpers.Dimensions;
+import org.noble.helium.helpers.Dimensions3;
 import org.noble.helium.rendering.HeliumModelInstance;
 import org.noble.helium.rendering.HeliumModelBatch;
 
@@ -60,7 +60,7 @@ public class ModelHandler {
     return null;
   }
 
-  public void addNewShape(String name, Shape shape, Color color, Vector3 position, Dimensions dimensions) {
+  public void addNewShape(String name, Shape shape, Color color, Vector3 position, Dimensions3 dimensions) {
     Model model = null;
 
     switch(shape) {
@@ -79,7 +79,7 @@ public class ModelHandler {
     m_modelInstances.put(name, instance);
   }
 
-  public void addNewShape(String name, Shape shape, String textureName, Vector3 position, Dimensions dimensions) {
+  public void addNewShape(String name, Shape shape, String textureName, Vector3 position, Dimensions3 dimensions) {
     Model model = null;
     Texture texture = m_textureHandler.getTexture(textureName);
 

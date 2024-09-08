@@ -6,12 +6,14 @@ import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
+import com.kotcrab.vis.ui.widget.VisLabel;
 import org.noble.helium.Helium;
 import org.noble.helium.handling.ObjectHandler;
 import org.noble.helium.handling.ModelHandler;
-import org.noble.helium.helpers.Dimensions;
+import org.noble.helium.helpers.Dimensions2;
+import org.noble.helium.helpers.Dimensions3;
 import org.noble.helium.io.KeyInput;
-import org.noble.helium.subsystems.UserInterface;
+import org.noble.helium.subsystems.ui.UserInterface;
 import org.noble.helium.world.WorldObject;
 
 import java.util.ArrayList;
@@ -43,7 +45,7 @@ public class PlayerController extends Actor {
 
     ModelHandler modelHandler = ModelHandler.getInstance();
     modelHandler.addNewShape("player", ModelHandler.Shape.CUBE, Color.BLACK,
-        new Vector3(), new Dimensions(5, 15, 5));
+        new Vector3(), new Dimensions3(5, 15, 5));
     modelHandler.setRenderable("player", false);
     m_playerWObject = new WorldObject(modelHandler.get("player"), WorldObject.ShapeType.BOX, WorldObject.CollisionType.NONE);
   }
@@ -202,7 +204,9 @@ public class PlayerController extends Actor {
     rotate();
     translate();
     m_camera.update();
-    UserInterface.getInstance().setLabel("PlayerController-Position", "Position: " + getX() + ", " + getY() + ", " + getZ());
+    VisLabel PosLabel = UserInterface.getInstance().getLabel("PlayerController-Position");
+    UserInterface.getInstance().setLabel("PlayerController-Position", "Position: " + getX() + ", " + getY() +
+        ", " + getZ(), PosLabel.getX(), PosLabel.getY(), new Dimensions2(PosLabel.getWidth(), PosLabel.getHeight()), PosLabel.getColor());
   }
 
   @Override

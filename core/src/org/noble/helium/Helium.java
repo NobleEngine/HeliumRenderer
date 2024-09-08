@@ -2,15 +2,21 @@ package org.noble.helium;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.kotcrab.vis.ui.widget.VisLabel;
 import org.noble.helium.actors.PlayerController;
 import org.noble.helium.handling.ScreenHandler;
 import org.noble.helium.handling.ModelHandler;
 import org.noble.helium.handling.TextureHandler;
+import org.noble.helium.helpers.Dimensions2;
 import org.noble.helium.io.KeyInput;
 import org.noble.helium.rendering.HeliumModelBatch;
 import org.noble.helium.subsystems.Subsystem;
-import org.noble.helium.subsystems.UserInterface;
+import org.noble.helium.subsystems.ui.UIRectangle;
+import org.noble.helium.subsystems.ui.UISprite;
+import org.noble.helium.subsystems.ui.UserInterface;
 
 import java.util.ArrayList;
 
@@ -66,8 +72,10 @@ public class Helium extends Game {
     m_screenHandler = ScreenHandler.getInstance();
     m_subsystems.add(m_userInterface);
 
-    m_userInterface.addLabel("FPS", "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, 10, 100, 25);
-    m_userInterface.addLabel("PlayerController-Position", "", 10, 30, 100, 25);
+    m_userInterface.addLabel("FPS", "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, 10, 100, 25, Color.BLUE);
+    m_userInterface.addLabel("PlayerController-Position", "", 10, 30, 100, 25, Color.RED);
+    m_userInterface.addRect("test", new UIRectangle(0,0,new Dimensions2(100,75), Color.GREEN, ShapeRenderer.ShapeType.Filled));
+    m_userInterface.addSprite("dirt", new UISprite("textures/dirt.png", 50, 50, new Dimensions2(50, 50)));
 
     m_modelBatch = new HeliumModelBatch();
   }
@@ -79,7 +87,9 @@ public class Helium extends Game {
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
     m_player.update();
 
-    m_userInterface.setLabel("FPS", "FPS: " + Gdx.graphics.getFramesPerSecond());
+    VisLabel FPSLabel = m_userInterface.getLabel("FPS");
+    m_userInterface.setLabel("FPS", "FPS: " + Gdx.graphics.getFramesPerSecond(), FPSLabel.getX(),
+        FPSLabel.getY(), new Dimensions2(FPSLabel.getWidth(), FPSLabel.getHeight()), FPSLabel.getColor());
 
     //TODO: Change resolution on window resize
     if (m_input.isKeyDown(KeyInput.Action.TOGGLE_FULLSCREEN, true)) {
