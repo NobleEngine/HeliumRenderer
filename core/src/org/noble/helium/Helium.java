@@ -85,7 +85,9 @@ public class Helium extends Game {
     m_delta = Gdx.graphics.getDeltaTime();
     Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-    m_player.update();
+    if(getStatus() == Status.PLAY) {
+      m_player.update();
+    }
 
     VisLabel FPSLabel = m_userInterface.getLabel("FPS");
     m_userInterface.setLabel("FPS", "FPS: " + Gdx.graphics.getFramesPerSecond(), FPSLabel.getX(),
@@ -100,12 +102,23 @@ public class Helium extends Game {
       }
     }
 
-    if(m_input.isKeyDown(KeyInput.Action.DEBUG_KILL, true)) {
-      Gdx.app.exit();
+    if(m_input.isKeyDown(KeyInput.Action.PAUSE, true)) {
+      if(getStatus() == Status.PLAY) {
+        setStatus(Status.PAUSE);
+        Gdx.input.setCursorCatched(false);
+      } else {
+        setStatus(Status.PLAY);
+        Gdx.input.setCursorCatched(true);
+      }
     }
 
     super.render();
     m_subsystems.forEach(Subsystem::update);
+  }
+
+  public interface Status {
+    int PLAY = 0;
+    int PAUSE = 1;
   }
 
   @Override

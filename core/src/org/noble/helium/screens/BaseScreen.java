@@ -18,18 +18,13 @@ public class BaseScreen implements Screen {
   public final ObjectHandler m_objectHandler;
   public Environment m_environment;
 
-  public interface gameStatus {
-    int PLAY = 0;
-    int PAUSE = 1;
-  }
-
   public BaseScreen() {
     m_game = Helium.getInstance();
     m_batch = m_game.getModelBatch();
     m_player = PlayerController.getInstance();
     m_modelHandler = ModelHandler.getInstance();
     m_objectHandler = ObjectHandler.getInstance();
-    m_game.setStatus(gameStatus.PLAY);
+    m_game.setStatus(Helium.Status.PLAY);
 
     m_environment = new Environment();
     m_environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1.0f));
@@ -48,7 +43,7 @@ public class BaseScreen implements Screen {
       System.err.println("Model batch was not ended last cycle");
     }
 
-    if(m_game.getStatus() == gameStatus.PLAY) {
+    if(m_game.getStatus() == Helium.Status.PLAY) {
       m_player.update();
     }
 
@@ -62,12 +57,12 @@ public class BaseScreen implements Screen {
 
   @Override
   public void pause() {
-    m_game.setStatus(gameStatus.PAUSE);
+    m_game.setStatus(Helium.Status.PAUSE);
   }
 
   @Override
   public void resume() {
-    m_game.setStatus(gameStatus.PLAY);
+    m_game.setStatus(Helium.Status.PLAY);
   }
 
   @Override
