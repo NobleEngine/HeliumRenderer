@@ -14,14 +14,13 @@ public class KeyInput {
     m_keyBindings = new HashMap<>();
 
     //Player Movement
-    bindKey(Input.Keys.A, Action.MOVE_LEFT);
-    bindKey(Input.Keys.D, Action.MOVE_RIGHT);
-    bindKey(Input.Keys.W, Action.MOVE_FORWARD);
-    bindKey(Input.Keys.S, Action.MOVE_BACKWARD);
+    bindKey(Input.Keys.A, Action.STRAFE_LEFT);
+    bindKey(Input.Keys.D, Action.STRAFE_RIGHT);
+    bindKey(Input.Keys.W, Action.STRAFE_FORWARD);
+    bindKey(Input.Keys.S, Action.STRAFE_BACKWARD);
     bindKey(Input.Keys.SPACE, Action.JUMP);
 
     //Misc.
-//    bindKey(Input.Keys.ESCAPE, Action.PAUSE);
     bindKey(Input.Keys.F11, Action.TOGGLE_FULLSCREEN);
     bindKey(Input.Keys.ESCAPE, Action.PAUSE);
     bindKey(Input.Keys.SHIFT_LEFT, Action.MOVE_FASTER);
@@ -62,10 +61,10 @@ public class KeyInput {
   }
 
   public interface Action {
-    int MOVE_LEFT = 0;
-    int MOVE_RIGHT = 1;
-    int MOVE_FORWARD = 2;
-    int MOVE_BACKWARD = 3;
+    int STRAFE_LEFT = 0;
+    int STRAFE_RIGHT = 1;
+    int STRAFE_FORWARD = 2;
+    int STRAFE_BACKWARD = 3;
     int MOVE_FASTER = 4;
     int PAUSE = 5;
     int TOGGLE_FULLSCREEN = 6;

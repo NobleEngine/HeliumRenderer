@@ -4,18 +4,15 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import org.noble.helium.actors.PlayerController;
-import org.noble.helium.handling.ScreenHandler;
+import org.noble.helium.handling.LevelHandler;
 import org.noble.helium.handling.ModelHandler;
 import org.noble.helium.handling.TextureHandler;
 import org.noble.helium.helpers.Dimensions2;
 import org.noble.helium.io.KeyInput;
 import org.noble.helium.rendering.HeliumModelBatch;
 import org.noble.helium.subsystems.Subsystem;
-import org.noble.helium.subsystems.ui.UIRectangle;
-import org.noble.helium.subsystems.ui.UISprite;
 import org.noble.helium.subsystems.ui.UserInterface;
 
 import java.util.ArrayList;
@@ -30,7 +27,7 @@ public class Helium extends Game {
   private PlayerController m_player;
   private HeliumModelBatch m_modelBatch;
   private UserInterface m_userInterface;
-  private ScreenHandler m_screenHandler;
+  private LevelHandler m_screenHandler;
 
   private Helium() {
     m_subsystems = new ArrayList<>();
@@ -69,13 +66,12 @@ public class Helium extends Game {
     Gdx.input.setCursorCatched(true);
     m_player = PlayerController.getInstance();
     m_userInterface = UserInterface.getInstance();
-    m_screenHandler = ScreenHandler.getInstance();
+    m_screenHandler = LevelHandler.getInstance();
     m_subsystems.add(m_userInterface);
 
-    m_userInterface.addLabel("FPS", "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, 10, 100, 25, Color.BLUE);
-    m_userInterface.addLabel("PlayerController-Position", "", 10, 30, 100, 25, Color.RED);
-    m_userInterface.addRect("test", new UIRectangle(0,0,new Dimensions2(100,75), Color.GREEN, ShapeRenderer.ShapeType.Filled));
-    m_userInterface.addSprite("dirt", new UISprite("textures/dirt.png", 50, 50, new Dimensions2(50, 50)));
+    m_userInterface.addLabel("Engine-FPS", "FPS: " + Gdx.graphics.getFramesPerSecond(), 0, 0, 100, 25, Color.WHITE);
+    m_userInterface.addLabel("PlayerController-Position", "", 0, 30, 100, 25, Color.WHITE);
+    m_userInterface.addLabel("Engine-Status", "", 0, 60, 100, 25, Color.WHITE);
 
     m_modelBatch = new HeliumModelBatch();
   }
@@ -89,9 +85,12 @@ public class Helium extends Game {
       m_player.update();
     }
 
-    VisLabel FPSLabel = m_userInterface.getLabel("FPS");
-    m_userInterface.setLabel("FPS", "FPS: " + Gdx.graphics.getFramesPerSecond(), FPSLabel.getX(),
+    VisLabel FPSLabel = m_userInterface.getLabel("Engine-FPS");
+    m_userInterface.setLabel("Engine-FPS", "FPS: " + Gdx.graphics.getFramesPerSecond(), FPSLabel.getX(),
         FPSLabel.getY(), new Dimensions2(FPSLabel.getWidth(), FPSLabel.getHeight()), FPSLabel.getColor());
+    VisLabel StatusLabel = m_userInterface.getLabel("Engine-Status");
+    m_userInterface.setLabel("Engine-Status", "Status: " + getStatus(), StatusLabel.getX(),
+        StatusLabel.getY(), new Dimensions2(StatusLabel.getWidth(), StatusLabel.getHeight()), StatusLabel.getColor());
 
     //TODO: Change resolution on window resize
     if (m_input.isKeyDown(KeyInput.Action.TOGGLE_FULLSCREEN, true)) {

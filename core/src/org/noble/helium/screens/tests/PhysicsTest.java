@@ -3,14 +3,21 @@ package org.noble.helium.screens.tests;
 import com.badlogic.gdx.graphics.Color;
 
 import com.badlogic.gdx.math.Vector3;
+import org.noble.helium.handling.LevelHandler;
 import org.noble.helium.handling.ModelHandler;
 import org.noble.helium.helpers.Dimensions3;
-import org.noble.helium.screens.BaseScreen;
+import org.noble.helium.screens.HeliumLevel;
 import org.noble.helium.world.WorldObject;
 
-public class PhysicsTest extends BaseScreen {
+import java.util.Objects;
+
+public class PhysicsTest extends HeliumLevel {
   public PhysicsTest() {
     super();
+  }
+
+  @Override
+  public void init() {
     m_modelHandler.addNewShape(
         "wall-01", ModelHandler.Shape.CUBE, Color.CORAL,
         new Vector3(0, 10, 20), new Dimensions3(50,100,5));
@@ -52,6 +59,7 @@ public class PhysicsTest extends BaseScreen {
         WorldObject.ShapeType.BOX, WorldObject.CollisionType.STANDARD));
 
     m_player.setPosition(new Vector3(0,50,0));
+    super.init();
   }
 
   @Override
@@ -63,6 +71,10 @@ public class PhysicsTest extends BaseScreen {
 //      m_player.setVerticalVelocity(0);
     }
 
+
     m_batch.end();
+    if(m_player.getX() > 50f && !Objects.equals(LevelHandler.getInstance().getPreviousLevelName(), "PhysicsTest")) {
+      LevelHandler.getInstance().changeScreen(new PhysicsTest());
+    }
   }
 }

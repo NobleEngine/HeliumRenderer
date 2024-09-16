@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
+import org.noble.helium.handling.ModelHandler;
 import org.noble.helium.helpers.Dimensions3;
 
 public class HeliumModelInstance extends ModelInstance {
@@ -38,6 +39,9 @@ public class HeliumModelInstance extends ModelInstance {
   }
 
   public Dimensions3 getDimensions() {
+    if(ModelHandler.getInstance().getName(this) == null) {
+      return new Dimensions3(0,0,0);
+    }
     BoundingBox boundingBox = new BoundingBox();
     Vector3 dimensions = new Vector3();
     this.calculateBoundingBox(boundingBox);
