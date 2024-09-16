@@ -3,7 +3,7 @@ package org.noble.helium.subsystems.ui;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
-import org.noble.helium.helpers.Dimensions2;
+import org.noble.helium.math.Dimensions2;
 
 public class UIRectangle extends Rectangle {
   private final ShapeRenderer.ShapeType m_type;

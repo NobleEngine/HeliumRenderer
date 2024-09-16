@@ -3,7 +3,7 @@ package org.noble.helium.subsystems.ui;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import org.noble.helium.handling.TextureHandler;
-import org.noble.helium.helpers.Dimensions2;
+import org.noble.helium.math.Dimensions2;
 
 public class UISprite {
   private final Vector2 m_position;

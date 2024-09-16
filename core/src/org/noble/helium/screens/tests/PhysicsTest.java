@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
 import org.noble.helium.handling.LevelHandler;
 import org.noble.helium.handling.ModelHandler;
-import org.noble.helium.helpers.Dimensions3;
+import org.noble.helium.math.Dimensions3;
 import org.noble.helium.screens.HeliumLevel;
 import org.noble.helium.world.WorldObject;
 

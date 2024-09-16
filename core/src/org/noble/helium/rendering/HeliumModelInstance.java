@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import org.noble.helium.handling.ModelHandler;
-import org.noble.helium.helpers.Dimensions3;
+import org.noble.helium.math.Dimensions3;
 
 public class HeliumModelInstance extends ModelInstance {
   private Vector3 m_position;

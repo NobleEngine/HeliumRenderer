@@ -2,7 +2,6 @@ package org.noble.helium.subsystems.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -10,7 +9,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import org.noble.helium.handling.TextureHandler;
-import org.noble.helium.helpers.Dimensions2;
+import org.noble.helium.math.Dimensions2;
 import org.noble.helium.subsystems.Subsystem;
 
 import java.util.HashMap;

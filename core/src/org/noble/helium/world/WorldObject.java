@@ -1,7 +1,7 @@
 package org.noble.helium.world;
 
 import com.badlogic.gdx.math.Vector3;
-import org.noble.helium.helpers.Dimensions3;
+import org.noble.helium.math.Dimensions3;
 import org.noble.helium.rendering.HeliumModelInstance;
 
 public class WorldObject {

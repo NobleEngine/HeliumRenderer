@@ -9,7 +9,7 @@ import org.noble.helium.actors.PlayerController;
 import org.noble.helium.handling.LevelHandler;
 import org.noble.helium.handling.ModelHandler;
 import org.noble.helium.handling.TextureHandler;
-import org.noble.helium.helpers.Dimensions2;
+import org.noble.helium.math.Dimensions2;
 import org.noble.helium.io.KeyInput;
 import org.noble.helium.rendering.HeliumModelBatch;
 import org.noble.helium.subsystems.Subsystem;

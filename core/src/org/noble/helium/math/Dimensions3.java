@@ -1,22 +1,22 @@
-package org.noble.helium.helpers;
+package org.noble.helium.math;
 
 import com.badlogic.gdx.math.Vector3;
 
 public class Dimensions3 {
-  private final Vector3 dim;
+  private final Vector3 m_dim;
   public Dimensions3(float width, float height, float depth) {
-    dim = new Vector3(width, height, depth);
+    m_dim = new Vector3(width, height, depth);
   }
 
   public float getWidth() {
-    return dim.x;
+    return m_dim.x;
   }
 
   public float getHeight() {
-    return dim.y;
+    return m_dim.y;
   }
 
   public float getDepth() {
-    return dim.z;
+    return m_dim.z;
   }
 }
