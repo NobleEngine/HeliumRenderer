@@ -74,7 +74,7 @@ public class PlayerController extends Actor {
   public void setPosition(Vector3 pos) {
     super.setPosition(pos);
     m_camera.position.set(pos);
-    m_objectHandler.get("PlayerController-object").setPosition(pos.x, pos.y, pos.z);
+    m_objectHandler.get("PlayerController-object").setPosition(pos);
   }
 
   private void createWorldObject() {
@@ -126,7 +126,7 @@ public class PlayerController extends Actor {
         float movementSpeed = (m_engine.getDelta() * 2f);
         float yMovement = translation - nextPos.y;
         if (translation > nextPos.y) {
-          if(yMovement < 3f) {
+          if (yMovement < 3f) {
             movementSpeed *= 4f;
             shouldCalculate = false;
           }
@@ -137,7 +137,6 @@ public class PlayerController extends Actor {
           setVerticalVelocity(10f);
         }
       }
-
       float extentA_x = playerWObject.getWidth() / 2.0f;
       float extentA_y = playerWObject.getHeight() / 2.0f;
       float extentA_z = playerWObject.getDepth() / 2.0f;

@@ -2,10 +2,12 @@ package org.noble.helium.rendering;
 
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import org.noble.helium.handling.ModelHandler;
 import org.noble.helium.math.Dimensions3;
+import org.noble.helium.math.EulerAngles;
 
 public class HeliumModelInstance extends ModelInstance {
   private Vector3 m_position;
@@ -47,5 +49,11 @@ public class HeliumModelInstance extends ModelInstance {
     this.calculateBoundingBox(boundingBox);
     boundingBox.getDimensions(dimensions);
     return new Dimensions3(dimensions.x, dimensions.y, dimensions.z);
+  }
+
+  public EulerAngles getAngles() {
+    Quaternion quaternion = new Quaternion();
+    transform.getRotation(quaternion);
+    return new EulerAngles(quaternion.getYaw(), quaternion.getPitch(), quaternion.getRoll());
   }
 }

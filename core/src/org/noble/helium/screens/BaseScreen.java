@@ -45,6 +45,7 @@ public class BaseScreen implements Screen {
 
     if(m_game.getStatus() == Helium.Status.PLAY) {
       m_player.update();
+      m_objectHandler.update();
     }
 
     m_batch.begin(m_player.getCamera());

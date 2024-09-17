@@ -34,4 +34,10 @@ public class ObjectHandler {
   public void clear() {
     m_objects.clear();
   }
+
+  public void update() {
+    for(WorldObject object : m_objects.values()) {
+      object.update();
+    }
+  }
 }

@@ -73,8 +73,5 @@ public class PhysicsTest extends HeliumLevel {
 
 
     m_batch.end();
-    if(m_player.getX() > 50f && !Objects.equals(LevelHandler.getInstance().getPreviousLevelName(), "PhysicsTest")) {
-      LevelHandler.getInstance().changeScreen(new PhysicsTest());
-    }
   }
 }

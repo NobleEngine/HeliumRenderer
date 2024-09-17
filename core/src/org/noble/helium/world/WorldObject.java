@@ -1,28 +1,36 @@
 package org.noble.helium.world;
 
 import com.badlogic.gdx.math.Vector3;
+import org.noble.helium.logic.OrientedBoundingBox;
 import org.noble.helium.math.Dimensions3;
 import org.noble.helium.rendering.HeliumModelInstance;
 
 public class WorldObject {
   private final HeliumModelInstance m_modelInstance;
+  private OrientedBoundingBox m_boundingBox;
   private final int m_collisionType;
 
   public WorldObject(HeliumModelInstance modelInstance, ShapeType shape, int collision) {
     m_modelInstance = modelInstance;
     m_collisionType = collision;
+
+    m_boundingBox = new OrientedBoundingBox(modelInstance.getPosition(), modelInstance.getDimensions(), modelInstance.getAngles());
   }
 
   public HeliumModelInstance getModelInstance() {
     return m_modelInstance;
   }
 
+  public OrientedBoundingBox getBoundingBox() {
+    return m_boundingBox;
+  }
+
   public int getCollisionType() {
     return m_collisionType;
   }
 
-  public void setPosition(float x, float y, float z) {
-    m_modelInstance.setPosition(x,y,z);
+  public void setPosition(Vector3 position) {
+    m_modelInstance.setPosition(position);
   }
 
   public float getX() {
@@ -50,28 +58,11 @@ public class WorldObject {
   }
 
   public boolean isColliding(WorldObject object) {
-    if(object.getCollisionType() == CollisionType.NONE) {
-      return false;
-    }
+    return m_boundingBox.intersects(object.getBoundingBox());
+  }
 
-    Dimensions3 thisDimensions = m_modelInstance.getDimensions();
-    Vector3 thisPosition = m_modelInstance.getPosition();
-    Dimensions3 comparedDimensions = object.getModelInstance().getDimensions();
-    Vector3 comparedPosition = object.getModelInstance().getPosition();
-
-    double extentA_x = thisDimensions.getWidth() / 2.0;
-    double extentA_y = thisDimensions.getHeight() / 2.0;
-    double extentA_z = thisDimensions.getDepth() / 2.0;
-
-    double extentB_x = comparedDimensions.getWidth() / 2.0;
-    double extentB_y = comparedDimensions.getHeight() / 2.0;
-    double extentB_z = comparedDimensions.getDepth() / 2.0;
-
-    boolean xOverlap = Math.abs(thisPosition.x - comparedPosition.x) <= (extentA_x + extentB_x);
-    boolean yOverlap = Math.abs(thisPosition.y - comparedPosition.y) <= (extentA_y + extentB_y);
-    boolean zOverlap = Math.abs(thisPosition.z - comparedPosition.z) <= (extentA_z + extentB_z);
-
-    return xOverlap && yOverlap && zOverlap;
+  public void update() {
+    m_boundingBox = new OrientedBoundingBox(m_modelInstance.getPosition(), m_modelInstance.getDimensions(), m_modelInstance.getAngles());
   }
 
   public enum ShapeType { //TODO: Add more
