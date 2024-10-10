@@ -11,6 +11,7 @@ import org.noble.helium.math.EulerAngles;
 
 public class HeliumModelInstance extends ModelInstance {
   private Vector3 m_position;
+  private EulerAngles m_eulerAngles;
   private boolean m_render;
   public HeliumModelInstance(Model model, Vector3 startingPosition) {
     super(model);
@@ -30,6 +31,10 @@ public class HeliumModelInstance extends ModelInstance {
 
   public void setShouldRender(boolean shouldRender) {
     m_render = shouldRender;
+  }
+
+  public void setRotation(EulerAngles angles) {
+    transform.setFromEulerAnglesRad(angles.getYaw(), angles.getPitch(), angles.getRoll());
   }
 
   public boolean shouldRender() {
@@ -52,8 +57,9 @@ public class HeliumModelInstance extends ModelInstance {
   }
 
   public EulerAngles getAngles() {
-    Quaternion quaternion = new Quaternion();
-    transform.getRotation(quaternion);
-    return new EulerAngles(quaternion.getYaw(), quaternion.getPitch(), quaternion.getRoll());
+    if(m_eulerAngles == null) {
+      return new EulerAngles(0,0,0);
+    }
+    return m_eulerAngles;
   }
 }

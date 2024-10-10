@@ -3,13 +3,10 @@ package org.noble.helium.screens.tests;
 import com.badlogic.gdx.graphics.Color;
 
 import com.badlogic.gdx.math.Vector3;
-import org.noble.helium.handling.LevelHandler;
 import org.noble.helium.handling.ModelHandler;
 import org.noble.helium.math.Dimensions3;
 import org.noble.helium.screens.HeliumLevel;
 import org.noble.helium.world.WorldObject;
-
-import java.util.Objects;
 
 public class PhysicsTest extends HeliumLevel {
   public PhysicsTest() {
@@ -21,6 +18,7 @@ public class PhysicsTest extends HeliumLevel {
     m_modelHandler.addNewShape(
         "wall-01", ModelHandler.Shape.CUBE, Color.CORAL,
         new Vector3(0, 10, 20), new Dimensions3(50,100,5));
+
     m_modelHandler.addNewShape(
         "cube-01", ModelHandler.Shape.CUBE, Color.FIREBRICK,
         new Vector3(), new Dimensions3(30f,10f,50f));

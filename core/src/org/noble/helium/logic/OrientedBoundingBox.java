@@ -106,17 +106,25 @@ public class OrientedBoundingBox {
 
   // Check for overlap along a given axis using SAT
   private boolean overlapOnAxis(OrientedBoundingBox boxA, OrientedBoundingBox boxB, double[] axis) {
-    double projectA = projectOntoAxis(boxA, axis);
-    double projectB = projectOntoAxis(boxB, axis);
+    // Normalize the axis
+    double axisLength = Math.sqrt(dotProduct(axis, axis));
+    if (axisLength == 0) {
+      return true;  // Degenerate axis
+    }
+    double[] normalizedAxis = { axis[0] / axisLength, axis[1] / axisLength, axis[2] / axisLength };
 
-    // Calculate the distance between box centers projected onto the axis
-    double centerDistance = Math.abs(dotProduct(new double[] {
+    // Project each box onto the normalized axis
+    double projectionA = projectOntoAxis(boxA, normalizedAxis);
+    double projectionB = projectOntoAxis(boxB, normalizedAxis);
+
+    // Get the center distance projected onto the axis
+    double centerDistance = Math.abs(dotProduct(new double[]{
         boxA.getPosition().x - boxB.getPosition().x,
         boxA.getPosition().y - boxB.getPosition().y,
-        boxA.getPosition().z - boxB.getPosition().z }, axis));
+        boxA.getPosition().z - boxB.getPosition().z }, normalizedAxis));
 
-    // If the center distance is greater than the combined projection extents, they are separated
-    return centerDistance <= (projectA + projectB);
+    // Check for overlap
+    return centerDistance <= (projectionA + projectionB);
   }
 
   // Dot product helper function
@@ -125,16 +133,17 @@ public class OrientedBoundingBox {
   }
 
   // Resolve the collision (smallest penetration axis)
-  public void resolveCollision(OrientedBoundingBox other) {
+  public Vector3 resolveCollision(OrientedBoundingBox other) {
     double[][] rotationA = this.getRotationMatrix();
     double[][] rotationB = other.getRotationMatrix();
 
-    // Combine all axes that were tested for overlap
+    // All 15 axes: 3 face normals from each box + 9 cross products of edges
     double[][] axesToTest = new double[15][3];
     for (int i = 0; i < 3; i++) {
-      axesToTest[i] = rotationA[i];
-      axesToTest[i + 3] = rotationB[i];
+      axesToTest[i] = rotationA[i]; // Local axes of box A
+      axesToTest[i + 3] = rotationB[i]; // Local axes of box B
     }
+
     int index = 6;
     for (int i = 0; i < 3; i++) {
       for (int j = 0; j < 3; j++) {
@@ -143,33 +152,38 @@ public class OrientedBoundingBox {
       }
     }
 
-    // Track the smallest penetration axis and depth
+    // Track the smallest penetration depth and axis
     double minPenetrationDepth = Double.MAX_VALUE;
     double[] minPenetrationAxis = null;
 
-    // Find the axis with the smallest penetration
     for (double[] axis : axesToTest) {
       double projectionA = projectOntoAxis(this, axis);
       double projectionB = projectOntoAxis(other, axis);
 
-      double centerDistance = Math.abs(dotProduct(new double[] {
+      // Calculate the center distance projected onto the current axis
+      double centerDistance = Math.abs(dotProduct(new double[]{
           this.getPosition().x - other.getPosition().x,
           this.getPosition().y - other.getPosition().y,
           this.getPosition().z - other.getPosition().z }, axis));
-
       double penetrationDepth = (projectionA + projectionB) - centerDistance;
 
-      if (penetrationDepth < minPenetrationDepth) {
+      // If there's penetration, check if this axis has the smallest penetration depth
+      if (penetrationDepth < minPenetrationDepth && penetrationDepth > 0) {
         minPenetrationDepth = penetrationDepth;
         minPenetrationAxis = axis;
       }
     }
 
-    // Move this box along the smallest penetration axis to resolve the collision
-    double moveDistance = minPenetrationDepth / 2.0;
-    assert minPenetrationAxis != null;
-    this.getPosition().x += (float) (minPenetrationAxis[0] * moveDistance);
-    this.getPosition().y += (float) (minPenetrationAxis[1] * moveDistance);
-    this.getPosition().z += (float) (minPenetrationAxis[2] * moveDistance);
+    // Move the object along the smallest penetration axis to resolve the collision
+    if (minPenetrationAxis != null) {
+      double moveDistance = minPenetrationDepth / 2.0;
+
+      // Move along the calculated separating axis
+      getPosition().x += (float) (minPenetrationAxis[0] * moveDistance);
+      getPosition().y += (float) (minPenetrationAxis[1] * moveDistance);
+      getPosition().z += (float) (minPenetrationAxis[2] * moveDistance);
+    }
+
+    return new Vector3(getPosition().x, getPosition().y, getPosition().z);
   }
 }
