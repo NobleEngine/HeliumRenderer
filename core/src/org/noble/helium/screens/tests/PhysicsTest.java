@@ -30,7 +30,7 @@ public class PhysicsTest extends HeliumLevel {
         new Vector3(90f,0f,0f), new Dimensions3(30f,1f,50f));
     m_modelHandler.addNewShape(
         "cube-04", ModelHandler.Shape.CUBE, "textures/dirt.png",
-        new Vector3(130f,0f,0f), new Dimensions3(30f,1f,50f));
+        new Vector3(130f,0f,0f), new Dimensions3(30f,30f,30f));
     m_modelHandler.addNewShape(
         "ladder", ModelHandler.Shape.CUBE, Color.WHITE,
         new Vector3(5,10,25), new Dimensions3(5f,100.1f,16f));
@@ -68,8 +68,5 @@ public class PhysicsTest extends HeliumLevel {
       m_player.setPosition(new Vector3(m_player.getX(),150,m_player.getZ()));
 //      m_player.setVerticalVelocity(0);
     }
-
-
-    m_batch.end();
   }
 }

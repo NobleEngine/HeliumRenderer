@@ -2,6 +2,7 @@ package org.noble.helium.handling;
 
 import org.noble.helium.Helium;
 import org.noble.helium.screens.HeliumLevel;
+import org.noble.helium.screens.tests.ActorTest;
 import org.noble.helium.screens.tests.PhysicsTest;
 
 public class LevelHandler {

@@ -11,8 +11,8 @@ public abstract class HeliumLevel extends BaseScreen {
   public void render(float delta) {
     if(!m_hasInit) {
       init();
-    } else {
-      super.render(delta);
     }
+    super.render(delta);
+    m_batch.end();
   }
 }

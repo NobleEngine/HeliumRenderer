@@ -47,6 +47,10 @@ public abstract class Actor implements Disposable {
     m_position = newPosition;
   }
 
+  public void setHealth(int health) {
+    m_health = health;
+  }
+
   public abstract void update();
 
 }
