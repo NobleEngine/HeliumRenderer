@@ -2,8 +2,8 @@ package org.noble.helium.handling;
 
 import org.noble.helium.Helium;
 import org.noble.helium.screens.HeliumLevel;
-import org.noble.helium.screens.tests.ActorTest;
 import org.noble.helium.screens.tests.PhysicsTest;
+import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
 
 public class LevelHandler {
   private static LevelHandler m_instance;
@@ -11,6 +11,7 @@ public class LevelHandler {
   private final Helium m_helium;
   private final ModelHandler m_modelHandler;
   private final ObjectHandler m_objectHandler;
+  private final HeliumTelemetry m_telemetry;
   private String m_previousLevelName;
 
 
@@ -18,6 +19,7 @@ public class LevelHandler {
     m_helium = Helium.getInstance();
     m_modelHandler = ModelHandler.getInstance();
     m_objectHandler = ObjectHandler.getInstance();
+    m_telemetry = HeliumTelemetry.getInstance();
     changeScreen(new PhysicsTest());
   }
 
@@ -42,9 +44,9 @@ public class LevelHandler {
 
   public void changeScreen(HeliumLevel level) {
     if (m_currentLevel != null) {
-      System.out.println("Changing screen to " + level.getClass().getSimpleName());
+      m_telemetry.print("Changing screen to " + level.getClass().getSimpleName());
     } else {
-      System.out.println("Starting game on " + level.getClass().getSimpleName());
+      m_telemetry.print("Starting game on " + level.getClass().getSimpleName());
     }
 //    m_userInterface.clear();
     m_modelHandler.clear();

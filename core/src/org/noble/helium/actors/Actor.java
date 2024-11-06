@@ -2,8 +2,9 @@ package org.noble.helium.actors;
 
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
+import org.noble.helium.subsystems.telemetry.Loggable;
 
-public abstract class Actor implements Disposable {
+public abstract class Actor extends Loggable implements Disposable {
   private Vector3 m_position;
   private int m_health;
   private final float m_speed;

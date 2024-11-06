@@ -12,9 +12,12 @@ import org.noble.helium.handling.TextureHandler;
 import org.noble.helium.math.Dimensions2;
 import org.noble.helium.io.KeyInput;
 import org.noble.helium.rendering.HeliumModelBatch;
+import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
 import org.noble.helium.subsystems.Subsystem;
 import org.noble.helium.subsystems.ui.UserInterface;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.OperatingSystemMXBean;
 import java.util.ArrayList;
 
 public class Helium extends Game {
@@ -28,6 +31,7 @@ public class Helium extends Game {
   private HeliumModelBatch m_modelBatch;
   private UserInterface m_userInterface;
   private LevelHandler m_screenHandler;
+  private HeliumTelemetry m_telemetry;
 
   private Helium() {
     m_subsystems = new ArrayList<>();
@@ -61,6 +65,11 @@ public class Helium extends Game {
 
   @Override
   public void create() {
+    m_telemetry = HeliumTelemetry.getInstance();
+    OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();
+    String osName = osBean.getName();
+    String osArch = osBean.getArch();
+    m_telemetry.print(Constants.Engine.prettyName + " starting up on " + osName + " " + osArch);
     m_modelHandler = ModelHandler.getInstance();
     m_input = KeyInput.getInstance();
     Gdx.input.setCursorCatched(true);
@@ -68,12 +77,14 @@ public class Helium extends Game {
     m_userInterface = UserInterface.getInstance();
     m_screenHandler = LevelHandler.getInstance();
     m_subsystems.add(m_userInterface);
+    m_subsystems.add(m_telemetry);
 
     m_userInterface.addLabel("Engine-FPS", "FPS: " + Gdx.graphics.getFramesPerSecond(), 0, 0, 100, 25, Color.WHITE);
     m_userInterface.addLabel("PlayerController-Position", "", 0, 30, 100, 25, Color.WHITE);
     m_userInterface.addLabel("Engine-Status", "", 0, 60, 100, 25, Color.WHITE);
 
     m_modelBatch = new HeliumModelBatch();
+    m_telemetry.print("Ready to render!");
   }
 
   @Override

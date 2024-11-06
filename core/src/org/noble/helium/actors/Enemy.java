@@ -3,6 +3,9 @@ package org.noble.helium.actors;
 import com.badlogic.gdx.math.Vector3;
 import org.noble.helium.math.EulerAngles;
 import org.noble.helium.rendering.HeliumModelInstance;
+import org.noble.helium.subsystems.telemetry.LogEntry;
+
+import java.util.ArrayList;
 
 public class Enemy extends Actor {
   private final HeliumModelInstance m_model;
@@ -20,5 +23,10 @@ public class Enemy extends Actor {
   @Override
   public void dispose() {
 
+  }
+
+  @Override
+  public ArrayList<LogEntry> getLogs() {
+    return null;
   }
 }

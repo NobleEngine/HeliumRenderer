@@ -14,10 +14,15 @@ import org.noble.helium.math.Dimensions2;
 import org.noble.helium.math.Dimensions3;
 import org.noble.helium.io.KeyInput;
 import org.noble.helium.math.EulerAngles;
+import org.noble.helium.subsystems.telemetry.LogEntry;
+import org.noble.helium.subsystems.telemetry.Loggable;
 import org.noble.helium.subsystems.ui.UserInterface;
 import org.noble.helium.world.WorldObject;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class PlayerController extends Actor {
   private final PerspectiveCamera m_camera;
@@ -29,6 +34,7 @@ public class PlayerController extends Actor {
 
   private PlayerController() {
     super(new Vector3(), 100, 0.5f);
+    m_loggedName = "PlayerController";
     m_input = KeyInput.getInstance();
     m_engine = Helium.getInstance();
     m_objectHandler = ObjectHandler.getInstance();
@@ -221,5 +227,13 @@ public class PlayerController extends Actor {
 
   @Override
   public void dispose() {
+  }
+
+  @Override
+  public ArrayList<LogEntry> getLogs() {
+    ArrayList<LogEntry> logs = new ArrayList<>();
+    logs.add(new LogEntry(Timestamp.from(Instant.now()), "Player Position", getPosition().toString()));
+    logs.add(new LogEntry(Timestamp.from(Instant.now()), "Player Direction", getCamera().direction.toString()));
+    return logs;
   }
 }
