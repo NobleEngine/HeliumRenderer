@@ -69,7 +69,7 @@ public class Helium extends Game {
     OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();
     String osName = osBean.getName();
     String osArch = osBean.getArch();
-    m_telemetry.println(Constants.Engine.prettyName + " starting up on " + osName + " " + osArch);
+    m_telemetry.println(Constants.Engine.k_prettyName + " starting up on " + osName + " " + osArch);
     m_telemetry.addLoggedItem(PlayerController.getInstance());
     m_modelHandler = ModelHandler.getInstance();
     m_input = KeyInput.getInstance();

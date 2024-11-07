@@ -9,6 +9,7 @@ import org.noble.helium.actors.PlayerController;
 import org.noble.helium.handling.ObjectHandler;
 import org.noble.helium.handling.ModelHandler;
 import org.noble.helium.rendering.HeliumModelBatch;
+import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
 
 public class BaseScreen implements Screen {
   public final Helium m_game;
@@ -40,7 +41,7 @@ public class BaseScreen implements Screen {
   public void render(float delta) {
     if(m_batch.isWorking()) {
       m_batch.end();
-      System.err.println("Model batch was not ended last cycle");
+      HeliumTelemetry.getInstance().printErrorln("Model batch was not ended last cycle");
     }
 
     if(m_game.getStatus() == Helium.Status.PLAY) {
