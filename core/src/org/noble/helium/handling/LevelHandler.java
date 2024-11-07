@@ -44,9 +44,9 @@ public class LevelHandler {
 
   public void changeScreen(HeliumLevel level) {
     if (m_currentLevel != null) {
-      m_telemetry.print("Changing screen to " + level.getClass().getSimpleName());
+      m_telemetry.println("Changing screen to " + level.getClass().getSimpleName());
     } else {
-      m_telemetry.print("Starting game on " + level.getClass().getSimpleName());
+      m_telemetry.println("Starting game on " + level.getClass().getSimpleName());
     }
 //    m_userInterface.clear();
     m_modelHandler.clear();

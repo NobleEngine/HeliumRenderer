@@ -23,14 +23,25 @@ public class HeliumTelemetry extends Subsystem {
     return m_instance;
   }
 
-  public void print(String string) {
+  public void println(String string) {
     Timestamp timestamp = Timestamp.from(Instant.now());
     m_logs.add(new LogEntry(timestamp, "Console", string));
     System.out.println(Timestamp.from(Instant.now()) + " : " + string);
   }
 
+  public void addLoggedItem(Loggable loggableItem) {
+    m_loggedItems.add(loggableItem);
+  }
+
   @Override
   public void update() {
+    for(int currentItem = m_loggedItems.size() - 1; currentItem > 0; currentItem--) {
+      ArrayList<LogEntry> entries = m_loggedItems.get(currentItem).getLogEntries();
+      for(int currentEntry = entries.size() - 1; currentEntry > 0; currentEntry--) {
+        LogEntry entry = entries.get(currentEntry);
+        m_logs.add(new LogEntry(entry.getTimestamp(), m_loggedItems.get(currentItem).m_loggedName + "/" + entry.getItemName(), entry.getLoggedValue()));
+      }
+    }
   }
 
   @Override

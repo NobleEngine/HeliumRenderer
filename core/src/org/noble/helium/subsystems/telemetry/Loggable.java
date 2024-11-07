@@ -4,5 +4,5 @@ import java.util.ArrayList;
 
 public abstract class Loggable {
   public String m_loggedName;
-  public abstract ArrayList<LogEntry> getLogs();
+  public abstract ArrayList<LogEntry> getLogEntries();
 }

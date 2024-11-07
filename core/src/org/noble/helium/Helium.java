@@ -69,7 +69,8 @@ public class Helium extends Game {
     OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();
     String osName = osBean.getName();
     String osArch = osBean.getArch();
-    m_telemetry.print(Constants.Engine.prettyName + " starting up on " + osName + " " + osArch);
+    m_telemetry.println(Constants.Engine.prettyName + " starting up on " + osName + " " + osArch);
+    m_telemetry.addLoggedItem(PlayerController.getInstance());
     m_modelHandler = ModelHandler.getInstance();
     m_input = KeyInput.getInstance();
     Gdx.input.setCursorCatched(true);
@@ -84,7 +85,7 @@ public class Helium extends Game {
     m_userInterface.addLabel("Engine-Status", "", 0, 60, 100, 25, Color.WHITE);
 
     m_modelBatch = new HeliumModelBatch();
-    m_telemetry.print("Ready to render!");
+    m_telemetry.println("Ready to render!");
   }
 
   @Override

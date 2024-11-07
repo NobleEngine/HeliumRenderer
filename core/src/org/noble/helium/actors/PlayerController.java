@@ -230,7 +230,7 @@ public class PlayerController extends Actor {
   }
 
   @Override
-  public ArrayList<LogEntry> getLogs() {
+  public ArrayList<LogEntry> getLogEntries() {
     ArrayList<LogEntry> logs = new ArrayList<>();
     logs.add(new LogEntry(Timestamp.from(Instant.now()), "Player Position", getPosition().toString()));
     logs.add(new LogEntry(Timestamp.from(Instant.now()), "Player Direction", getCamera().direction.toString()));

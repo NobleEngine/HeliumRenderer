@@ -26,7 +26,7 @@ public class Enemy extends Actor {
   }
 
   @Override
-  public ArrayList<LogEntry> getLogs() {
+  public ArrayList<LogEntry> getLogEntries() {
     return null;
   }
 }
