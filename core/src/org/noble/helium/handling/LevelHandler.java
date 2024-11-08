@@ -21,6 +21,7 @@ public class LevelHandler {
     m_objectHandler = ObjectHandler.getInstance();
     m_telemetry = HeliumTelemetry.getInstance();
     changeScreen(new PhysicsTest());
+    HeliumTelemetry.getInstance().println("Level handler initialized");
   }
 
   public HeliumLevel getCurrentLevel() {

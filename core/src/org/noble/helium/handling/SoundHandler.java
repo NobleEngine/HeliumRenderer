@@ -2,6 +2,7 @@ package org.noble.helium.handling;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
 
 import java.util.HashMap;
 
@@ -11,6 +12,7 @@ public class SoundHandler {
 
   private SoundHandler() {
     m_soundList = new HashMap<>();
+    HeliumTelemetry.getInstance().println("Sound handler initialized");
   }
 
   public static SoundHandler getInstance() {

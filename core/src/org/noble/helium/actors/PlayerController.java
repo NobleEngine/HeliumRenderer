@@ -13,16 +13,13 @@ import org.noble.helium.handling.ObjectHandler;
 import org.noble.helium.math.Dimensions2;
 import org.noble.helium.math.Dimensions3;
 import org.noble.helium.io.KeyInput;
-import org.noble.helium.math.EulerAngles;
 import org.noble.helium.subsystems.telemetry.LogEntry;
-import org.noble.helium.subsystems.telemetry.Loggable;
 import org.noble.helium.subsystems.ui.UserInterface;
 import org.noble.helium.world.WorldObject;
 
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class PlayerController extends Actor {
   private final PerspectiveCamera m_camera;

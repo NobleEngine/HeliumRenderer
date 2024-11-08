@@ -11,6 +11,7 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import org.noble.helium.handling.TextureHandler;
 import org.noble.helium.math.Dimensions2;
 import org.noble.helium.subsystems.Subsystem;
+import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
 
 import java.util.HashMap;
 
@@ -31,6 +32,7 @@ public class UserInterface extends Subsystem {
     m_sprites = new HashMap<>();
     m_2dStage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
     m_shapeRenderer = new ShapeRenderer();
+    HeliumTelemetry.getInstance().println("User Interface subsystem initialized");
   }
 
   public static UserInterface getInstance() {

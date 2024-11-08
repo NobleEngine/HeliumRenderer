@@ -10,7 +10,7 @@ buildscript {
         google()
     }
     dependencies {
-        
+
 
     }
 }
@@ -71,5 +71,8 @@ project(":core") {
         api "com.badlogicgames.gdx:gdx-bullet:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-ai:$aiVersion"
         api "com.kotcrab.vis:vis-ui:$visuiVersion"
+        // https://mvnrepository.com/artifact/org.apache.poi/poi
+        implementation group: 'org.apache.poi', name: 'poi', version: '3.9'
+
     }
 }

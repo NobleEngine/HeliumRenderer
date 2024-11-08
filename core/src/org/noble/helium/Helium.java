@@ -16,12 +16,10 @@ import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
 import org.noble.helium.subsystems.Subsystem;
 import org.noble.helium.subsystems.ui.UserInterface;
 
-import java.lang.management.ManagementFactory;
-import java.lang.management.OperatingSystemMXBean;
 import java.util.ArrayList;
 
 public class Helium extends Game {
-  private int m_status;
+  private State m_state;
   private float m_delta;
   private static Helium m_instance;
   private final ArrayList<Subsystem> m_subsystems;
@@ -51,12 +49,13 @@ public class Helium extends Game {
     return m_modelBatch;
   }
 
-  public void setStatus(int status) {
-    m_status = status;
+  public void setState(State state) {
+    m_state = state;
+    m_telemetry.println("Game state set to " + state);
   }
 
-  public int getStatus() {
-    return m_status;
+  public State getStatus() {
+    return m_state;
   }
 
   public float getDelta() {
@@ -66,10 +65,6 @@ public class Helium extends Game {
   @Override
   public void create() {
     m_telemetry = HeliumTelemetry.getInstance();
-    OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();
-    String osName = osBean.getName();
-    String osArch = osBean.getArch();
-    m_telemetry.println(Constants.Engine.k_prettyName + " starting up on " + osName + " " + osArch);
     m_telemetry.addLoggedItem(PlayerController.getInstance());
     m_modelHandler = ModelHandler.getInstance();
     m_input = KeyInput.getInstance();
@@ -79,6 +74,9 @@ public class Helium extends Game {
     m_screenHandler = LevelHandler.getInstance();
     m_subsystems.add(m_userInterface);
     m_subsystems.add(m_telemetry);
+
+    m_telemetry.setDumpInterval(10);
+    m_telemetry.setPollInterval(5);
 
     m_userInterface.addLabel("Engine-FPS", "FPS: " + Gdx.graphics.getFramesPerSecond(), 0, 0, 100, 25, Color.WHITE);
     m_userInterface.addLabel("PlayerController-Position", "", 0, 30, 100, 25, Color.WHITE);
@@ -93,7 +91,7 @@ public class Helium extends Game {
     m_delta = Gdx.graphics.getDeltaTime();
     Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-    if(getStatus() == Status.PLAY) {
+    if(getStatus() == State.PLAY) {
       m_player.update();
     }
 
@@ -114,11 +112,11 @@ public class Helium extends Game {
     }
 
     if(m_input.isKeyDown(KeyInput.Action.PAUSE, true)) {
-      if(getStatus() == Status.PLAY) {
-        setStatus(Status.PAUSE);
+      if(getStatus() == State.PLAY) {
+        setState(State.PAUSE);
         Gdx.input.setCursorCatched(false);
       } else {
-        setStatus(Status.PLAY);
+        setState(State.PLAY);
         Gdx.input.setCursorCatched(true);
       }
     }
@@ -127,9 +125,8 @@ public class Helium extends Game {
     m_subsystems.forEach(Subsystem::update);
   }
 
-  public interface Status {
-    int PLAY = 0;
-    int PAUSE = 1;
+  public enum State {
+    PLAY, PAUSE
   }
 
   @Override

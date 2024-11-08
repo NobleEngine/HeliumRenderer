@@ -7,6 +7,7 @@ public class Constants {
 
     public static class Telemetry {
       public static final int k_defaultDumpInterval = 30;
+      public static final int k_defaultPollInterval = 30;
     }
   }
 }
