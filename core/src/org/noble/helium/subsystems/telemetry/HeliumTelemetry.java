@@ -33,7 +33,12 @@ public class HeliumTelemetry extends Subsystem {
     String osArch = osBean.getArch();
 
     try {
-      String directoryName = System.getProperty("user.home") + "\\Noble-Engine\\logs\\";
+      String directoryName;
+      if(osName.startsWith("Windows")) {
+        directoryName = System.getProperty("user.home") + "\\Noble-Engine\\logs\\";
+      } else {
+        directoryName = System.getProperty("user.home") + "/Noble-Engine/logs/";
+      }
       String fileName = "log-" + LocalDate.now() + ".csv";
       File directory = new File(directoryName);
       File file = new File(directoryName + fileName);
@@ -43,7 +48,7 @@ public class HeliumTelemetry extends Subsystem {
         println("Created log directory. This is probably the first time this program has ran on this computer :)");
       }
 
-      String header = "Timestamp,Item,Value";
+      String header = "Timestamp;Item;Value";
 
 
       if(file.createNewFile()) {
@@ -104,7 +109,7 @@ public class HeliumTelemetry extends Subsystem {
     printErrorln("dump");
     for(int log = m_logs.size() - 1; log >= 0; log--) {
       LogEntry entry = m_logs.get(log);
-      String text = "\n" + entry.getTimestamp().toString() + "," + entry.getItemName() + "," + entry.getLoggedValue();
+      String text = "\n" + entry.getTimestamp().toString() + ";" + entry.getItemName() + ";" + entry.getLoggedValue();
       try {
         Files.write(Paths.get(m_logFilePath), text.getBytes(), StandardOpenOption.APPEND);
         m_logs.remove(log);
