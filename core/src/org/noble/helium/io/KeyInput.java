@@ -11,6 +11,7 @@ public class KeyInput {
   private static KeyInput m_instance;
 
   private KeyInput() { //Default binds go here
+    Gdx.input.setCursorCatched(true);
     m_keyBindings = new HashMap<>();
 
     //Player Movement

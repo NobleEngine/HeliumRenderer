@@ -68,7 +68,6 @@ public class Helium extends Game {
     m_telemetry.addLoggedItem(PlayerController.getInstance());
     m_modelHandler = ModelHandler.getInstance();
     m_input = KeyInput.getInstance();
-    Gdx.input.setCursorCatched(true);
     m_player = PlayerController.getInstance();
     m_userInterface = UserInterface.getInstance();
     m_screenHandler = LevelHandler.getInstance();
@@ -81,6 +80,7 @@ public class Helium extends Game {
     m_userInterface.addLabel("Engine-FPS", "FPS: " + Gdx.graphics.getFramesPerSecond(), 0, 0, 100, 25, Color.WHITE);
     m_userInterface.addLabel("PlayerController-Position", "", 0, 30, 100, 25, Color.WHITE);
     m_userInterface.addLabel("Engine-Status", "", 0, 60, 100, 25, Color.WHITE);
+    m_userInterface.addLabel("Engine-FrametimeMS", "", 0, 90, 100, 25, Color.WHITE);
 
     m_modelBatch = new HeliumModelBatch();
     m_telemetry.println("Ready to render!");
@@ -101,6 +101,9 @@ public class Helium extends Game {
     VisLabel StatusLabel = m_userInterface.getLabel("Engine-Status");
     m_userInterface.setLabel("Engine-Status", "Status: " + getStatus(), StatusLabel.getX(),
         StatusLabel.getY(), new Dimensions2(StatusLabel.getWidth(), StatusLabel.getHeight()), StatusLabel.getColor());
+    VisLabel FrametimeMSLabel = m_userInterface.getLabel("Engine-FrametimeMS");
+    m_userInterface.setLabel("Engine-FrametimeMS", "Frame time: " + getDelta(), FrametimeMSLabel.getX(),
+            FrametimeMSLabel.getY(), new Dimensions2(FrametimeMSLabel.getWidth(), FrametimeMSLabel.getHeight()), FrametimeMSLabel.getColor());
 
     //TODO: Change resolution on window resize
     if (m_input.isKeyDown(KeyInput.Action.TOGGLE_FULLSCREEN, true)) {
