@@ -76,7 +76,7 @@ public class ModelHandler {
           VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
     }
 
-    HeliumModelInstance instance = new HeliumModelInstance(model, position);
+    HeliumModelInstance instance = new HeliumModelInstance(model, position, HeliumModelInstance.ModelType.SHAPE);
 
     m_modelInstances.put(name, instance);
   }
@@ -96,19 +96,19 @@ public class ModelHandler {
           VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates);
     }
 
-    HeliumModelInstance instance = new HeliumModelInstance(model, position);
+    HeliumModelInstance instance = new HeliumModelInstance(model, position, HeliumModelInstance.ModelType.SHAPE);
 
     m_modelInstances.put(name, instance);
   }
 
   public void addNewGLTFModel(String name, String path, Vector3 position) {
     Model model = m_GLTFLoader.load(Gdx.files.internal(path)).scene.model;
-    m_modelInstances.put(name, new HeliumModelInstance(model, position));
+    m_modelInstances.put(name, new HeliumModelInstance(model, position, HeliumModelInstance.ModelType.MODEL));
   }
 
   public void addNewOBJModel(String name, String path, Vector3 position) {
     Model model = m_objLoader.loadModel(Gdx.files.internal(path));
-    m_modelInstances.put(name, new HeliumModelInstance(model, position));
+    m_modelInstances.put(name, new HeliumModelInstance(model, position, HeliumModelInstance.ModelType.MODEL));
   }
 
   public void setTexture(String modelName, String textureName) {

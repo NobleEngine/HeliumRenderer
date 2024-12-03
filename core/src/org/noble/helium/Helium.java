@@ -10,7 +10,7 @@ import org.noble.helium.handling.LevelHandler;
 import org.noble.helium.handling.ModelHandler;
 import org.noble.helium.handling.TextureHandler;
 import org.noble.helium.math.Dimensions2;
-import org.noble.helium.io.KeyInput;
+import org.noble.helium.handling.InputHandler;
 import org.noble.helium.rendering.HeliumModelBatch;
 import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
 import org.noble.helium.subsystems.Subsystem;
@@ -24,7 +24,7 @@ public class Helium extends Game {
   private static Helium m_instance;
   private final ArrayList<Subsystem> m_subsystems;
   private ModelHandler m_modelHandler;
-  private KeyInput m_input;
+  private InputHandler m_input;
   private PlayerController m_player;
   private HeliumModelBatch m_modelBatch;
   private UserInterface m_userInterface;
@@ -67,7 +67,7 @@ public class Helium extends Game {
     m_telemetry = HeliumTelemetry.getInstance();
     m_telemetry.addLoggedItem(PlayerController.getInstance());
     m_modelHandler = ModelHandler.getInstance();
-    m_input = KeyInput.getInstance();
+    m_input = InputHandler.getInstance();
     m_player = PlayerController.getInstance();
     m_userInterface = UserInterface.getInstance();
     m_screenHandler = LevelHandler.getInstance();
@@ -81,6 +81,7 @@ public class Helium extends Game {
     m_userInterface.addLabel("PlayerController-Position", "", 0, 30, 100, 25, Color.WHITE);
     m_userInterface.addLabel("Engine-Status", "", 0, 60, 100, 25, Color.WHITE);
     m_userInterface.addLabel("Engine-FrametimeMS", "", 0, 90, 100, 25, Color.WHITE);
+    m_userInterface.addLabel("PlayerController-Health", "", 0, 120, 100, 25, Color.WHITE);
 
     m_modelBatch = new HeliumModelBatch();
     m_telemetry.println("Ready to render!");
@@ -106,7 +107,7 @@ public class Helium extends Game {
             FrametimeMSLabel.getY(), new Dimensions2(FrametimeMSLabel.getWidth(), FrametimeMSLabel.getHeight()), FrametimeMSLabel.getColor());
 
     //TODO: Change resolution on window resize
-    if (m_input.isKeyDown(KeyInput.Action.TOGGLE_FULLSCREEN, true)) {
+    if (m_input.isActionDown(InputHandler.Action.TOGGLE_FULLSCREEN, true)) {
       if (Gdx.graphics.isFullscreen()) {
         Gdx.graphics.setWindowedMode(1600, 900);
       } else {
@@ -114,7 +115,7 @@ public class Helium extends Game {
       }
     }
 
-    if(m_input.isKeyDown(KeyInput.Action.PAUSE, true)) {
+    if(m_input.isActionDown(InputHandler.Action.PAUSE, true)) {
       if(getStatus() == State.PLAY) {
         setState(State.PAUSE);
         Gdx.input.setCursorCatched(false);

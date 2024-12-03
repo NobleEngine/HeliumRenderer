@@ -12,7 +12,7 @@ import org.noble.helium.handling.ModelHandler;
 import org.noble.helium.handling.ObjectHandler;
 import org.noble.helium.math.Dimensions2;
 import org.noble.helium.math.Dimensions3;
-import org.noble.helium.io.KeyInput;
+import org.noble.helium.handling.InputHandler;
 import org.noble.helium.subsystems.telemetry.LogEntry;
 import org.noble.helium.subsystems.ui.UserInterface;
 import org.noble.helium.world.WorldObject;
@@ -23,16 +23,16 @@ import java.util.ArrayList;
 
 public class PlayerController extends Actor {
   private final PerspectiveCamera m_camera;
-  private final KeyInput m_input;
+  private final InputHandler m_input;
   private final Helium m_engine;
   private final ObjectHandler m_objectHandler;
   private static PlayerController m_instance;
   private float m_cameraPitch, m_cameraYaw, m_verticalVelocity;
 
   private PlayerController() {
-    super(new Vector3(), 100, 0.5f);
+    super(new Vector3(), 100, 0.5f, null);
     m_loggedName = "PlayerController";
-    m_input = KeyInput.getInstance();
+    m_input = InputHandler.getInstance();
     m_engine = Helium.getInstance();
     m_objectHandler = ObjectHandler.getInstance();
 
@@ -86,7 +86,7 @@ public class PlayerController extends Actor {
     modelHandler.addNewShape("PlayerController-model", ModelHandler.Shape.CUBE, Color.WHITE, new Vector3(),
         new Dimensions3(5,15,5));
     m_objectHandler.add("PlayerController-object", new WorldObject(modelHandler.get("PlayerController-model"),
-        WorldObject.ShapeType.BOX, WorldObject.CollisionType.NONE));
+        WorldObject.ShapeType.BOX, WorldObject.CollisionType.STANDARD));
   }
 
   private ArrayList<WorldObject> getCollisions() {
@@ -119,7 +119,7 @@ public class PlayerController extends Actor {
     float speed;
     ArrayList<WorldObject> collisions = getCollisions();
     WorldObject playerWObject = m_objectHandler.get("PlayerController-object");
-
+    
     setVerticalVelocity(getVerticalVelocity() - 15f * m_engine.getDelta());
 
     boolean shouldCalculate = true;
@@ -137,7 +137,7 @@ public class PlayerController extends Actor {
           nextPos.y += (yMovement) * movementSpeed;
         }
         setVerticalVelocity(0f);
-        if (m_input.isKeyDown(KeyInput.Action.JUMP, false)) {
+        if (m_input.isActionDown(InputHandler.Action.JUMP, false)) {
           setVerticalVelocity(10f);
         }
       }
@@ -170,7 +170,7 @@ public class PlayerController extends Actor {
           }
           nextPos.y -= 0.0005f;
           setVerticalVelocity(0);
-          if (m_input.isKeyDown(KeyInput.Action.JUMP, false)) {
+          if (m_input.isActionDown(InputHandler.Action.JUMP, false)) {
             setVerticalVelocity(10f);
           }
         } else {
@@ -184,7 +184,7 @@ public class PlayerController extends Actor {
       }
     }
 
-    if (m_input.isKeyDown(KeyInput.Action.MOVE_FASTER, false)) {
+    if (m_input.isActionDown(InputHandler.Action.MOVE_FASTER, false)) {
       speed = 0.5f * 20f;
     } else {
       speed = 0.5f * 10f;
@@ -192,16 +192,16 @@ public class PlayerController extends Actor {
 
     float tempY = nextPos.y;
 
-    if (m_input.isKeyDown(KeyInput.Action.STRAFE_FORWARD, false)) {
+    if (m_input.isActionDown(InputHandler.Action.STRAFE_FORWARD, false)) {
       nextPos.add(tmp.set(m_camera.direction).scl(speed * m_engine.getDelta()));
     }
-    if (m_input.isKeyDown(KeyInput.Action.STRAFE_BACKWARD, false)) {
+    if (m_input.isActionDown(InputHandler.Action.STRAFE_BACKWARD, false)) {
       nextPos.add(tmp.set(m_camera.direction).scl(-speed * m_engine.getDelta()));
     }
-    if (m_input.isKeyDown(KeyInput.Action.STRAFE_LEFT, false)) {
+    if (m_input.isActionDown(InputHandler.Action.STRAFE_LEFT, false)) {
       nextPos.add(tmp.set(m_camera.direction).crs(m_camera.up).nor().scl(-speed * m_engine.getDelta()));
     }
-    if (m_input.isKeyDown(KeyInput.Action.STRAFE_RIGHT, false)) {
+    if (m_input.isActionDown(InputHandler.Action.STRAFE_RIGHT, false)) {
       nextPos.add(tmp.set(m_camera.direction).crs(m_camera.up).nor().scl(speed * m_engine.getDelta()));
     }
 
@@ -220,6 +220,9 @@ public class PlayerController extends Actor {
     VisLabel PosLabel = UserInterface.getInstance().getLabel("PlayerController-Position");
     UserInterface.getInstance().setLabel("PlayerController-Position", "Position: " + getX() + ", " + getY() +
         ", " + getZ(), PosLabel.getX(), PosLabel.getY(), new Dimensions2(PosLabel.getWidth(), PosLabel.getHeight()), PosLabel.getColor());
+    VisLabel HealthLabel = UserInterface.getInstance().getLabel("PlayerController-Health");
+    UserInterface.getInstance().setLabel("PlayerController-Health", "Health: " + getHealth(), HealthLabel.getX(), HealthLabel.getY(),
+        new Dimensions2(HealthLabel.getWidth(), HealthLabel.getHeight()), HealthLabel.getColor());
   }
 
   @Override

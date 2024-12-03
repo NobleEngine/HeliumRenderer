@@ -19,4 +19,9 @@ public class Dimensions3 {
   public float getDepth() {
     return m_dim.z;
   }
+
+  @Override
+  public String toString() {
+    return m_dim.toString();
+  }
 }

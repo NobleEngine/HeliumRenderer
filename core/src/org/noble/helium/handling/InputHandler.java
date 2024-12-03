@@ -1,4 +1,4 @@
-package org.noble.helium.io;
+package org.noble.helium.handling;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -6,11 +6,11 @@ import com.badlogic.gdx.Input;
 import java.util.HashMap;
 import java.util.Map;
 
-public class KeyInput {
+public class InputHandler {
   private final HashMap<Integer, Integer> m_keyBindings;
-  private static KeyInput m_instance;
+  private static InputHandler m_instance;
 
-  private KeyInput() { //Default binds go here
+  private InputHandler() { //Default binds go here
     Gdx.input.setCursorCatched(true);
     m_keyBindings = new HashMap<>();
 
@@ -27,9 +27,9 @@ public class KeyInput {
     bindKey(Input.Keys.SHIFT_LEFT, Action.MOVE_FASTER);
   }
 
-  public static KeyInput getInstance() {
+  public static InputHandler getInstance() {
     if (m_instance == null) {
-      m_instance = new KeyInput();
+      m_instance = new InputHandler();
     }
     return m_instance;
   }
@@ -38,7 +38,14 @@ public class KeyInput {
     m_keyBindings.put(keyCode, action);
   }
 
-  public boolean isKeyDown(int action, boolean noHold) {
+  public boolean isKeyDown(int keyCode, boolean noHold) {
+    if(!noHold && Gdx.input.isKeyPressed(keyCode)) {
+      return true;
+    }
+    return noHold && Gdx.input.isKeyJustPressed(keyCode);
+  }
+
+  public boolean isActionDown(int action, boolean noHold) {
     for (Map.Entry<Integer, Integer> entry : m_keyBindings.entrySet()) {
       if (entry.getValue() == action) {
         if (!noHold && Gdx.input.isKeyPressed(entry.getKey())) {
@@ -47,15 +54,6 @@ public class KeyInput {
         if (noHold && Gdx.input.isKeyJustPressed(entry.getKey())) {
           return true;
         }
-      }
-    }
-    return false;
-  }
-
-  public boolean isAnyKeyDown() {
-    for (Map.Entry<Integer, Integer> entry : m_keyBindings.entrySet()) {
-      if (Gdx.input.isKeyPressed(entry.getKey())) {
-        return true;
       }
     }
     return false;

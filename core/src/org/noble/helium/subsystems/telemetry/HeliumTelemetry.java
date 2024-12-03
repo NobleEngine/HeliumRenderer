@@ -74,14 +74,14 @@ public class HeliumTelemetry extends Subsystem {
   public void println(String string) {
     Timestamp timestamp = Timestamp.from(Instant.now());
     m_logs.add(new LogEntry(timestamp, "Console", string));
-    System.out.println(timestamp + " : " + string);
+    System.out.println(timestamp + "\t:\t" + string);
   }
 
   public void printErrorln(String string) {
     Timestamp timestamp = Timestamp.from(Instant.now());
     m_logs.add(new LogEntry(timestamp, "Console", string));
     m_logs.add(new LogEntry(timestamp, "Console/Errors", string));
-    System.err.println(timestamp + " : " + string);
+    System.err.println(timestamp + "\t:\t" + string);
   }
 
   public void addLoggedItem(Loggable loggableItem) {

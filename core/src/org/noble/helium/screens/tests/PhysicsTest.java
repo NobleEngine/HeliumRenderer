@@ -3,18 +3,25 @@ package org.noble.helium.screens.tests;
 import com.badlogic.gdx.graphics.Color;
 
 import com.badlogic.gdx.math.Vector3;
+import org.noble.helium.actors.Enemy;
+import org.noble.helium.handling.LevelHandler;
 import org.noble.helium.handling.ModelHandler;
 import org.noble.helium.math.Dimensions3;
 import org.noble.helium.screens.HeliumLevel;
 import org.noble.helium.world.WorldObject;
 
 public class PhysicsTest extends HeliumLevel {
+  Enemy enemy;
   public PhysicsTest() {
     super();
   }
 
   @Override
   public void init() {
+//    m_modelHandler.addNewOBJModel("enemy", "models/Pawn/pawn.obj", new Vector3(200,11,200));
+    m_modelHandler.addNewShape("enemy", ModelHandler.Shape.CUBE, Color.RED, new Vector3(100,5,0), new Dimensions3(2,2,2));
+    enemy = new Enemy(new Vector3(100,5,0),10,5f, m_modelHandler.get("enemy"), m_player.getWorldObject());
+
     m_modelHandler.addNewShape(
         "wall-01", ModelHandler.Shape.CUBE, Color.CORAL,
         new Vector3(0, 10, 20), new Dimensions3(50,100,5));
@@ -68,5 +75,9 @@ public class PhysicsTest extends HeliumLevel {
       m_player.setPosition(new Vector3(m_player.getX(),150,m_player.getZ()));
 //      m_player.setVerticalVelocity(0);
     }
+
+    enemy.update();
+
+//    LevelHandler.getInstance().changeScreen(new ActorTest());
   }
 }
