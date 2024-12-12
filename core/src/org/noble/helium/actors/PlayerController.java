@@ -28,10 +28,12 @@ public class PlayerController extends Actor {
   private final ObjectHandler m_objectHandler;
   private static PlayerController m_instance;
   private float m_cameraPitch, m_cameraYaw, m_verticalVelocity;
+  private final PlayerType m_playerType;
 
   private PlayerController() {
-    super(new Vector3(), 100, 0.5f, null);
+    super(new Vector3(), 100, 8f, null);
     m_loggedName = "PlayerController";
+    m_playerType = PlayerType.GHOST;
     m_input = InputHandler.getInstance();
     m_engine = Helium.getInstance();
     m_objectHandler = ObjectHandler.getInstance();
@@ -107,21 +109,57 @@ public class PlayerController extends Actor {
 
     // Clamp pitch angle to prevent flipping
     m_cameraPitch = MathUtils.clamp(m_cameraPitch, -89f, 89f);
+    if(m_playerType == PlayerType.DOOM) {
+      m_cameraPitch = 0.0f;
+    }
 
     Quaternion quaternion = new Quaternion().setEulerAngles(m_cameraYaw, m_cameraPitch, 0);
     m_camera.direction.set(Vector3.Z).mul(quaternion);
+  }
+
+  private void setVectorFromKeyboard(Vector3 nextPos, Vector3 tmp) {
+    if (m_input.isActionDown(InputHandler.Action.STRAFE_FORWARD, false)) {
+      nextPos.add(tmp.set(m_camera.direction).scl(getSpeed() * m_engine.getDelta()));
+    }
+    if (m_input.isActionDown(InputHandler.Action.STRAFE_BACKWARD, false)) {
+      nextPos.add(tmp.set(m_camera.direction).scl(-getSpeed() * m_engine.getDelta()));
+    }
+    if (m_input.isActionDown(InputHandler.Action.STRAFE_LEFT, false)) {
+      nextPos.add(tmp.set(m_camera.direction).crs(m_camera.up).nor().scl(-getSpeed() * m_engine.getDelta()));
+    }
+    if (m_input.isActionDown(InputHandler.Action.STRAFE_RIGHT, false)) {
+      nextPos.add(tmp.set(m_camera.direction).crs(m_camera.up).nor().scl(getSpeed() * m_engine.getDelta()));
+    }
   }
 
   private void translate() {
     // Move the camera based on keyboard input
     Vector3 nextPos = m_camera.position.cpy();
     Vector3 tmp = new Vector3();
-    float speed;
     ArrayList<WorldObject> collisions = getCollisions();
     WorldObject playerWObject = m_objectHandler.get("PlayerController-object");
-    
-    setVerticalVelocity(getVerticalVelocity() - 15f * m_engine.getDelta());
 
+    switch(m_playerType) {
+      case STANDARD, DOOM -> {
+        calculateCollisions(nextPos, collisions, playerWObject);
+        setVerticalVelocity(getVerticalVelocity() - 15f * m_engine.getDelta());
+
+        float tempY = nextPos.y;
+        setVectorFromKeyboard(nextPos, tmp);
+        nextPos.y = tempY + (getVerticalVelocity() * m_engine.getDelta());
+      }
+      case FLY -> {
+        calculateCollisions(nextPos, collisions, playerWObject);
+        setVectorFromKeyboard(nextPos, tmp);
+      }
+      case GHOST -> setVectorFromKeyboard(nextPos, tmp);
+    }
+
+    setPosition(nextPos);
+
+  }
+
+  private void calculateCollisions(Vector3 nextPos, ArrayList<WorldObject> collisions, WorldObject playerWObject) {
     boolean shouldCalculate = true;
     for (WorldObject collision : collisions) {
       if (collision.getCollisionType() == WorldObject.CollisionType.CLIMBABLE) {
@@ -183,31 +221,6 @@ public class PlayerController extends Actor {
         }
       }
     }
-
-    if (m_input.isActionDown(InputHandler.Action.MOVE_FASTER, false)) {
-      speed = 0.5f * 20f;
-    } else {
-      speed = 0.5f * 10f;
-    }
-
-    float tempY = nextPos.y;
-
-    if (m_input.isActionDown(InputHandler.Action.STRAFE_FORWARD, false)) {
-      nextPos.add(tmp.set(m_camera.direction).scl(speed * m_engine.getDelta()));
-    }
-    if (m_input.isActionDown(InputHandler.Action.STRAFE_BACKWARD, false)) {
-      nextPos.add(tmp.set(m_camera.direction).scl(-speed * m_engine.getDelta()));
-    }
-    if (m_input.isActionDown(InputHandler.Action.STRAFE_LEFT, false)) {
-      nextPos.add(tmp.set(m_camera.direction).crs(m_camera.up).nor().scl(-speed * m_engine.getDelta()));
-    }
-    if (m_input.isActionDown(InputHandler.Action.STRAFE_RIGHT, false)) {
-      nextPos.add(tmp.set(m_camera.direction).crs(m_camera.up).nor().scl(speed * m_engine.getDelta()));
-    }
-
-    nextPos.y = tempY + (getVerticalVelocity() * m_engine.getDelta());
-
-    setPosition(nextPos);
   }
 
   public void update() {
@@ -235,5 +248,9 @@ public class PlayerController extends Actor {
     logs.add(new LogEntry(Timestamp.from(Instant.now()), "Player Position", getPosition().toString()));
     logs.add(new LogEntry(Timestamp.from(Instant.now()), "Player Direction", getCamera().direction.toString()));
     return logs;
+  }
+
+  public enum PlayerType {
+    STANDARD, DOOM, FLY, GHOST
   }
 }
