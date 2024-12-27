@@ -91,17 +91,6 @@ public class PlayerController extends Actor {
         WorldObject.ShapeType.BOX, WorldObject.CollisionType.STANDARD));
   }
 
-  private ArrayList<WorldObject> getCollisions() {
-    ArrayList<WorldObject> collisions = new ArrayList<>();
-    WorldObject playerWObject = m_objectHandler.get("PlayerController-object");
-    for (WorldObject object : ObjectHandler.getInstance().getAllObjects().values()) {
-      if (!object.equals(playerWObject) && playerWObject.isColliding(object)) {
-        collisions.add(object);
-      }
-    }
-    return collisions;
-  }
-
   private void rotate() {
     // Update camera rotation based on mouse movement
     m_cameraYaw += -Gdx.input.getDeltaX() * m_engine.getDelta() * 10f;
@@ -136,12 +125,11 @@ public class PlayerController extends Actor {
     // Move the camera based on keyboard input
     Vector3 nextPos = m_camera.position.cpy();
     Vector3 tmp = new Vector3();
-    ArrayList<WorldObject> collisions = getCollisions();
     WorldObject playerWObject = m_objectHandler.get("PlayerController-object");
 
     switch(m_playerType) {
       case STANDARD, DOOM -> {
-        calculateCollisions(nextPos, collisions, playerWObject);
+//        calculateCollisions(nextPos, collisions, playerWObject);
         setVerticalVelocity(getVerticalVelocity() - 15f * m_engine.getDelta());
 
         float tempY = nextPos.y;
@@ -149,7 +137,7 @@ public class PlayerController extends Actor {
         nextPos.y = tempY + (getVerticalVelocity() * m_engine.getDelta());
       }
       case FLY -> {
-        calculateCollisions(nextPos, collisions, playerWObject);
+//        calculateCollisions(nextPos, collisions, playerWObject);
         setVectorFromKeyboard(nextPos, tmp);
       }
       case GHOST -> setVectorFromKeyboard(nextPos, tmp);

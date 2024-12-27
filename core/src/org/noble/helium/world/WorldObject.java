@@ -1,28 +1,19 @@
 package org.noble.helium.world;
 
 import com.badlogic.gdx.math.Vector3;
-import org.noble.helium.logic.OrientedBoundingBox;
-import org.noble.helium.math.Dimensions3;
 import org.noble.helium.rendering.HeliumModelInstance;
 
 public class WorldObject {
   private final HeliumModelInstance m_modelInstance;
-  private OrientedBoundingBox m_boundingBox;
   private final int m_collisionType;
 
   public WorldObject(HeliumModelInstance modelInstance, ShapeType shape, int collision) {
     m_modelInstance = modelInstance;
     m_collisionType = collision;
-
-    m_boundingBox = new OrientedBoundingBox(modelInstance.getPosition(), modelInstance.getDimensions(), modelInstance.getAngles());
   }
 
   public HeliumModelInstance getModelInstance() {
     return m_modelInstance;
-  }
-
-  public OrientedBoundingBox getBoundingBox() {
-    return m_boundingBox;
   }
 
   public int getCollisionType() {
@@ -57,12 +48,7 @@ public class WorldObject {
     return m_modelInstance.getDimensions().getDepth();
   }
 
-  public boolean isColliding(WorldObject object) {
-    return m_boundingBox.intersects(object.getBoundingBox());
-  }
-
   public void update() {
-    m_boundingBox = new OrientedBoundingBox(m_modelInstance.getPosition(), m_modelInstance.getDimensions(), m_modelInstance.getAngles());
   }
 
   public enum ShapeType { //TODO: Add more

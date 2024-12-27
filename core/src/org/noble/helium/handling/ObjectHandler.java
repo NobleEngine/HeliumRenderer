@@ -3,7 +3,6 @@ package org.noble.helium.handling;
 import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
 import org.noble.helium.world.WorldObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ObjectHandler {
@@ -36,16 +35,6 @@ public class ObjectHandler {
 
   public void clear() {
     m_objects.clear();
-  }
-
-  public ArrayList<WorldObject> getCollidingObjects(WorldObject object) {
-    ArrayList<WorldObject> collisions = new ArrayList<>();
-    for(WorldObject obj : getAllObjects().values()) {
-      if(obj.isColliding(object)) {
-        collisions.add(obj);
-      }
-    }
-    return collisions;
   }
 
   public void update() {
