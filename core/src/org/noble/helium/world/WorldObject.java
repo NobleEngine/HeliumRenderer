@@ -5,6 +5,7 @@ import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
 import org.noble.helium.math.Dimensions3;
+import org.noble.helium.math.EulerAngles;
 import org.noble.helium.rendering.HeliumModelInstance;
 
 public class WorldObject {
@@ -36,6 +37,10 @@ public class WorldObject {
 
   public void setPosition(Vector3 position) {
     m_modelInstance.setPosition(position);
+  }
+
+  public void setAngles(EulerAngles angles) {
+    m_modelInstance.setRotation(angles);
   }
 
   public float getX() {

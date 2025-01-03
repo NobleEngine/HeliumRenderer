@@ -7,6 +7,7 @@ import org.noble.helium.actors.Enemy;
 import org.noble.helium.handling.LevelHandler;
 import org.noble.helium.handling.ModelHandler;
 import org.noble.helium.math.Dimensions3;
+import org.noble.helium.math.EulerAngles;
 import org.noble.helium.screens.HeliumLevel;
 import org.noble.helium.world.WorldObject;
 
@@ -57,6 +58,8 @@ public class PhysicsTest extends HeliumLevel {
         WorldObject.ShapeType.BOX, WorldObject.CollisionType.STANDARD));
     m_objectHandler.add("floor4", new WorldObject(m_modelHandler.get("cube-04"),
         WorldObject.ShapeType.BOX, WorldObject.CollisionType.STANDARD));
+
+    m_objectHandler.get("wall1").setAngles(new EulerAngles(0,0,45));
 
     m_player.setPosition(new Vector3(0,50,0));
     super.init();
