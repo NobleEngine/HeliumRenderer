@@ -20,6 +20,10 @@ public class Dimensions3 {
     return m_dim.z;
   }
 
+  public Vector3 toVector3() {
+    return m_dim.cpy();
+  }
+
   @Override
   public String toString() {
     return m_dim.toString();

@@ -13,6 +13,7 @@ import org.noble.helium.handling.ObjectHandler;
 import org.noble.helium.math.Dimensions2;
 import org.noble.helium.math.Dimensions3;
 import org.noble.helium.handling.InputHandler;
+import org.noble.helium.subsystems.Physics;
 import org.noble.helium.subsystems.telemetry.LogEntry;
 import org.noble.helium.subsystems.ui.UserInterface;
 import org.noble.helium.world.WorldObject;
@@ -26,17 +27,20 @@ public class PlayerController extends Actor {
   private final InputHandler m_input;
   private final Helium m_engine;
   private final ObjectHandler m_objectHandler;
+  private final Physics m_physics;
   private static PlayerController m_instance;
   private float m_cameraPitch, m_cameraYaw, m_verticalVelocity;
   private final PlayerType m_playerType;
+  private int m_objectsCollidingWithPlayer = 0;
 
   private PlayerController() {
     super(new Vector3(), 100, 8f, null);
     m_loggedName = "PlayerController";
-    m_playerType = PlayerType.GHOST;
+    m_playerType = PlayerType.STANDARD;
     m_input = InputHandler.getInstance();
     m_engine = Helium.getInstance();
     m_objectHandler = ObjectHandler.getInstance();
+    m_physics = Physics.getInstance();
 
     m_camera = new PerspectiveCamera();
     m_camera.fieldOfView = 67;
@@ -72,6 +76,10 @@ public class PlayerController extends Actor {
     return m_verticalVelocity;
   }
 
+  public int getObjectsCollidingWithPlayer() {
+    return m_objectsCollidingWithPlayer;
+  }
+
   public void setVerticalVelocity(float velocity) {
     m_verticalVelocity = velocity;
   }
@@ -89,6 +97,7 @@ public class PlayerController extends Actor {
         new Dimensions3(5,15,5));
     m_objectHandler.add("PlayerController-object", new WorldObject(modelHandler.get("PlayerController-model"),
         WorldObject.ShapeType.BOX, WorldObject.CollisionType.STANDARD));
+    m_worldObject = m_objectHandler.get("PlayerController-object");
   }
 
   private void rotate() {
@@ -126,10 +135,13 @@ public class PlayerController extends Actor {
     Vector3 nextPos = m_camera.position.cpy();
     Vector3 tmp = new Vector3();
     WorldObject playerWObject = m_objectHandler.get("PlayerController-object");
+    ArrayList<WorldObject> collisions = m_physics.getCollisions(playerWObject);
+
+    m_objectsCollidingWithPlayer = collisions.size();
 
     switch(m_playerType) {
       case STANDARD, DOOM -> {
-//        calculateCollisions(nextPos, collisions, playerWObject);
+        calculateCollisions(nextPos, collisions, playerWObject);
         setVerticalVelocity(getVerticalVelocity() - 15f * m_engine.getDelta());
 
         float tempY = nextPos.y;
@@ -137,7 +149,7 @@ public class PlayerController extends Actor {
         nextPos.y = tempY + (getVerticalVelocity() * m_engine.getDelta());
       }
       case FLY -> {
-//        calculateCollisions(nextPos, collisions, playerWObject);
+        calculateCollisions(nextPos, collisions, playerWObject);
         setVectorFromKeyboard(nextPos, tmp);
       }
       case GHOST -> setVectorFromKeyboard(nextPos, tmp);
@@ -209,6 +221,7 @@ public class PlayerController extends Actor {
         }
       }
     }
+    setPosition(nextPos);
   }
 
   public void update() {
@@ -224,6 +237,9 @@ public class PlayerController extends Actor {
     VisLabel HealthLabel = UserInterface.getInstance().getLabel("PlayerController-Health");
     UserInterface.getInstance().setLabel("PlayerController-Health", "Health: " + getHealth(), HealthLabel.getX(), HealthLabel.getY(),
         new Dimensions2(HealthLabel.getWidth(), HealthLabel.getHeight()), HealthLabel.getColor());
+    VisLabel CollLabel = UserInterface.getInstance().getLabel("PlayerController-Collisions");
+    UserInterface.getInstance().setLabel("PlayerController-Collisions", "Collisions: " + getObjectsCollidingWithPlayer(), CollLabel.getX(), CollLabel.getY(),
+        new Dimensions2(CollLabel.getWidth(), CollLabel.getHeight()), CollLabel.getColor());
   }
 
   @Override

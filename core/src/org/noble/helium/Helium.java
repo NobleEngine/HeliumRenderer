@@ -12,6 +12,7 @@ import org.noble.helium.handling.TextureHandler;
 import org.noble.helium.math.Dimensions2;
 import org.noble.helium.handling.InputHandler;
 import org.noble.helium.rendering.HeliumModelBatch;
+import org.noble.helium.subsystems.Physics;
 import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
 import org.noble.helium.subsystems.Subsystem;
 import org.noble.helium.subsystems.ui.UserInterface;
@@ -30,6 +31,7 @@ public class Helium extends Game {
   private UserInterface m_userInterface;
   private LevelHandler m_screenHandler;
   private HeliumTelemetry m_telemetry;
+  private Physics m_physics;
 
   private Helium() {
     m_subsystems = new ArrayList<>();
@@ -71,8 +73,10 @@ public class Helium extends Game {
     m_player = PlayerController.getInstance();
     m_userInterface = UserInterface.getInstance();
     m_screenHandler = LevelHandler.getInstance();
+    m_physics = Physics.getInstance();
     m_subsystems.add(m_userInterface);
     m_subsystems.add(m_telemetry);
+    m_subsystems.add(m_physics);
 
     m_telemetry.setDumpInterval(10);
     m_telemetry.setPollInterval(5);
@@ -82,6 +86,7 @@ public class Helium extends Game {
     m_userInterface.addLabel("Engine-Status", "", 0, 60, 100, 25, Color.WHITE);
     m_userInterface.addLabel("Engine-FrametimeMS", "", 0, 90, 100, 25, Color.WHITE);
     m_userInterface.addLabel("PlayerController-Health", "", 0, 120, 100, 25, Color.WHITE);
+    m_userInterface.addLabel("PlayerController-Collisions", "", 0, 150, 100, 25, Color.WHITE);
 
     m_modelBatch = new HeliumModelBatch();
     m_telemetry.println("Ready to render!");
@@ -139,5 +144,6 @@ public class Helium extends Game {
     m_modelHandler.clear();
     m_subsystems.forEach(Subsystem::dispose);
     m_screenHandler.dispose();
+    m_physics.dispose();
   }
 }
