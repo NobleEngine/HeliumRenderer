@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector3;
 import org.noble.helium.logic.OrientedBoundingBox;
 import org.noble.helium.math.Dimensions3;
 import org.noble.helium.rendering.HeliumModelInstance;
+import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
 
 public class WorldObject {
   private final HeliumModelInstance m_modelInstance;
@@ -58,6 +59,10 @@ public class WorldObject {
   }
 
   public boolean isColliding(WorldObject object) {
+    if(object == null) {
+      HeliumTelemetry.getInstance().printErrorln("WorldObject is null");
+      return false;
+    }
     return m_boundingBox.intersects(object.getBoundingBox());
   }
 

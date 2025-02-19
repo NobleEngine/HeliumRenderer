@@ -20,7 +20,7 @@ public class PhysicsTest extends HeliumLevel {
   public void init() {
 //    m_modelHandler.addNewOBJModel("enemy", "models/Pawn/pawn.obj", new Vector3(200,11,200));
     m_modelHandler.addNewShape("enemy", ModelHandler.Shape.CUBE, Color.RED, new Vector3(100,5,0), new Dimensions3(2,2,2));
-    enemy = new Enemy(new Vector3(100,5,0),10,5f, m_modelHandler.get("enemy"), m_player.getWorldObject());
+    enemy = new Enemy(new Vector3(100,5,0),10,5f, m_modelHandler.get("enemy"), m_player);
 
     m_modelHandler.addNewShape(
         "wall-01", ModelHandler.Shape.CUBE, Color.CORAL,
@@ -72,7 +72,8 @@ public class PhysicsTest extends HeliumLevel {
     super.render(delta);
 
     if(m_player.getPosition().y < -100f) {
-      m_player.setPosition(new Vector3(m_player.getX(),150,m_player.getZ()));
+//      m_player.setPosition(new Vector3(m_player.getX(),150,m_player.getZ()));
+      LevelHandler.getInstance().changeScreen(new ActorTest());
 //      m_player.setVerticalVelocity(0);
     }
 

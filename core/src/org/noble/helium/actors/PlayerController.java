@@ -33,13 +33,13 @@ public class PlayerController extends Actor {
   private PlayerController() {
     super(new Vector3(), 100, 8f, null);
     m_loggedName = "PlayerController";
-    m_playerType = PlayerType.GHOST;
+    m_playerType = PlayerType.STANDARD;
     m_input = InputHandler.getInstance();
     m_engine = Helium.getInstance();
     m_objectHandler = ObjectHandler.getInstance();
 
     m_camera = new PerspectiveCamera();
-    m_camera.fieldOfView = 67;
+    m_camera.fieldOfView = 95;
     m_camera.viewportWidth = Gdx.graphics.getWidth();
     m_camera.viewportHeight = Gdx.graphics.getHeight();
     m_camera.position.set(10f, 10f, 10f);
