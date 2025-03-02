@@ -14,4 +14,7 @@ public class Constants {
       public static final boolean k_debugDrawing = true;
     }
   }
+  public static class Player {
+    public static final float k_speed = 20.0f;
+  }
 }

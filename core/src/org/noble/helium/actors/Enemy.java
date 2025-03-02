@@ -9,21 +9,21 @@ import org.noble.helium.world.WorldObject;
 import java.util.ArrayList;
 
 public class Enemy extends Actor {
-  private final WorldObject m_followingObject;
+  private final Actor m_followingActor;
 
-  public Enemy(Vector3 startingPos, int startingHealth, float speed, HeliumModelInstance model, WorldObject followingObject) {
+  public Enemy(Vector3 startingPos, int startingHealth, float speed, HeliumModelInstance model, Actor followingActor) {
     super(startingPos, startingHealth, speed, model);
     m_worldObject = new WorldObject(m_model, WorldObject.ShapeType.BOX, WorldObject.CollisionType.STANDARD);
-    m_followingObject = followingObject;
+    m_followingActor = followingActor;
   }
 
-  public WorldObject getWorldObject() {
-    return m_worldObject;
-  }
-
-  private void follow(WorldObject target) {
+  private void follow(Actor followingActor) {
     Vector3 nextPosition = new Vector3(getPosition().x, getPosition().y, getPosition().z);
     float delta = Helium.getInstance().getDelta();
+    WorldObject target = followingActor.getWorldObject();
+    if (target == null) {
+      return;
+    }
 
     if (target.getX() > getX()) {
       nextPosition.x += getSpeed() * delta;
@@ -31,9 +31,9 @@ public class Enemy extends Actor {
       nextPosition.x -= getSpeed() * delta;
     }
 
-    if (target.getY() - target.getHeight() > getY() - this.getWorldObject().getHeight()) {
+    if (target.getY() - target.getDepth() > getY() - this.getWorldObject().getDepth()) {
       nextPosition.y += getSpeed() * delta;
-    } else if (target.getY() - target.getHeight() < getY() - this.getWorldObject().getHeight()) {
+    } else if (target.getY() - target.getDepth() < getY() - this.getWorldObject().getDepth()) {
       nextPosition.y -= getSpeed() * delta;
     }
 
@@ -42,13 +42,11 @@ public class Enemy extends Actor {
     } else if (target.getZ() < getZ()) {
       nextPosition.z -= getSpeed() * delta;
     }
-
-    setPosition(nextPosition);
   }
 
   @Override
   public void update() {
-    follow(m_followingObject);
+    follow(m_followingActor);
   }
 
   @Override

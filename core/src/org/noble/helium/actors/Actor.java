@@ -2,9 +2,6 @@ package org.noble.helium.actors;
 
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
-import org.noble.helium.Helium;
-import org.noble.helium.handling.InputHandler;
-import org.noble.helium.handling.ObjectHandler;
 import org.noble.helium.rendering.HeliumModelInstance;
 import org.noble.helium.subsystems.telemetry.Loggable;
 import org.noble.helium.world.WorldObject;
@@ -12,7 +9,7 @@ import org.noble.helium.world.WorldObject;
 public abstract class Actor extends Loggable implements Disposable {
   private Vector3 m_position;
   private int m_health;
-  private final float m_speed;
+  private float m_speed;
   private boolean m_dead;
   public HeliumModelInstance m_model;
   public WorldObject m_worldObject;
@@ -48,8 +45,21 @@ public abstract class Actor extends Loggable implements Disposable {
   public float getZ() {
     return m_position.z;
   }
+
   public Vector3 getPosition() {
     return m_position;
+  }
+
+  public WorldObject getWorldObject() {
+    return m_worldObject;
+  }
+
+  public void die() {
+    m_dead = true;
+  }
+
+  public void setSpeed(float speed) {
+    m_speed = speed;
   }
 
   public void setPosition(Vector3 newPosition) {
@@ -61,5 +71,4 @@ public abstract class Actor extends Loggable implements Disposable {
   }
 
   public abstract void update();
-
 }

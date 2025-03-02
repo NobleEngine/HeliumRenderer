@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
 import org.noble.helium.math.Dimensions3;
 import org.noble.helium.math.EulerAngles;
 import org.noble.helium.rendering.HeliumModelInstance;
+import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
 
 public class WorldObject {
   private final HeliumModelInstance m_modelInstance;

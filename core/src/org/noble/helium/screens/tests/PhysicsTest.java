@@ -59,7 +59,7 @@ public class PhysicsTest extends HeliumLevel {
     m_objectHandler.add("floor4", new WorldObject(m_modelHandler.get("cube-04"),
         WorldObject.ShapeType.BOX, WorldObject.CollisionType.STANDARD));
 
-    m_objectHandler.get("wall1").setAngles(new EulerAngles(0,0,45));
+//    m_objectHandler.get("wall1").setAngles(new EulerAngles(0,0,45));
 
     m_player.setPosition(new Vector3(0,50,0));
     super.init();

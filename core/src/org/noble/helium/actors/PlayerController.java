@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.kotcrab.vis.ui.widget.VisLabel;
+import org.noble.helium.Constants;
 import org.noble.helium.Helium;
 import org.noble.helium.handling.ModelHandler;
 import org.noble.helium.handling.ObjectHandler;
@@ -34,16 +35,16 @@ public class PlayerController extends Actor {
   private int m_objectsCollidingWithPlayer = 0;
 
   private PlayerController() {
-    super(new Vector3(), 100, 8f, null);
+    super(new Vector3(), 100, Constants.Player.k_speed, null);
     m_loggedName = "PlayerController";
-    m_playerType = PlayerType.GHOST;
+    m_playerType = PlayerType.STANDARD;
     m_input = InputHandler.getInstance();
     m_engine = Helium.getInstance();
     m_objectHandler = ObjectHandler.getInstance();
     m_physics = Physics.getInstance();
 
     m_camera = new PerspectiveCamera();
-    m_camera.fieldOfView = 67;
+    m_camera.fieldOfView = 95;
     m_camera.viewportWidth = Gdx.graphics.getWidth();
     m_camera.viewportHeight = Gdx.graphics.getHeight();
     m_camera.position.set(10f, 10f, 10f);
@@ -141,8 +142,8 @@ public class PlayerController extends Actor {
 
     switch(m_playerType) {
       case STANDARD, DOOM -> {
+//        setVerticalVelocity(getVerticalVelocity() - 50f * m_engine.getDelta());
         calculateCollisions(nextPos, collisions, playerWObject);
-        setVerticalVelocity(getVerticalVelocity() - 15f * m_engine.getDelta());
 
         float tempY = nextPos.y;
         setVectorFromKeyboard(nextPos, tmp);
@@ -175,9 +176,6 @@ public class PlayerController extends Actor {
           nextPos.y += (yMovement) * movementSpeed;
         }
         setVerticalVelocity(0f);
-        if (m_input.isActionDown(InputHandler.Action.JUMP, false)) {
-          setVerticalVelocity(10f);
-        }
       }
       float extentA_x = playerWObject.getWidth() / 2.0f;
       float extentA_y = playerWObject.getHeight() / 2.0f;
@@ -205,11 +203,6 @@ public class PlayerController extends Actor {
             nextPos.y = collision.getY() - (extentA_y + extentB_y);
           } else {
             nextPos.y = collision.getY() + (extentA_y + extentB_y);
-          }
-          nextPos.y -= 0.0005f;
-          setVerticalVelocity(0);
-          if (m_input.isActionDown(InputHandler.Action.JUMP, false)) {
-            setVerticalVelocity(10f);
           }
         } else {
           // Smallest overlap is in the z-axis
