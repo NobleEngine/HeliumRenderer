@@ -9,5 +9,9 @@ public class Constants {
       public static final int k_defaultDumpInterval = 30;
       public static final int k_defaultPollInterval = 30;
     }
+
+    public static class Physics {
+      public static final boolean k_debugDrawing = true;
+    }
   }
 }
