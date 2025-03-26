@@ -28,16 +28,13 @@ public class LDAParser {
       JsonObject object = value.getAsJsonObject();
       ModelHandler modelHandler = ModelHandler.getInstance();
       if (object.get("type").getAsString().equals("shape")) {
-        if(object.get("shape").getAsString().equalsIgnoreCase("rectangle")) {
           modelHandler.addNewShape(
               key + "-model",
               toShapeType(object.get("shape").getAsString()),
               toColor(object.get("color").getAsString()),
-//              Color.WHITE,
               toVector3(object.get("position").getAsJsonArray()),
               new Dimensions3(toVector3(object.get("dimensions").getAsJsonArray())));
           objects.put(key + "-model",new WorldObject(modelHandler.get(key + "-model"), WorldObject.CollisionType.STANDARD));
-        }
       }
     });
     objects.forEach((key, value) -> ObjectHandler.getInstance().add(key + "-object", value));
