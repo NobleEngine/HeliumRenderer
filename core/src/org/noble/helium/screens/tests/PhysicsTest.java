@@ -25,6 +25,7 @@ public class PhysicsTest extends HeliumLevel {
     m_modelHandler.addNewShape(
         "cube-01", ModelHandler.Shape.CUBE, Color.FIREBRICK,
         new Vector3(), new Dimensions3(30f,10f,50f));
+
     m_modelHandler.addNewShape(
         "cube-02", ModelHandler.Shape.CUBE, Color.OLIVE,
         new Vector3(50f,0f,0f), new Dimensions3(30f,1f,50f));
@@ -71,6 +72,7 @@ public class PhysicsTest extends HeliumLevel {
 
     if(m_player.getPosition().y < -100f) {
       m_player.setPosition(new Vector3(m_player.getX(),150,m_player.getZ()));
+//      LevelHandler.getInstance().changeScreen(new ActorTest());
 //      m_player.setVerticalVelocity(0);
     }
 

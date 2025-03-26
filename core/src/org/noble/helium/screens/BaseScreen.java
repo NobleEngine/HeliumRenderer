@@ -4,6 +4,9 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import org.noble.helium.Helium;
 import org.noble.helium.actors.PlayerController;
 import org.noble.helium.handling.ObjectHandler;
@@ -17,6 +20,7 @@ public class BaseScreen implements Screen {
   public final PlayerController m_player;
   public final ModelHandler m_modelHandler;
   public final ObjectHandler m_objectHandler;
+  private final Viewport m_viewport;
   public Environment m_environment;
 
   public BaseScreen() {
@@ -27,6 +31,8 @@ public class BaseScreen implements Screen {
     m_objectHandler = ObjectHandler.getInstance();
     m_game.setState(Helium.State.PLAY);
 
+//    Vector2 resolution = m_game.getResolution();
+    m_viewport = new ScreenViewport(m_player.getCamera());
     m_environment = new Environment();
     m_environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1.0f));
     m_environment.add(new DirectionalLight().set(0.8f,0.8f,0.8f,-1f,-0.8f,-0.2f));
@@ -55,6 +61,12 @@ public class BaseScreen implements Screen {
 
   @Override
   public void resize(int x, int y) {
+    if(m_player.getWorldObject() == null) {
+      return;
+    }
+    Vector3 playerPos = m_player.getPosition();
+    m_viewport.update(x, y, true);
+    m_player.setPosition(playerPos);
   }
 
   @Override
