@@ -2,6 +2,7 @@ package org.noble.helium;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector2;
@@ -10,6 +11,7 @@ import org.noble.helium.actors.PlayerController;
 import org.noble.helium.handling.LevelHandler;
 import org.noble.helium.handling.ModelHandler;
 import org.noble.helium.handling.TextureHandler;
+import org.noble.helium.lda.LDAExtractor;
 import org.noble.helium.math.Dimensions2;
 import org.noble.helium.handling.InputHandler;
 import org.noble.helium.rendering.HeliumModelBatch;
@@ -17,6 +19,7 @@ import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
 import org.noble.helium.subsystems.Subsystem;
 import org.noble.helium.subsystems.ui.UserInterface;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Helium extends Game {
@@ -90,6 +93,12 @@ public class Helium extends Game {
 
     m_modelBatch = new HeliumModelBatch();
     m_telemetry.println("Ready to render!");
+
+    try {
+      LDAExtractor.getLDAElements(Gdx.files.internal("levels/test.lda"));
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   @Override
