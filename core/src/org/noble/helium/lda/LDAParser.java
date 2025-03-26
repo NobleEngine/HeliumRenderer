@@ -11,7 +11,6 @@ import org.noble.helium.math.Dimensions3;
 import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
 import org.noble.helium.world.WorldObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,9 +40,7 @@ public class LDAParser {
         }
       }
     });
-    objects.forEach((key, value) -> {
-      ObjectHandler.getInstance().add(key + "-object", value);
-    });
+    objects.forEach((key, value) -> ObjectHandler.getInstance().add(key + "-object", value));
   }
 
   private static ModelHandler.Shape toShapeType(String type) {

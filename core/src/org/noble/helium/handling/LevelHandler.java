@@ -9,10 +9,8 @@ import org.noble.helium.screens.HeliumLevel;
 import org.noble.helium.screens.ParsedLevel;
 import org.noble.helium.screens.tests.PhysicsTest;
 import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
-import org.noble.helium.world.WorldObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Map;
 
 public class LevelHandler {

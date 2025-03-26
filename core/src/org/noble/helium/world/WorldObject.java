@@ -2,7 +2,6 @@ package org.noble.helium.world;
 
 import com.badlogic.gdx.math.Vector3;
 import org.noble.helium.logic.OrientedBoundingBox;
-import org.noble.helium.math.Dimensions3;
 import org.noble.helium.rendering.HeliumModelInstance;
 import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
 
@@ -64,15 +63,15 @@ public class WorldObject {
       return false;
     }
 
+    if(m_collisionType == 2 || object.getCollisionType() == 2) {
+      return false;
+    }
+
     return m_boundingBox.isColliding(object.getBoundingBox());
   }
 
   public void update() {
     m_boundingBox = new OrientedBoundingBox(m_modelInstance.getPosition(), m_modelInstance.getDimensions(), m_modelInstance.getAngles());
-  }
-
-  public enum ShapeType { //TODO: Add more
-    BOX
   }
 
   public interface CollisionType {
