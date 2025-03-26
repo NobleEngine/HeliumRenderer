@@ -16,7 +16,7 @@ public class Enemy extends Actor {
   public Enemy(Vector3 startingPos, int startingHealth, int strength, float speed, HeliumModelInstance model, Actor followingActor) {
     super(startingPos, startingHealth, speed, model);
     m_strength = strength;
-    m_worldObject = new WorldObject(m_model, WorldObject.ShapeType.BOX, WorldObject.CollisionType.STANDARD);
+    m_worldObject = new WorldObject(m_model, WorldObject.CollisionType.STANDARD);
     m_followingActor = followingActor;
     m_timer = 0.0f;
   }

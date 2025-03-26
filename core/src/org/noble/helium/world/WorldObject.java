@@ -11,7 +11,7 @@ public class WorldObject {
   private OrientedBoundingBox m_boundingBox;
   private final int m_collisionType;
 
-  public WorldObject(HeliumModelInstance modelInstance, ShapeType shape, int collision) {
+  public WorldObject(HeliumModelInstance modelInstance, int collision) {
     m_modelInstance = modelInstance;
     m_collisionType = collision;
 

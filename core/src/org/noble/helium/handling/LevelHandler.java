@@ -1,10 +1,19 @@
 package org.noble.helium.handling;
 
+import com.badlogic.gdx.Gdx;
+import com.google.gson.JsonElement;
 import org.noble.helium.Helium;
+import org.noble.helium.lda.LDAExtractor;
+import org.noble.helium.lda.LDAParser;
 import org.noble.helium.screens.HeliumLevel;
-import org.noble.helium.screens.tests.ActorTest;
+import org.noble.helium.screens.ParsedLevel;
 import org.noble.helium.screens.tests.PhysicsTest;
 import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
+import org.noble.helium.world.WorldObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Map;
 
 public class LevelHandler {
   private static LevelHandler m_instance;
@@ -21,7 +30,13 @@ public class LevelHandler {
     m_modelHandler = ModelHandler.getInstance();
     m_objectHandler = ObjectHandler.getInstance();
     m_telemetry = HeliumTelemetry.getInstance();
-    changeScreen(new PhysicsTest());
+//    changeScreen(new PhysicsTest());
+    try {
+      changeScreen("test.lda");
+    } catch (IOException e) {
+      changeScreen(new PhysicsTest());
+      throw new RuntimeException(e);
+    }
     HeliumTelemetry.getInstance().println("Level handler initialized");
   }
 
@@ -42,6 +57,13 @@ public class LevelHandler {
 
   public void dispose() {
     m_currentLevel.dispose();
+  }
+
+  public void changeScreen(String LDAName) throws IOException {
+    changeScreen(new ParsedLevel());
+    Map<String, JsonElement> m_ldaElements = LDAExtractor.getLDAElements(Gdx.files.internal("levels/" + LDAName));
+    LDAParser.addWorldObjects(m_ldaElements);
+
   }
 
   public void changeScreen(HeliumLevel level) {
