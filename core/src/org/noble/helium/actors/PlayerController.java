@@ -227,9 +227,17 @@ public class PlayerController extends Actor {
     if(m_objectHandler.get("PlayerController-object") == null) {
       createWorldObject();
     }
+
+    if(m_input.isActionDown(InputHandler.Action.MOVE_FASTER, false)) {
+      setSpeed(16f);
+    } else {
+      setSpeed(8f);
+    }
+
     rotate();
     translate();
     m_camera.update();
+    
     VisLabel PosLabel = UserInterface.getInstance().getLabel("PlayerController-Position");
     UserInterface.getInstance().setLabel("PlayerController-Position", "Position: " + getX() + ", " + getY() +
         ", " + getZ(), PosLabel.getX(), PosLabel.getY(), new Dimensions2(PosLabel.getWidth(), PosLabel.getHeight()), PosLabel.getColor());

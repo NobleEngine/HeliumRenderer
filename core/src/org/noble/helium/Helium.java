@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.math.Vector2;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import org.noble.helium.actors.PlayerController;
 import org.noble.helium.handling.LevelHandler;
@@ -62,6 +63,10 @@ public class Helium extends Game {
     return m_delta;
   }
 
+  public Vector2 getResolution() {
+    return new Vector2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+  }
+
   @Override
   public void create() {
     m_telemetry = HeliumTelemetry.getInstance();
@@ -106,7 +111,6 @@ public class Helium extends Game {
     m_userInterface.setLabel("Engine-FrametimeMS", "Frame time: " + getDelta(), FrametimeMSLabel.getX(),
             FrametimeMSLabel.getY(), new Dimensions2(FrametimeMSLabel.getWidth(), FrametimeMSLabel.getHeight()), FrametimeMSLabel.getColor());
 
-    //TODO: Change resolution on window resize
     if (m_input.isActionDown(InputHandler.Action.TOGGLE_FULLSCREEN, true)) {
       if (Gdx.graphics.isFullscreen()) {
         Gdx.graphics.setWindowedMode(1600, 900);

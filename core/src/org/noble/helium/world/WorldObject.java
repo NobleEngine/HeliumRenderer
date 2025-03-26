@@ -63,7 +63,8 @@ public class WorldObject {
       HeliumTelemetry.getInstance().printErrorln("WorldObject is null");
       return false;
     }
-    return m_boundingBox.intersects(object.getBoundingBox());
+
+    return m_boundingBox.isColliding(object.getBoundingBox());
   }
 
   public void update() {
