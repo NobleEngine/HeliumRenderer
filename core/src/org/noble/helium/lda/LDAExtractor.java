@@ -3,6 +3,7 @@ package org.noble.helium.lda;
 import com.badlogic.gdx.files.FileHandle;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -34,6 +35,10 @@ public class LDAExtractor {
         }
         zis.closeEntry();
       }
+    }
+
+    for (Map.Entry<String, JsonElement> entry : jsonFiles.entrySet()) {
+      HeliumTelemetry.getInstance().println(entry.getKey() + ": " + entry.getValue().getAsJsonObject());
     }
 
     return jsonFiles;
