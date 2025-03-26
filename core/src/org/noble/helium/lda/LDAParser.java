@@ -20,7 +20,8 @@ public class LDAParser {
     Map<String, WorldObject> objects = new HashMap<>();
     elements.forEach((key, value) -> {
       if(key.startsWith("world/")) {
-        String fileName = key.substring(key.lastIndexOf('/') + 1); // Remove folder prefix
+        String fileName = key.substring(key.lastIndexOf('/') + 1)
+            .replace(".json", ""); // Remove folder and .json from name
         worldElements.put(fileName, value);
       }
     });
@@ -34,8 +35,14 @@ public class LDAParser {
               toColor(object.get("color").getAsString()),
               toVector3(object.get("position").getAsJsonArray()),
               new Dimensions3(toVector3(object.get("dimensions").getAsJsonArray())));
-          objects.put(key + "-model",new WorldObject(modelHandler.get(key + "-model"), WorldObject.CollisionType.STANDARD));
+      } else if (object.get("type").getAsString().equals("model")) {
+        modelHandler.addNewOBJModel(
+            key + "-model",
+            object.get("model").getAsString(),
+            toVector3(object.get("position").getAsJsonArray())
+        );
       }
+      objects.put(key + "-object",new WorldObject(modelHandler.get(key + "-model"), WorldObject.CollisionType.STANDARD));
     });
     objects.forEach((key, value) -> ObjectHandler.getInstance().add(key + "-object", value));
   }
