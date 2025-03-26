@@ -91,5 +91,6 @@ public class BaseScreen implements Screen {
   public void dispose() {
     m_modelHandler.clear();
     m_objectHandler.clear();
+    m_actorHandler.clear();
   }
 }

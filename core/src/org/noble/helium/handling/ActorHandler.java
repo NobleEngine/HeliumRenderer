@@ -20,12 +20,10 @@ public class ActorHandler {
   }
 
   public void update() {
-    for(Actor actor : m_actors) {
+    for (Actor actor : m_actors) {
       actor.update();
-      if(actor.isDead()) {
-        m_actors.remove(actor);
-      }
     }
+    m_actors.removeIf(Actor::isDead);
   }
 
   public void addActor(Actor actor) {

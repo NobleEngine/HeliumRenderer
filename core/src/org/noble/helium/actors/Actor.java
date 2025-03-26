@@ -56,6 +56,7 @@ public abstract class Actor extends Loggable implements Disposable {
 
   public void die() {
     m_dead = true;
+    m_model.setShouldRender(false);
   }
 
   public void setSpeed(float speed) {
