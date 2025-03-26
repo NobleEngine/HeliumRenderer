@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import org.noble.helium.Helium;
 import org.noble.helium.actors.PlayerController;
+import org.noble.helium.handling.ActorHandler;
 import org.noble.helium.handling.ObjectHandler;
 import org.noble.helium.handling.ModelHandler;
 import org.noble.helium.rendering.HeliumModelBatch;
@@ -20,6 +21,7 @@ public class BaseScreen implements Screen {
   public final PlayerController m_player;
   public final ModelHandler m_modelHandler;
   public final ObjectHandler m_objectHandler;
+  public final ActorHandler m_actorHandler;
   private final Viewport m_viewport;
   public Environment m_environment;
 
@@ -29,9 +31,9 @@ public class BaseScreen implements Screen {
     m_player = PlayerController.getInstance();
     m_modelHandler = ModelHandler.getInstance();
     m_objectHandler = ObjectHandler.getInstance();
+    m_actorHandler = ActorHandler.getInstance();
     m_game.setState(Helium.State.PLAY);
 
-//    Vector2 resolution = m_game.getResolution();
     m_viewport = new ScreenViewport(m_player.getCamera());
     m_environment = new Environment();
     m_environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1.0f));
@@ -53,6 +55,7 @@ public class BaseScreen implements Screen {
     if(m_game.getStatus() == Helium.State.PLAY) {
       m_player.update();
       m_objectHandler.update();
+      m_actorHandler.update();
     }
 
     m_batch.begin(m_player.getCamera());
@@ -88,5 +91,6 @@ public class BaseScreen implements Screen {
   public void dispose() {
     m_modelHandler.clear();
     m_objectHandler.clear();
+    m_actorHandler.clear();
   }
 }

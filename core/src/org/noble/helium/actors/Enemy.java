@@ -10,17 +10,23 @@ import java.util.ArrayList;
 
 public class Enemy extends Actor {
   private final Actor m_followingActor;
+  private final int m_strength;
+  private float m_timer;
 
-  public Enemy(Vector3 startingPos, int startingHealth, float speed, HeliumModelInstance model, Actor followingActor) {
+  public Enemy(Vector3 startingPos, int startingHealth, int strength, float speed, HeliumModelInstance model, Actor followingActor) {
     super(startingPos, startingHealth, speed, model);
+    m_strength = strength;
     m_worldObject = new WorldObject(m_model, WorldObject.ShapeType.BOX, WorldObject.CollisionType.STANDARD);
     m_followingActor = followingActor;
+    m_timer = 0.0f;
   }
 
-  private void follow(Actor followingActor) {
+  @Override
+  public void update() {
+    m_worldObject.update();
     Vector3 nextPosition = new Vector3(getPosition().x, getPosition().y, getPosition().z);
     float delta = Helium.getInstance().getDelta();
-    WorldObject target = followingActor.getWorldObject();
+    WorldObject target = m_followingActor.getWorldObject();
     if (target == null) {
       return;
     }
@@ -43,8 +49,13 @@ public class Enemy extends Actor {
       } else if (target.getZ() < getZ()) {
         nextPosition.z -= getSpeed() * delta;
       }
+      m_timer = 1.0f;
     } else {
-      followingActor.setHealth(followingActor.getHealth() - 1);
+      m_timer += delta;
+      if(m_timer >= 1.0f) {
+        m_followingActor.setHealth(m_followingActor.getHealth() - m_strength);
+        m_timer = 0.0f;
+      }
     }
 
     if (getHealth() <= 0) {
@@ -52,11 +63,6 @@ public class Enemy extends Actor {
     }
 
     setPosition(nextPosition);
-  }
-
-  @Override
-  public void update() {
-    follow(m_followingActor);
   }
 
   @Override
