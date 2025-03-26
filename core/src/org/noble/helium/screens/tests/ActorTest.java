@@ -17,7 +17,7 @@ public class ActorTest extends HeliumLevel {
   public void init() {
     m_modelHandler.addNewOBJModel("enemy", "models/Pawn/pawn.obj", new Vector3(200,11,200));
 
-    enemy = new Enemy(new Vector3(200,12,200),10,5, m_modelHandler.get("enemy"), m_player);
+    enemy = new Enemy(new Vector3(200,12,200),10,10,5, m_modelHandler.get("enemy"), m_player);
 
     m_modelHandler.addNewShape("ground", ModelHandler.Shape.CUBE, "textures/dirt.png", new Vector3(), new Dimensions3(1000, 10, 1000));
     m_objectHandler.add("ground", new WorldObject(m_modelHandler.get("ground"), WorldObject.ShapeType.BOX, WorldObject.CollisionType.STANDARD));
