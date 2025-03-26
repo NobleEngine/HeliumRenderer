@@ -59,9 +59,9 @@ public class LevelHandler {
 
   public void changeScreen(String LDAName) throws IOException {
     changeScreen(new ParsedLevel());
-    Map<String, JsonElement> m_ldaElements = LDAExtractor.getLDAElements(Gdx.files.internal("levels/" + LDAName));
-    LDAParser.addWorldObjects(m_ldaElements);
-
+    Map<String, JsonElement> ldaElements = LDAExtractor.getLDAElements(Gdx.files.internal("levels/" + LDAName));
+    LDAParser.addWorldObjects(ldaElements);
+    LDAParser.usePlayerStartingConfiguration(ldaElements);
   }
 
   public void changeScreen(HeliumLevel level) {

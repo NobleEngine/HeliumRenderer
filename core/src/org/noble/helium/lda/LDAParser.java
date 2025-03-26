@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import org.noble.helium.actors.PlayerController;
 import org.noble.helium.handling.ModelHandler;
 import org.noble.helium.handling.ObjectHandler;
 import org.noble.helium.math.Dimensions3;
@@ -15,6 +16,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LDAParser {
+  public static void usePlayerStartingConfiguration(Map<String, JsonElement> elements) {
+    PlayerController m_player = PlayerController.getInstance();
+    Map<String, JsonElement> configs = new HashMap<>();
+    elements.forEach((key, value) -> {
+      if(key.startsWith("config/")) {
+        String fileName = key.substring(key.lastIndexOf('/') + 1)
+            .replace(".json", ""); // Remove folder and .json from name
+        configs.put(fileName, value);
+      }
+    });
+
+    JsonObject playerStartConfig = configs.get("playerstart").getAsJsonObject();
+    if(playerStartConfig.has("position")) {
+//      m_player.setPosition(toVector3(playerStartConfig.getAsJsonArray("position")));
+    }
+    if(playerStartConfig.has("health")) {
+      m_player.setHealth(playerStartConfig.get("health").getAsInt());
+    }
+  }
+
   public static void addWorldObjects(Map<String, JsonElement> elements) {
     Map<String, JsonElement> worldElements = new HashMap<>();
     Map<String, WorldObject> objects = new HashMap<>();
@@ -26,6 +47,7 @@ public class LDAParser {
       }
     });
     worldElements.forEach((key, value) -> {
+      System.out.println("Adding world object: " + key);
       JsonObject object = value.getAsJsonObject();
       ModelHandler modelHandler = ModelHandler.getInstance();
       if (object.get("type").getAsString().equals("shape")) {

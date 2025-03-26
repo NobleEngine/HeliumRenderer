@@ -10,6 +10,8 @@ import org.noble.helium.math.Dimensions3;
 import org.noble.helium.screens.HeliumLevel;
 import org.noble.helium.world.WorldObject;
 
+import java.io.IOException;
+
 public class PhysicsTest extends HeliumLevel {
   Enemy enemy;
   public PhysicsTest() {
@@ -67,7 +69,6 @@ public class PhysicsTest extends HeliumLevel {
 
     if(m_player.getPosition().y < -100f) {
       m_player.setPosition(new Vector3(m_player.getX(),150,m_player.getZ()));
-      LevelHandler.getInstance().changeScreen(new ActorTest());
     }
   }
 }
