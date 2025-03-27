@@ -47,7 +47,7 @@ public class LDAParser {
       }
     });
     worldElements.forEach((key, value) -> {
-      System.out.println("Adding world object: " + key);
+      HeliumTelemetry.getInstance().println("Adding world object: " + key);
       JsonObject object = value.getAsJsonObject();
       ModelHandler modelHandler = ModelHandler.getInstance();
       if (object.get("type").getAsString().equals("shape")) {

@@ -15,6 +15,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -49,7 +50,7 @@ public class LDAExtractor {
     }
 
     for (Map.Entry<String, JsonElement> entry : jsonFiles.entrySet()) {
-      HeliumTelemetry.getInstance().println(entry.getKey() + ": " + entry.getValue().getAsJsonObject());
+      HeliumTelemetry.getInstance().println("Found Element - " + entry.getKey() + ": " + entry.getValue().getAsJsonObject());
     }
 
     return jsonFiles;
@@ -84,7 +85,7 @@ public class LDAExtractor {
         }
       }
     } catch (IOException | ClassNotFoundException e) {
-      e.printStackTrace();
+      HeliumTelemetry.getInstance().printErrorln("Exception while compiling LDA scripts: " + e.getMessage());
     }
 
     return loadedClasses;
@@ -100,7 +101,7 @@ public class LDAExtractor {
       outputStream.write(buffer, 0, bytesRead);
     }
 
-    return new String(outputStream.toByteArray());
+    return outputStream.toString();
   }
 
   private static Class<?> compileAndLoadClass(String className, String sourceCode) throws MalformedURLException, ClassNotFoundException {
@@ -112,7 +113,7 @@ public class LDAExtractor {
     JavaFileObject file = new JavaSourceFromString(className, sourceCode);
 
     // Compile the source code
-    boolean success = compiler.getTask(null, fileManager, null, null, null, Arrays.asList(file)).call();
+    boolean success = compiler.getTask(null, fileManager, null, null, null, List.of(file)).call();
 
     if (!success) {
       throw new RuntimeException("Compilation failed for " + className);

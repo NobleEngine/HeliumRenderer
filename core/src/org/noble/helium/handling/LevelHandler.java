@@ -8,6 +8,8 @@ import org.noble.helium.lda.LDAParser;
 import org.noble.helium.screens.HeliumLevel;
 import org.noble.helium.screens.ParsedLevel;
 import org.noble.helium.screens.tests.PhysicsTest;
+import org.noble.helium.subsystems.scripting.HeliumScript;
+import org.noble.helium.subsystems.scripting.ScriptRunner;
 import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
 
 import javax.tools.ToolProvider;
@@ -67,14 +69,10 @@ public class LevelHandler {
     LDAParser.usePlayerStartingConfiguration(ldaElements);
 
     Map<String, Class<?>> scripts = LDAExtractor.getScripts(Gdx.files.internal("levels/" + LDAName));
-    Class<?> clazz = scripts.get("script");
-    Method updateMethod = clazz.getMethod("update", float.class);
-    try {
-      updateMethod.invoke(clazz.getDeclaredConstructor().newInstance(), Gdx.graphics.getDeltaTime());
-    } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
-      throw new RuntimeException(e);
-    }
 
+    scripts.forEach((key,value) -> {
+      ScriptRunner.getInstance().addScript(new HeliumScript(value));
+    });
   }
 
   public void changeScreen(HeliumLevel level) {
