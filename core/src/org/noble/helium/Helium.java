@@ -74,6 +74,7 @@ public class Helium extends Game {
   public void create() {
     m_telemetry = HeliumTelemetry.getInstance();
     m_telemetry.addLoggedItem(PlayerController.getInstance());
+    m_subsystems.add(ScriptRunner.getInstance());
     m_modelHandler = ModelHandler.getInstance();
     m_input = InputHandler.getInstance();
     m_player = PlayerController.getInstance();
@@ -81,7 +82,6 @@ public class Helium extends Game {
     m_screenHandler = LevelHandler.getInstance();
     m_subsystems.add(m_userInterface);
     m_subsystems.add(m_telemetry);
-    m_subsystems.add(ScriptRunner.getInstance());
 
     m_telemetry.setDumpInterval(10);
     m_telemetry.setPollInterval(5);

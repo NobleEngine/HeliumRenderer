@@ -7,15 +7,10 @@ import org.noble.helium.lda.LDAExtractor;
 import org.noble.helium.lda.LDAParser;
 import org.noble.helium.screens.HeliumLevel;
 import org.noble.helium.screens.ParsedLevel;
-import org.noble.helium.screens.tests.PhysicsTest;
-import org.noble.helium.subsystems.scripting.HeliumScript;
 import org.noble.helium.subsystems.scripting.ScriptRunner;
 import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
 
-import javax.tools.ToolProvider;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Map;
 
 public class LevelHandler {
@@ -25,22 +20,18 @@ public class LevelHandler {
   private final ModelHandler m_modelHandler;
   private final ObjectHandler m_objectHandler;
   private final HeliumTelemetry m_telemetry;
+  private final ScriptRunner m_scriptRunner;
   private String m_previousLevelName;
-
 
   private LevelHandler() {
     m_helium = Helium.getInstance();
     m_modelHandler = ModelHandler.getInstance();
     m_objectHandler = ObjectHandler.getInstance();
     m_telemetry = HeliumTelemetry.getInstance();
-    changeScreen(new PhysicsTest());
-    try {
-      changeScreen("test.lda");
-    } catch (IOException | ClassNotFoundException | NoSuchMethodException e) {
-      changeScreen(new PhysicsTest());
-      throw new RuntimeException(e);
-    }
-//    HeliumTelemetry.getInstance().println("Level handler initialized");
+    m_scriptRunner = ScriptRunner.getInstance();
+//    changeScreen(new PhysicsTest());
+    changeScreen("test.lda");
+    HeliumTelemetry.getInstance().println("Level handler initialized");
   }
 
   public HeliumLevel getCurrentLevel() {
@@ -62,17 +53,17 @@ public class LevelHandler {
     m_currentLevel.dispose();
   }
 
-  public void changeScreen(String LDAName) throws IOException, ClassNotFoundException, NoSuchMethodException {
-    changeScreen(new ParsedLevel());
-    Map<String, JsonElement> ldaElements = LDAExtractor.getLDAElements(Gdx.files.internal("levels/" + LDAName));
+  public void changeScreen(String LDAName) {
+    Map<String, Class<?>> scripts = LDAExtractor.getScripts(Gdx.files.internal("levels/" + LDAName));
+    changeScreen(new ParsedLevel(scripts));
+    Map<String, JsonElement> ldaElements;
+    try {
+      ldaElements = LDAExtractor.getLDAElements(Gdx.files.internal("levels/" + LDAName));
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
     LDAParser.addWorldObjects(ldaElements);
     LDAParser.usePlayerStartingConfiguration(ldaElements);
-
-    Map<String, Class<?>> scripts = LDAExtractor.getScripts(Gdx.files.internal("levels/" + LDAName));
-
-    scripts.forEach((key,value) -> {
-      ScriptRunner.getInstance().addScript(new HeliumScript(value));
-    });
   }
 
   public void changeScreen(HeliumLevel level) {

@@ -13,8 +13,13 @@ public class HeliumScript {
     m_externalClass = externalClass;
   }
 
-  public void update() throws NoSuchMethodException {
-    Method updateMethod = m_externalClass.getMethod("update", float.class);
+  public void update() {
+    Method updateMethod;
+    try {
+      updateMethod = m_externalClass.getMethod("update", float.class);
+    } catch (NoSuchMethodException e) {
+      throw new RuntimeException(e);
+    }
     try {
       updateMethod.invoke(m_externalClass.getDeclaredConstructor().newInstance(), Gdx.graphics.getDeltaTime());
     } catch (IllegalAccessException | InvocationTargetException | InstantiationException | NoSuchMethodException e) {

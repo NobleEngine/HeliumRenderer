@@ -29,6 +29,7 @@ public class LDAParser {
 
     JsonObject playerStartConfig = configs.get("playerstart").getAsJsonObject();
     if(playerStartConfig.has("position")) {
+      //TODO: Fix this
 //      m_player.setPosition(toVector3(playerStartConfig.getAsJsonArray("position")));
     }
     if(playerStartConfig.has("health")) {
