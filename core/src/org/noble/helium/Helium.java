@@ -4,13 +4,11 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL32;
-import com.badlogic.gdx.math.Vector2;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import org.noble.helium.actors.PlayerController;
 import org.noble.helium.handling.LevelHandler;
 import org.noble.helium.handling.ModelHandler;
 import org.noble.helium.handling.TextureHandler;
-import org.noble.helium.lda.LDAExtractor;
 import org.noble.helium.math.Dimensions2;
 import org.noble.helium.handling.InputHandler;
 import org.noble.helium.rendering.HeliumModelBatch;
@@ -19,7 +17,6 @@ import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
 import org.noble.helium.subsystems.Subsystem;
 import org.noble.helium.subsystems.ui.UserInterface;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class Helium extends Game {
@@ -64,10 +61,6 @@ public class Helium extends Game {
 
   public float getDelta() {
     return m_delta;
-  }
-
-  public Vector2 getResolution() {
-    return new Vector2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
   }
 
   @Override

@@ -79,6 +79,9 @@ public class LDAExtractor {
       }
     } catch (IOException | ClassNotFoundException e) {
       HeliumTelemetry.getInstance().printErrorln("Exception while compiling LDA scripts: " + e.getMessage());
+      for(StackTraceElement element : e.getStackTrace()) {
+        HeliumTelemetry.getInstance().println(element.toString());
+      }
     }
 
     return loadedClasses;

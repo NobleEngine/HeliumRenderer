@@ -10,8 +10,6 @@ import org.noble.helium.math.Dimensions3;
 import org.noble.helium.screens.HeliumLevel;
 import org.noble.helium.world.WorldObject;
 
-import java.io.IOException;
-
 public class PhysicsTest extends HeliumLevel {
   Enemy enemy;
   public PhysicsTest() {

@@ -22,8 +22,9 @@ public class ParsedLevel extends HeliumLevel {
     m_scripts.forEach((key,value) -> {
       if(value.getSimpleName().equals("start")) {
         new HeliumScript(value).update();
+      } else {
+        m_scriptRunner.addScript(new HeliumScript(value));
       }
-      m_scriptRunner.addScript(new HeliumScript(value));
     });
   }
 

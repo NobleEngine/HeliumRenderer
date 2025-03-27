@@ -7,7 +7,6 @@ import org.noble.helium.lda.LDAExtractor;
 import org.noble.helium.lda.LDAParser;
 import org.noble.helium.screens.HeliumLevel;
 import org.noble.helium.screens.ParsedLevel;
-import org.noble.helium.subsystems.scripting.ScriptRunner;
 import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
 
 import java.io.IOException;
@@ -20,26 +19,14 @@ public class LevelHandler {
   private final ModelHandler m_modelHandler;
   private final ObjectHandler m_objectHandler;
   private final HeliumTelemetry m_telemetry;
-  private final ScriptRunner m_scriptRunner;
-  private String m_previousLevelName;
 
   private LevelHandler() {
     m_helium = Helium.getInstance();
     m_modelHandler = ModelHandler.getInstance();
     m_objectHandler = ObjectHandler.getInstance();
     m_telemetry = HeliumTelemetry.getInstance();
-    m_scriptRunner = ScriptRunner.getInstance();
-//    changeScreen(new PhysicsTest());
     changeScreen("test.lda");
     HeliumTelemetry.getInstance().println("Level handler initialized");
-  }
-
-  public HeliumLevel getCurrentLevel() {
-    return m_currentLevel;
-  }
-
-  public String getPreviousLevelName() {
-    return m_previousLevelName;
   }
 
   public static LevelHandler getInstance() {
@@ -77,7 +64,6 @@ public class LevelHandler {
     m_objectHandler.clear();
     m_helium.setScreen(level);
     if (m_currentLevel != null) {
-      m_previousLevelName = m_currentLevel.getClass().getSimpleName();
       m_currentLevel.dispose();
     }
     m_currentLevel = level;
