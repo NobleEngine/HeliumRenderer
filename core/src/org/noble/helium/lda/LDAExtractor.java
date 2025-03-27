@@ -13,10 +13,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -62,10 +59,6 @@ public class LDAExtractor {
     try (ZipInputStream zipInputStream = new ZipInputStream(new ByteArrayInputStream(zipFileHandle.readBytes()))) {
       ZipEntry entry;
 
-      // Prepare the JavaCompiler
-      JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-      StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
-
       // Iterate through the zip file
       while ((entry = zipInputStream.getNextEntry()) != null) {
         String entryName = entry.getName();
@@ -109,11 +102,14 @@ public class LDAExtractor {
     JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
     StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
 
+    // set compiler's classpath to be same as the runtime
+    List<String> optionList = new ArrayList<>(Arrays.asList("-classpath", System.getProperty("java.class.path")));
+
     // Prepare in-memory file using a custom JavaFileObject
     JavaFileObject file = new JavaSourceFromString(className, sourceCode);
 
     // Compile the source code
-    boolean success = compiler.getTask(null, fileManager, null, null, null, List.of(file)).call();
+    boolean success = compiler.getTask(null, fileManager, null, optionList, null, List.of(file)).call();
 
     if (!success) {
       throw new RuntimeException("Compilation failed for " + className);
