@@ -5,7 +5,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import org.noble.helium.actors.PlayerController;
 import org.noble.helium.handling.ModelHandler;
 import org.noble.helium.handling.ObjectHandler;
 import org.noble.helium.math.Dimensions3;
