@@ -10,6 +10,7 @@ import org.noble.helium.screens.ParsedLevel;
 import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 public class LevelHandler {
@@ -41,7 +42,7 @@ public class LevelHandler {
   }
 
   public void changeScreen(String LDAName) {
-    Map<String, Class<?>> scripts = LDAExtractor.getScripts(Gdx.files.internal("levels/" + LDAName));
+    List<Class<?>> scripts = LDAExtractor.getScripts(Gdx.files.internal("levels/" + LDAName));
     changeScreen(new ParsedLevel(scripts));
     Map<String, JsonElement> ldaElements;
     try {

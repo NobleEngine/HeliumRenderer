@@ -4,12 +4,12 @@ import org.noble.helium.subsystems.scripting.HeliumScript;
 import org.noble.helium.subsystems.scripting.ScriptRunner;
 import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
 
-import java.util.Map;
+import java.util.List;
 
 public class ParsedLevel extends HeliumLevel {
   private final ScriptRunner m_scriptRunner;
-  private final Map<String, Class<?>> m_scripts;
-  public ParsedLevel(Map<String, Class<?>> scripts) {
+  private final List<Class<?>> m_scripts;
+  public ParsedLevel(List<Class<?>> scripts) {
     super();
     m_scriptRunner = ScriptRunner.getInstance();
     m_scripts = scripts;
@@ -19,13 +19,13 @@ public class ParsedLevel extends HeliumLevel {
   public void init() {
     super.init();
 
-    m_scripts.forEach((key,value) -> {
-      if(value.getSimpleName().equals("start")) {
-        new HeliumScript(value).update();
+    for(Class<?> script : m_scripts) {
+      if(script.getSimpleName().equals("start")) {
+        new HeliumScript(script).update();
       } else {
-        m_scriptRunner.addScript(new HeliumScript(value));
+        m_scriptRunner.addScript(new HeliumScript(script));
       }
-    });
+    }
   }
 
   @Override
