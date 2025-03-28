@@ -49,9 +49,9 @@ public class HeliumModelInstance extends ModelInstance {
   }
 
   public Dimensions3 getDimensions() {
-    if(ModelHandler.getInstance().getName(this) == null) {
-      return new Dimensions3(0,0,0);
-    }
+//    if(ModelHandler.getInstance().getName(this) == null) {
+//      return new Dimensions3(0,0,0);
+//    }
     BoundingBox boundingBox = new BoundingBox();
     Vector3 dimensions = new Vector3();
     this.calculateBoundingBox(boundingBox);

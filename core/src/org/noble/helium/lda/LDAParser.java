@@ -16,27 +16,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LDAParser {
-  public static void usePlayerStartingConfiguration(Map<String, JsonElement> elements) {
-    PlayerController m_player = PlayerController.getInstance();
-    Map<String, JsonElement> configs = new HashMap<>();
-    elements.forEach((key, value) -> {
-      if(key.startsWith("config/")) {
-        String fileName = key.substring(key.lastIndexOf('/') + 1)
-            .replace(".json", ""); // Remove folder and .json from name
-        configs.put(fileName, value);
-      }
-    });
-
-    JsonObject playerStartConfig = configs.get("playerstart").getAsJsonObject();
-    if(playerStartConfig.has("position")) {
-      //TODO: Fix this
-//      m_player.setPosition(toVector3(playerStartConfig.getAsJsonArray("position")));
-    }
-    if(playerStartConfig.has("health")) {
-      m_player.setHealth(playerStartConfig.get("health").getAsInt());
-    }
-  }
-
   public static void addWorldObjects(Map<String, JsonElement> elements) {
     Map<String, JsonElement> worldElements = new HashMap<>();
     Map<String, WorldObject> objects = new HashMap<>();

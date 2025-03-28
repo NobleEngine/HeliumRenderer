@@ -50,7 +50,6 @@ public class LevelHandler {
       throw new RuntimeException(e);
     }
     LDAParser.addWorldObjects(ldaElements);
-    LDAParser.usePlayerStartingConfiguration(ldaElements);
   }
 
   public void changeScreen(HeliumLevel level) {

@@ -141,7 +141,9 @@ public class ModelHandler {
 
   public void clear() {
     for (Map.Entry<String, HeliumModelInstance> entry : getModelInstances().entrySet()) {
-      entry.getValue().model.dispose();
+      if(!entry.getValue().equals(get("PlayerController-model"))) {
+        entry.getValue().model.dispose();
+      }
     }
     m_modelInstances.clear();
   }
