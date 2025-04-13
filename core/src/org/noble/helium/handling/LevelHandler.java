@@ -7,6 +7,7 @@ import org.noble.helium.lda.LDAExtractor;
 import org.noble.helium.lda.LDAParser;
 import org.noble.helium.screens.HeliumLevel;
 import org.noble.helium.screens.ParsedLevel;
+import org.noble.helium.screens.tests.PhysicsTest;
 import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
 
 import java.io.IOException;
@@ -26,7 +27,8 @@ public class LevelHandler {
     m_modelHandler = ModelHandler.getInstance();
     m_objectHandler = ObjectHandler.getInstance();
     m_telemetry = HeliumTelemetry.getInstance();
-    changeScreen("test.lda");
+//    changeScreen("test.lda");
+    changeScreen(new PhysicsTest());
     HeliumTelemetry.getInstance().println("Level handler initialized");
   }
 

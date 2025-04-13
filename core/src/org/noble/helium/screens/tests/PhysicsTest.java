@@ -2,6 +2,7 @@ package org.noble.helium.screens.tests;
 
 import com.badlogic.gdx.graphics.Color;
 
+import com.badlogic.gdx.graphics.g3d.environment.PointLight;
 import com.badlogic.gdx.math.Vector3;
 import org.noble.helium.actors.Enemy;
 import org.noble.helium.handling.LevelHandler;
