@@ -106,7 +106,7 @@ public class Helium extends Game {
         StatusLabel.getY(), new Dimensions2(StatusLabel.getWidth(), StatusLabel.getHeight()), StatusLabel.getColor());
     VisLabel FrametimeMSLabel = m_userInterface.getLabel("Engine-FrametimeMS");
     m_userInterface.setLabel("Engine-FrametimeMS", "Frame time: " + getDelta(), FrametimeMSLabel.getX(),
-            FrametimeMSLabel.getY(), new Dimensions2(FrametimeMSLabel.getWidth(), FrametimeMSLabel.getHeight()), FrametimeMSLabel.getColor());
+        FrametimeMSLabel.getY(), new Dimensions2(FrametimeMSLabel.getWidth(), FrametimeMSLabel.getHeight()), FrametimeMSLabel.getColor());
 
     if (m_input.isActionDown(InputHandler.Action.TOGGLE_FULLSCREEN, true)) {
       if (Gdx.graphics.isFullscreen()) {

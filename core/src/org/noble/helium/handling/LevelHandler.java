@@ -7,6 +7,7 @@ import org.noble.helium.lda.LDAExtractor;
 import org.noble.helium.lda.LDAParser;
 import org.noble.helium.screens.HeliumLevel;
 import org.noble.helium.screens.ParsedLevel;
+import org.noble.helium.screens.tests.PhysicsTest;
 import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
 
 import java.io.IOException;
