@@ -2,24 +2,19 @@ package org.noble.helium.rendering;
 
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
-import org.noble.helium.handling.ModelHandler;
 import org.noble.helium.math.Dimensions3;
 import org.noble.helium.math.EulerAngles;
-import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
 
 public class HeliumModelInstance extends ModelInstance {
   private Vector3 m_position;
   private EulerAngles m_angles;
-  private ModelType m_modelType;
   private boolean m_render;
-  public HeliumModelInstance(Model model, Vector3 startingPosition, ModelType type) {
+  public HeliumModelInstance(Model model, Vector3 startingPosition) {
     super(model);
     setPosition(startingPosition);
     m_render = true;
-    m_modelType = type;
   }
 
   public void setPosition(Vector3 coords) {
@@ -49,9 +44,6 @@ public class HeliumModelInstance extends ModelInstance {
   }
 
   public Dimensions3 getDimensions() {
-    if(ModelHandler.getInstance().getName(this) == null) {
-      return new Dimensions3(0,0,0);
-    }
     BoundingBox boundingBox = new BoundingBox();
     Vector3 dimensions = new Vector3();
     this.calculateBoundingBox(boundingBox);
@@ -64,9 +56,5 @@ public class HeliumModelInstance extends ModelInstance {
       return new EulerAngles(0,0,0);
     }
     return m_angles;
-  }
-
-  public enum ModelType {
-    SHAPE, MODEL
   }
 }

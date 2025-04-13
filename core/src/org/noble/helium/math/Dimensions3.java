@@ -7,6 +7,9 @@ public class Dimensions3 {
   public Dimensions3(float width, float height, float depth) {
     m_dim = new Vector3(width, height, depth);
   }
+  public Dimensions3(Vector3 dim) {
+    m_dim = dim;
+  }
 
   public float getWidth() {
     return m_dim.x;

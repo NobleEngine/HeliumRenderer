@@ -27,4 +27,4 @@ replay_pid*
 .gradle/
 
 core/build
-desktop/build
+desktop/build/*

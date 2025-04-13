@@ -23,7 +23,7 @@ public class BaseScreen implements Screen {
   public final ObjectHandler m_objectHandler;
   public final ActorHandler m_actorHandler;
   private final Viewport m_viewport;
-  public Environment m_environment;
+  public final Environment m_environment;
 
   public BaseScreen() {
     m_game = Helium.getInstance();

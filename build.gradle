@@ -48,6 +48,8 @@ project(":desktop") {
 
     dependencies {
         implementation project(":core")
+        implementation 'com.google.code.gson:gson:2.10.1'
+
         api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         api "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
@@ -73,6 +75,8 @@ project(":core") {
         api "com.kotcrab.vis:vis-ui:$visuiVersion"
         // https://mvnrepository.com/artifact/org.apache.poi/poi
         implementation group: 'org.apache.poi', name: 'poi', version: '3.9'
+
+        implementation 'com.google.code.gson:gson:2.10.1'
 
     }
 }
