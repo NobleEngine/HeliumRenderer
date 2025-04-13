@@ -47,22 +47,15 @@ public class PhysicsTest extends HeliumLevel {
       m_modelHandler.addNewShape(
           "stair-" + i, ModelHandler.Shape.CUBE, Color.BLUE,
           new Vector3(170 + (i), i, 0), new Dimensions3(2, 1, 30));
-      m_objectHandler.add("stair" + i, new WorldObject(m_modelHandler.get("stair-" + i),
-          WorldObject.ShapeType.BOX, WorldObject.CollisionType.CLIMBABLE));
+      m_objectHandler.add("stair" + i, new WorldObject(m_modelHandler.get("stair-" + i), WorldObject.CollisionType.CLIMBABLE));
     }
 
-    m_objectHandler.add("wall1", new WorldObject(m_modelHandler.get("wall-01"),
-        WorldObject.ShapeType.BOX, WorldObject.CollisionType.STANDARD));
-    m_objectHandler.add("ladder", new WorldObject(m_modelHandler.get("ladder"),
-        WorldObject.ShapeType.BOX, WorldObject.CollisionType.CLIMBABLE));
-    m_objectHandler.add("floor1", new WorldObject(m_modelHandler.get("cube-01"),
-        WorldObject.ShapeType.BOX, WorldObject.CollisionType.STANDARD));
-    m_objectHandler.add("floor2", new WorldObject(m_modelHandler.get("cube-02"),
-        WorldObject.ShapeType.BOX, WorldObject.CollisionType.STANDARD));
-    m_objectHandler.add("floor3", new WorldObject(m_modelHandler.get("cube-03"),
-        WorldObject.ShapeType.BOX, WorldObject.CollisionType.STANDARD));
-    m_objectHandler.add("floor4", new WorldObject(m_modelHandler.get("cube-04"),
-        WorldObject.ShapeType.BOX, WorldObject.CollisionType.STANDARD));
+    m_objectHandler.add("wall1", new WorldObject(m_modelHandler.get("wall-01"), WorldObject.CollisionType.STANDARD));
+    m_objectHandler.add("ladder", new WorldObject(m_modelHandler.get("ladder"), WorldObject.CollisionType.CLIMBABLE));
+    m_objectHandler.add("floor1", new WorldObject(m_modelHandler.get("cube-01"), WorldObject.CollisionType.STANDARD));
+    m_objectHandler.add("floor2", new WorldObject(m_modelHandler.get("cube-02"), WorldObject.CollisionType.STANDARD));
+    m_objectHandler.add("floor3", new WorldObject(m_modelHandler.get("cube-03"), WorldObject.CollisionType.STANDARD));
+    m_objectHandler.add("floor4", new WorldObject(m_modelHandler.get("cube-04"), WorldObject.CollisionType.STANDARD));
 
     m_player.setPosition(new Vector3(0,50,0));
     super.init();
@@ -74,8 +67,7 @@ public class PhysicsTest extends HeliumLevel {
 
     if(m_player.getPosition().y < -100f) {
       m_player.setPosition(new Vector3(m_player.getX(),150,m_player.getZ()));
-      LevelHandler.getInstance().changeScreen(new ActorTest());
+      LevelHandler.getInstance().changeScreen("test.lda");
     }
-
   }
 }

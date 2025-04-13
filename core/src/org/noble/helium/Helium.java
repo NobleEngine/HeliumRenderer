@@ -3,8 +3,7 @@ package org.noble.helium;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.graphics.GL32;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import org.noble.helium.actors.PlayerController;
 import org.noble.helium.handling.LevelHandler;
@@ -13,6 +12,7 @@ import org.noble.helium.handling.TextureHandler;
 import org.noble.helium.math.Dimensions2;
 import org.noble.helium.handling.InputHandler;
 import org.noble.helium.rendering.HeliumModelBatch;
+import org.noble.helium.subsystems.scripting.ScriptRunner;
 import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
 import org.noble.helium.subsystems.Subsystem;
 import org.noble.helium.subsystems.ui.UserInterface;
@@ -63,10 +63,6 @@ public class Helium extends Game {
     return m_delta;
   }
 
-  public Vector2 getResolution() {
-    return new Vector2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-  }
-
   @Override
   public void create() {
     m_telemetry = HeliumTelemetry.getInstance();
@@ -76,6 +72,7 @@ public class Helium extends Game {
     m_player = PlayerController.getInstance();
     m_userInterface = UserInterface.getInstance();
     m_screenHandler = LevelHandler.getInstance();
+    m_subsystems.add(ScriptRunner.getInstance());
     m_subsystems.add(m_userInterface);
     m_subsystems.add(m_telemetry);
 
@@ -96,7 +93,7 @@ public class Helium extends Game {
   public void render() {
     m_delta = Gdx.graphics.getDeltaTime();
     Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+    Gdx.gl.glClear(GL32.GL_COLOR_BUFFER_BIT | GL32.GL_DEPTH_BUFFER_BIT);
     if(getStatus() == State.PLAY) {
       m_player.update();
     }

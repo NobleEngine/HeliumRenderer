@@ -20,7 +20,7 @@ public class ActorTest extends HeliumLevel {
     enemy = new Enemy(new Vector3(200,12,200),10,10,5, m_modelHandler.get("enemy"), m_player);
 
     m_modelHandler.addNewShape("ground", ModelHandler.Shape.CUBE, "textures/dirt.png", new Vector3(), new Dimensions3(1000, 10, 1000));
-    m_objectHandler.add("ground", new WorldObject(m_modelHandler.get("ground"), WorldObject.ShapeType.BOX, WorldObject.CollisionType.STANDARD));
+    m_objectHandler.add("ground", new WorldObject(m_modelHandler.get("ground"), WorldObject.CollisionType.STANDARD));
     m_player.setPosition(new Vector3(250,11,250));
     m_player.setSpeed(m_player.getSpeed() * 3);
     super.init();

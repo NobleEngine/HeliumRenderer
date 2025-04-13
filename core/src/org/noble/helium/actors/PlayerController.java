@@ -11,8 +11,8 @@ import org.noble.helium.Helium;
 import org.noble.helium.handling.ModelHandler;
 import org.noble.helium.handling.ObjectHandler;
 import org.noble.helium.math.Dimensions2;
-import org.noble.helium.math.Dimensions3;
 import org.noble.helium.handling.InputHandler;
+import org.noble.helium.math.Dimensions3;
 import org.noble.helium.subsystems.telemetry.LogEntry;
 import org.noble.helium.subsystems.ui.UserInterface;
 import org.noble.helium.world.WorldObject;
@@ -25,7 +25,6 @@ public class PlayerController extends Actor {
   private final PerspectiveCamera m_camera;
   private final InputHandler m_input;
   private final Helium m_engine;
-  private final ObjectHandler m_objectHandler;
   private static PlayerController m_instance;
   private float m_cameraPitch, m_cameraYaw, m_verticalVelocity;
   private final PlayerType m_playerType;
@@ -36,21 +35,24 @@ public class PlayerController extends Actor {
     m_playerType = PlayerType.STANDARD;
     m_input = InputHandler.getInstance();
     m_engine = Helium.getInstance();
-    m_objectHandler = ObjectHandler.getInstance();
+
+    ModelHandler.getInstance().addNewShape(m_loggedName + "-model", ModelHandler.Shape.SPHERE, Color.WHITE,
+        new Vector3(), new Dimensions3(5f,15f,5f));
+    m_model = ModelHandler.getInstance().get(m_loggedName + "-model");
+
+    m_worldObject = new WorldObject(m_model, WorldObject.CollisionType.STANDARD);
 
     m_camera = new PerspectiveCamera();
     m_camera.fieldOfView = 95;
     m_camera.viewportWidth = Gdx.graphics.getWidth();
     m_camera.viewportHeight = Gdx.graphics.getHeight();
     m_camera.position.set(10f, 10f, 10f);
-    m_camera.lookAt(10f, 10f, 10f);
+
     m_camera.near = 0.1f;
     m_camera.far = 5000f;
 
     m_cameraYaw = 0.0f;
-    m_cameraPitch = 45.0f;
-
-    createWorldObject();
+    m_cameraPitch = 0.0f;
   }
 
   public static PlayerController getInstance() {
@@ -62,10 +64,6 @@ public class PlayerController extends Actor {
 
   public PerspectiveCamera getCamera() {
     return m_camera;
-  }
-
-  public WorldObject getWorldObject() {
-    return m_objectHandler.get("PlayerController-object");
   }
 
   public float getVerticalVelocity() {
@@ -80,22 +78,13 @@ public class PlayerController extends Actor {
   public void setPosition(Vector3 pos) {
     super.setPosition(pos);
     m_camera.position.set(pos);
-    m_objectHandler.get("PlayerController-object").setPosition(pos);
-  }
-
-  private void createWorldObject() {
-    ModelHandler modelHandler = ModelHandler.getInstance();
-    modelHandler.addNewShape("PlayerController-model", ModelHandler.Shape.CUBE, Color.WHITE, new Vector3(),
-        new Dimensions3(5,15,5));
-    m_objectHandler.add("PlayerController-object", new WorldObject(modelHandler.get("PlayerController-model"),
-        WorldObject.ShapeType.BOX, WorldObject.CollisionType.STANDARD));
+    m_worldObject.setPosition(pos);
   }
 
   private ArrayList<WorldObject> getCollisions() {
     ArrayList<WorldObject> collisions = new ArrayList<>();
-    WorldObject playerWObject = m_objectHandler.get("PlayerController-object");
     for (WorldObject object : ObjectHandler.getInstance().getAllObjects().values()) {
-      if (!object.equals(playerWObject) && playerWObject.isColliding(object)) {
+      if (!object.equals(m_worldObject) && m_worldObject.getBoundingBox().isColliding(object.getBoundingBox())) {
         collisions.add(object);
       }
     }
@@ -137,11 +126,10 @@ public class PlayerController extends Actor {
     Vector3 nextPos = m_camera.position.cpy();
     Vector3 tmp = new Vector3();
     ArrayList<WorldObject> collisions = getCollisions();
-    WorldObject playerWObject = m_objectHandler.get("PlayerController-object");
 
     switch(m_playerType) {
       case STANDARD, DOOM -> {
-        calculateCollisions(nextPos, collisions, playerWObject);
+        calculateCollisions(nextPos, collisions);
         setVerticalVelocity(getVerticalVelocity() - 15f * m_engine.getDelta());
 
         float tempY = nextPos.y;
@@ -149,7 +137,7 @@ public class PlayerController extends Actor {
         nextPos.y = tempY + (getVerticalVelocity() * m_engine.getDelta());
       }
       case FLY -> {
-        calculateCollisions(nextPos, collisions, playerWObject);
+        calculateCollisions(nextPos, collisions);
         setVectorFromKeyboard(nextPos, tmp);
       }
       case GHOST -> setVectorFromKeyboard(nextPos, tmp);
@@ -159,12 +147,12 @@ public class PlayerController extends Actor {
 
   }
 
-  private void calculateCollisions(Vector3 nextPos, ArrayList<WorldObject> collisions, WorldObject playerWObject) {
+  private void calculateCollisions(Vector3 nextPos, ArrayList<WorldObject> collisions) {
     boolean shouldCalculate = true;
     for (WorldObject collision : collisions) {
       if (collision.getCollisionType() == WorldObject.CollisionType.CLIMBABLE) {
         float topFaceOfObj = collision.getY() + collision.getHeight() / 2f;
-        float translation = topFaceOfObj + playerWObject.getHeight() / 2f;
+        float translation = topFaceOfObj + m_worldObject.getHeight() / 2f;
         float movementSpeed = (m_engine.getDelta() * 2f);
         float yMovement = translation - nextPos.y;
         if (translation > nextPos.y) {
@@ -179,29 +167,29 @@ public class PlayerController extends Actor {
           setVerticalVelocity(10f);
         }
       }
-      float extentA_x = playerWObject.getWidth() / 2.0f;
-      float extentA_y = playerWObject.getHeight() / 2.0f;
-      float extentA_z = playerWObject.getDepth() / 2.0f;
+      float extentA_x = m_worldObject.getWidth() / 2.0f;
+      float extentA_y = m_worldObject.getHeight() / 2.0f;
+      float extentA_z = m_worldObject.getDepth() / 2.0f;
 
       float extentB_x = collision.getWidth() / 2.0f;
       float extentB_y = collision.getHeight() / 2.0f;
       float extentB_z = collision.getDepth() / 2.0f;
 
-      float overlapX = (extentA_x + extentB_x) - Math.abs(playerWObject.getX() - collision.getX());
-      float overlapY = (extentA_y + extentB_y) - Math.abs(playerWObject.getY() - collision.getY());
-      float overlapZ = (extentA_z + extentB_z) - Math.abs(playerWObject.getZ() - collision.getZ());
+      float overlapX = (extentA_x + extentB_x) - Math.abs(m_worldObject.getX() - collision.getX());
+      float overlapY = (extentA_y + extentB_y) - Math.abs(m_worldObject.getY() - collision.getY());
+      float overlapZ = (extentA_z + extentB_z) - Math.abs(m_worldObject.getZ() - collision.getZ());
 
       if (shouldCalculate) {
         if (overlapX < overlapY && overlapX < overlapZ) {
           // Smallest overlap is in the x-axis
-          if (playerWObject.getX() < collision.getX()) {
+          if (m_worldObject.getX() < collision.getX()) {
             nextPos.x = collision.getX() - (extentA_x + extentB_x);
           } else {
             nextPos.x = collision.getX() + (extentA_x + extentB_x);
           }
         } else if (overlapY < overlapX && overlapY < overlapZ) {
           // Smallest overlap is in the y-axis
-          if (playerWObject.getY() < collision.getY()) {
+          if (m_worldObject.getY() < collision.getY()) {
             nextPos.y = collision.getY() - (extentA_y + extentB_y);
           } else {
             nextPos.y = collision.getY() + (extentA_y + extentB_y);
@@ -213,7 +201,7 @@ public class PlayerController extends Actor {
           }
         } else {
           // Smallest overlap is in the z-axis
-          if (playerWObject.getZ() < collision.getZ()) {
+          if (m_worldObject.getZ() < collision.getZ()) {
             nextPos.z = collision.getZ() - (extentA_z + extentB_z);
           } else {
             nextPos.z = collision.getZ() + (extentA_z + extentB_z);
@@ -224,10 +212,6 @@ public class PlayerController extends Actor {
   }
 
   public void update() {
-    if(m_objectHandler.get("PlayerController-object") == null) {
-      createWorldObject();
-    }
-
     if(m_input.isActionDown(InputHandler.Action.MOVE_FASTER, false)) {
       setSpeed(16f);
     } else {
@@ -237,6 +221,7 @@ public class PlayerController extends Actor {
     rotate();
     translate();
     m_camera.update();
+    m_worldObject.update();
     
     VisLabel PosLabel = UserInterface.getInstance().getLabel("PlayerController-Position");
     UserInterface.getInstance().setLabel("PlayerController-Position", "Position: " + getX() + ", " + getY() +
