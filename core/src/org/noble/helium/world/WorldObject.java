@@ -63,7 +63,7 @@ public class WorldObject {
       return false;
     }
 
-    if(m_collisionType == 2 || object.getCollisionType() == 2) {
+    if(m_collisionType == CollisionType.NONE || object.getCollisionType() == CollisionType.NONE) {
       return false;
     }
 
