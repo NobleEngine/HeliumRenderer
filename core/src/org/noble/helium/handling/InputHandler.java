@@ -25,6 +25,7 @@ public class InputHandler {
     bindKey(Input.Keys.F11, Action.TOGGLE_FULLSCREEN);
     bindKey(Input.Keys.ESCAPE, Action.PAUSE);
     bindKey(Input.Keys.SHIFT_LEFT, Action.MOVE_FASTER);
+    bindKey(Input.Keys.P, Action.WIREFRAME);
   }
 
   public static InputHandler getInstance() {
@@ -68,5 +69,6 @@ public class InputHandler {
     int PAUSE = 5;
     int TOGGLE_FULLSCREEN = 6;
     int JUMP = 7;
+    int WIREFRAME = 8;
   }
 }

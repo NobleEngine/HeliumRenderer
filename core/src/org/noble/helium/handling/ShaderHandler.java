@@ -1,10 +1,10 @@
 package org.noble.helium.handling;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader;
-import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.g3d.utils.ShaderProvider;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import org.noble.helium.Helium;
@@ -18,6 +18,7 @@ public class ShaderHandler implements ShaderProvider {
   private static ShaderHandler m_instance;
   private final HashMap<String, ShaderProgram> m_shaders;
   private DefaultShader m_activeShader;
+  private boolean m_isWireframe = false;
 
   private ShaderHandler() {
     m_shaders = new HashMap<>();
@@ -43,6 +44,10 @@ public class ShaderHandler implements ShaderProvider {
 
   public void setActiveShader(String name) {
 //    m_activeShader = m_shaders.get(name);
+  }
+
+  public void toggleWireframe() {
+    m_isWireframe = !m_isWireframe;
   }
 
   public void begin() {
@@ -75,7 +80,9 @@ public class ShaderHandler implements ShaderProvider {
       m_activeShader = new DefaultShader(renderable);
       m_activeShader.init();
     }
-//    renderable.meshPart.primitiveType = GL20.GL_LINES;
+    if(m_isWireframe) {
+      renderable.meshPart.primitiveType = GL20.GL_LINES;
+    }
     return m_activeShader;
   }
 

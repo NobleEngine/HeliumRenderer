@@ -82,7 +82,6 @@ public class Helium extends Game {
     m_userInterface.addLabel("Engine-FrametimeMS", "", 0, 90, 100, 25, Color.WHITE);
     m_userInterface.addLabel("PlayerController-Health", "", 0, 120, 100, 25, Color.WHITE);
 
-    m_modelBatch = new HeliumModelBatch();
     m_telemetry.println("Ready to render!");
   }
 
@@ -121,6 +120,10 @@ public class Helium extends Game {
         setState(State.PLAY);
         Gdx.input.setCursorCatched(true);
       }
+    }
+
+    if(m_input.isActionDown(InputHandler.Action.WIREFRAME, true)) {
+      ShaderHandler.getInstance().toggleWireframe();
     }
 
     super.render();
