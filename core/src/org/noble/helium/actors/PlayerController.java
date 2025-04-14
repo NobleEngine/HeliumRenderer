@@ -32,7 +32,7 @@ public class PlayerController extends Actor {
   private PlayerController() {
     super(new Vector3(), 100, 8f, null);
     m_loggedName = "PlayerController";
-    m_playerType = PlayerType.STANDARD;
+    m_playerType = PlayerType.FLY;
     m_input = InputHandler.getInstance();
     m_engine = Helium.getInstance();
 

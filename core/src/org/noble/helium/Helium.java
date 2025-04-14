@@ -3,14 +3,12 @@ package org.noble.helium;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GL32;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import org.noble.helium.actors.PlayerController;
-import org.noble.helium.handling.LevelHandler;
-import org.noble.helium.handling.ModelHandler;
-import org.noble.helium.handling.TextureHandler;
+import org.noble.helium.handling.*;
 import org.noble.helium.math.Dimensions2;
-import org.noble.helium.handling.InputHandler;
 import org.noble.helium.rendering.HeliumModelBatch;
 import org.noble.helium.subsystems.scripting.ScriptRunner;
 import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
@@ -45,7 +43,7 @@ public class Helium extends Game {
 
   public HeliumModelBatch getModelBatch() {
     if(m_modelBatch == null) {
-      m_modelBatch = new HeliumModelBatch();
+      m_modelBatch = new HeliumModelBatch(ShaderHandler.getInstance());
     }
     return m_modelBatch;
   }
