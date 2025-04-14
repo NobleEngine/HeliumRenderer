@@ -11,7 +11,6 @@ import org.noble.helium.screens.HeliumLevel;
 import org.noble.helium.world.WorldObject;
 
 public class PhysicsTest extends HeliumLevel {
-  Enemy enemy;
   public PhysicsTest() {
     super();
   }
@@ -19,8 +18,7 @@ public class PhysicsTest extends HeliumLevel {
   @Override
   public void init() {
     m_modelHandler.addNewShape("enemy", ModelHandler.Shape.CUBE, Color.RED, new Vector3(100,5,0), new Dimensions3(2,2,2));
-    enemy = new Enemy(new Vector3(100,5,0),10,10,5f, m_modelHandler.get("enemy"), m_player);
-    m_actorHandler.addActor(enemy);
+    m_actorHandler.addActor(new Enemy(new Vector3(100,5,0),10,10,5f, m_modelHandler.get("enemy"), m_player));
 
     m_modelHandler.addNewShape(
         "wall-01", ModelHandler.Shape.CUBE, Color.CORAL,
