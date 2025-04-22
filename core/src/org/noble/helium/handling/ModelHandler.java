@@ -86,13 +86,14 @@ public class ModelHandler {
     Texture texture = m_textureHandler.getTexture(textureName);
 
     switch(shape) {
+      //FIXME: Textures
       case CUBE -> model = m_modelBuilder.createBox(
           dimensions.getWidth(), dimensions.getHeight(), dimensions.getDepth(),
-          new Material(TextureAttribute.createDiffuse(texture)),
+          new Material(ColorAttribute.createDiffuse(Color.WHITE), TextureAttribute.createDiffuse(texture)),
           VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates);
       case SPHERE -> model = m_modelBuilder.createSphere(
           dimensions.getWidth(), dimensions.getHeight(), dimensions.getDepth(), 100, 100,
-          new Material(TextureAttribute.createNormal(texture)),
+          new Material(ColorAttribute.createDiffuse(Color.WHITE), TextureAttribute.createNormal(texture)),
           VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates);
     }
 

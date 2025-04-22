@@ -53,17 +53,17 @@ public class InputProcessing extends Subsystem {
     ArrayList<Action> pressedActions = getQueuedActions();
     for (Action action : pressedActions) {
       switch (action.getFunction()) {
-        case JUMP -> m_player.jump();
+        case JUMP -> m_player.jump(); //10
         case STRAFE_LEFT -> m_player.strafeLeft();
         case STRAFE_RIGHT -> m_player.strafeRight();
         case STRAFE_FORWARD -> m_player.strafeForward();
-        case STRAFE_BACKWARD -> m_player.strafeBack();
-        case MOVE_FASTER -> m_player.setSpeed(Constants.Player.k_fastSpeed);
-        case MOVE_STANDARD -> m_player.setSpeed(Constants.Player.k_defaultSpeed);
+        case STRAFE_BACKWARD -> m_player.strafeBackward();
+        case MOVE_FASTER -> m_player.setSpeed(Constants.Player.k_fastSpeed); //16
+        case MOVE_STANDARD -> m_player.setSpeed(Constants.Player.k_defaultSpeed); //8
         case PAUSE -> m_helium.setState(Helium.State.PAUSE);
         case RESUME -> m_helium.setState(Helium.State.PLAY);
-        case FULLSCREEN_MODE -> m_helium.setWindowMode(WindowMode.EXCLUSIVE_FULLSCREEN);
-        case WINDOWED_MODE -> m_helium.setWindowMode(WindowMode.WINDOWED);
+//        case FULLSCREEN_MODE -> m_helium.setWindowMode(WindowMode.EXCLUSIVE_FULLSCREEN);
+//        case WINDOWED_MODE -> m_helium.setWindowMode(WindowMode.WINDOWED);
       }
     }
   }

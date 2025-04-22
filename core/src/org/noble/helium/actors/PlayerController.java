@@ -7,11 +7,12 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.kotcrab.vis.ui.widget.VisLabel;
+import org.noble.helium.Constants;
 import org.noble.helium.Helium;
 import org.noble.helium.handling.ModelHandler;
 import org.noble.helium.handling.ObjectHandler;
 import org.noble.helium.math.Dimensions2;
-import org.noble.helium.handling.InputHandler;
+import org.noble.helium.subsystems.input.InputProcessing;
 import org.noble.helium.math.Dimensions3;
 import org.noble.helium.subsystems.telemetry.LogEntry;
 import org.noble.helium.subsystems.ui.UserInterface;
@@ -23,17 +24,17 @@ import java.util.ArrayList;
 
 public class PlayerController extends Actor {
   private final PerspectiveCamera m_camera;
-  private final InputHandler m_input;
   private final Helium m_engine;
   private static PlayerController m_instance;
   private float m_cameraPitch, m_cameraYaw, m_verticalVelocity;
   private final PlayerType m_playerType;
 
+  private boolean m_wantsToJump = false;
+
   private PlayerController() {
     super(new Vector3(), 100, 8f, null);
     m_loggedName = "PlayerController";
     m_playerType = PlayerType.STANDARD;
-    m_input = InputHandler.getInstance();
     m_engine = Helium.getInstance();
 
     ModelHandler.getInstance().addNewShape(m_loggedName + "-model", ModelHandler.Shape.SPHERE, Color.WHITE,
@@ -106,19 +107,29 @@ public class PlayerController extends Actor {
     m_camera.direction.set(Vector3.Z).mul(quaternion);
   }
 
+  boolean m_strafeForward;
+  boolean m_strafeBackward;
+  boolean m_strafeLeft;
+  boolean m_strafeRight;
+
   private void setVectorFromKeyboard(Vector3 nextPos, Vector3 tmp) {
-    if (m_input.isActionDown(InputHandler.Action.STRAFE_FORWARD, false)) {
+    if (m_strafeForward) {
       nextPos.add(tmp.set(m_camera.direction).scl(getSpeed() * m_engine.getDelta()));
     }
-    if (m_input.isActionDown(InputHandler.Action.STRAFE_BACKWARD, false)) {
+    if (m_strafeBackward) {
       nextPos.add(tmp.set(m_camera.direction).scl(-getSpeed() * m_engine.getDelta()));
     }
-    if (m_input.isActionDown(InputHandler.Action.STRAFE_LEFT, false)) {
+    if (m_strafeLeft) {
       nextPos.add(tmp.set(m_camera.direction).crs(m_camera.up).nor().scl(-getSpeed() * m_engine.getDelta()));
     }
-    if (m_input.isActionDown(InputHandler.Action.STRAFE_RIGHT, false)) {
+    if (m_strafeRight) {
       nextPos.add(tmp.set(m_camera.direction).crs(m_camera.up).nor().scl(getSpeed() * m_engine.getDelta()));
     }
+
+    m_strafeForward = false;
+    m_strafeBackward = false;
+    m_strafeLeft = false;
+    m_strafeRight = false;
   }
 
   private void translate() {
@@ -163,9 +174,7 @@ public class PlayerController extends Actor {
           nextPos.y += (yMovement) * movementSpeed;
         }
         setVerticalVelocity(0f);
-        if (m_input.isActionDown(InputHandler.Action.JUMP, false)) {
-          setVerticalVelocity(10f);
-        }
+        m_wantsToJump = false;
       }
       float extentA_x = m_worldObject.getWidth() / 2.0f;
       float extentA_y = m_worldObject.getHeight() / 2.0f;
@@ -196,9 +205,10 @@ public class PlayerController extends Actor {
           }
           nextPos.y -= 0.0005f;
           setVerticalVelocity(0);
-          if (m_input.isActionDown(InputHandler.Action.JUMP, false)) {
-            setVerticalVelocity(10f);
+          if(m_wantsToJump) {
+            setVerticalVelocity(Constants.Player.k_jumpVerticalVelocity);
           }
+          m_wantsToJump = false;
         } else {
           // Smallest overlap is in the z-axis
           if (m_worldObject.getZ() < collision.getZ()) {
@@ -209,15 +219,30 @@ public class PlayerController extends Actor {
         }
       }
     }
+    m_wantsToJump = false;
+  }
+
+  public void jump() {
+    m_wantsToJump = true;
+  }
+
+  public void strafeForward() {
+    m_strafeForward = true;
+  }
+
+  public void strafeBackward() {
+    m_strafeBackward = true;
+  }
+
+  public void strafeLeft() {
+    m_strafeLeft = true;
+  }
+
+  public void strafeRight() {
+    m_strafeRight = true;
   }
 
   public void update() {
-    if(m_input.isActionDown(InputHandler.Action.MOVE_FASTER, false)) {
-      setSpeed(16f);
-    } else {
-      setSpeed(8f);
-    }
-
     rotate();
     translate();
     m_camera.update();

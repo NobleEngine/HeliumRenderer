@@ -10,7 +10,7 @@ import org.noble.helium.handling.LevelHandler;
 import org.noble.helium.handling.ModelHandler;
 import org.noble.helium.handling.TextureHandler;
 import org.noble.helium.math.Dimensions2;
-import org.noble.helium.handling.InputHandler;
+import org.noble.helium.subsystems.input.InputProcessing;
 import org.noble.helium.rendering.HeliumModelBatch;
 import org.noble.helium.subsystems.scripting.ScriptRunner;
 import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
@@ -25,7 +25,6 @@ public class Helium extends Game {
   private static Helium m_instance;
   private final ArrayList<Subsystem> m_subsystems;
   private ModelHandler m_modelHandler;
-  private InputHandler m_input;
   private PlayerController m_player;
   private HeliumModelBatch m_modelBatch;
   private UserInterface m_userInterface;
@@ -50,11 +49,6 @@ public class Helium extends Game {
     return m_modelBatch;
   }
 
-  public void setState(State state) {
-    m_state = state;
-    m_telemetry.println("Game state set to " + state);
-  }
-
   public State getStatus() {
     return m_state;
   }
@@ -68,11 +62,11 @@ public class Helium extends Game {
     m_telemetry = HeliumTelemetry.getInstance();
     m_telemetry.addLoggedItem(PlayerController.getInstance());
     m_modelHandler = ModelHandler.getInstance();
-    m_input = InputHandler.getInstance();
     m_player = PlayerController.getInstance();
     m_userInterface = UserInterface.getInstance();
     m_screenHandler = LevelHandler.getInstance();
     m_subsystems.add(ScriptRunner.getInstance());
+    m_subsystems.add(InputProcessing.getInstance());
     m_subsystems.add(m_userInterface);
     m_subsystems.add(m_telemetry);
 
@@ -108,26 +102,23 @@ public class Helium extends Game {
     m_userInterface.setLabel("Engine-FrametimeMS", "Frame time: " + getDelta(), FrametimeMSLabel.getX(),
         FrametimeMSLabel.getY(), new Dimensions2(FrametimeMSLabel.getWidth(), FrametimeMSLabel.getHeight()), FrametimeMSLabel.getColor());
 
-    if (m_input.isActionDown(InputHandler.Action.TOGGLE_FULLSCREEN, true)) {
-      if (Gdx.graphics.isFullscreen()) {
-        Gdx.graphics.setWindowedMode(1600, 900);
-      } else {
-        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
-      }
-    }
-
-    if(m_input.isActionDown(InputHandler.Action.PAUSE, true)) {
-      if(getStatus() == State.PLAY) {
-        setState(State.PAUSE);
-        Gdx.input.setCursorCatched(false);
-      } else {
-        setState(State.PLAY);
-        Gdx.input.setCursorCatched(true);
-      }
-    }
-
     super.render();
     m_subsystems.forEach(Subsystem::update);
+  }
+
+  public void setState(State state) {
+    if(state == m_state) {
+      return;
+    }
+
+    m_state = state;
+
+    switch(m_state) {
+      case PLAY -> Gdx.input.setCursorCatched(true);
+      case PAUSE -> Gdx.input.setCursorCatched(false);
+    }
+
+    m_telemetry.println("Game state set to " + state);
   }
 
   public enum State {

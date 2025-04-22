@@ -27,8 +27,8 @@ public class HeliumTelemetry extends Subsystem {
   private HeliumTelemetry() {
     m_logs = new ArrayList<>();
     m_loggedItems = new ArrayList<>();
-    m_dumpInterval = Constants.Engine.Telemetry.k_defaultDumpInterval;
-    m_pollInterval = Constants.Engine.Telemetry.k_defaultPollInterval;
+    m_dumpInterval = Constants.Telemetry.k_defaultDumpInterval;
+    m_pollInterval = Constants.Telemetry.k_defaultPollInterval;
     OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();
     String osName = osBean.getName();
     String osArch = osBean.getArch();
