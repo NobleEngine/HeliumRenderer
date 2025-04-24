@@ -106,6 +106,16 @@ public class Helium extends Game {
     m_subsystems.forEach(Subsystem::update);
   }
 
+  public void setWindowMode(WindowMode windowMode) {
+    switch(windowMode) {
+      //TODO: Implement these modes, go into Windowed or Fullscreen for now
+      case WINDOWED -> Gdx.graphics.setWindowedMode(1280, 720);
+      case BORDERLESS -> Gdx.graphics.setWindowedMode(1280, 720);
+      case FULLSCREEN -> Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+      case MAXIMIZED -> Gdx.graphics.setWindowedMode(Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
+    }
+  }
+
   public void setState(State state) {
     if(state == m_state) {
       return;
@@ -123,6 +133,10 @@ public class Helium extends Game {
 
   public enum State {
     PLAY, PAUSE
+  }
+
+  public enum WindowMode {
+    WINDOWED, BORDERLESS, FULLSCREEN, MAXIMIZED
   }
 
   @Override

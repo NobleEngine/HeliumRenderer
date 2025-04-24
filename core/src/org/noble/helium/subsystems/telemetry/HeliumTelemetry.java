@@ -107,26 +107,27 @@ public class HeliumTelemetry extends Subsystem {
   }
 
   public void dump() {
-    if(!m_dumping) {
-      m_dumping = true;
-      new Thread(() -> {
-        for (int log = m_logs.size() - 1; log >= 0; log--) {
-          LogEntry entry = m_logs.get(log);
-          String text = "\n" + entry.getTimestamp().toString() + ";" + entry.getItemName() + ";" + entry.getLoggedValue();
-          try {
-            Files.write(Paths.get(m_logFilePath), text.getBytes(), StandardOpenOption.APPEND);
-            m_logs.remove(log);
-          } catch (Exception e) {
-            printErrorln(e.toString());
-            m_dumping = false;
-          }
-        }
-        m_dumping = false;
-      }).start();
-    } else {
-      printErrorln("Attempted to dump logs while there are already logs being dumped, resetting the dump timer");
-      m_dumpTimer = 0.0f;
-    }
+    //goodbye bad code, be banished to the realm of being used as a reference
+//    if(!m_dumping) {
+//      m_dumping = true;
+//      new Thread(() -> {
+//        for (int log = m_logs.size() - 1; log >= 0; log--) {
+//          LogEntry entry = m_logs.get(log);
+//          String text = "\n" + entry.getTimestamp().toString() + ";" + entry.getItemName() + ";" + entry.getLoggedValue();
+//          try {
+//            Files.write(Paths.get(m_logFilePath), text.getBytes(), StandardOpenOption.APPEND);
+//            m_logs.remove(log);
+//          } catch (Exception e) {
+//            printErrorln(e.toString());
+//            m_dumping = false;
+//          }
+//        }
+//        m_dumping = false;
+//      }).start();
+//    } else {
+//      printErrorln("Attempted to dump logs while there are already logs being dumped, resetting the dump timer");
+//      m_dumpTimer = 0.0f;
+//    }
   }
 
   @Override

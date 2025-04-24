@@ -3,7 +3,7 @@ package org.noble.helium.subsystems.input;
 import com.badlogic.gdx.Gdx;
 
 public class Action {
-  private final int m_keyCode;
+  final int m_keyCode;
   private final InputFunction m_function;
   private final InputType m_inputType;
 
