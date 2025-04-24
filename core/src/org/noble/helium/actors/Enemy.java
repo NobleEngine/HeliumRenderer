@@ -5,8 +5,6 @@ import org.noble.helium.Helium;
 import org.noble.helium.rendering.HeliumModelInstance;
 import org.noble.helium.world.WorldObject;
 
-import java.util.ArrayList;
-
 public class Enemy extends Actor {
   private final Actor m_followingActor;
   private final int m_strength;

@@ -16,11 +16,10 @@ import org.noble.helium.math.Dimensions3;
 import org.noble.helium.subsystems.ui.UserInterface;
 import org.noble.helium.world.WorldObject;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.ArrayList;
 
 public class PlayerController extends Actor {
+  //TODO: Refactor this class LAST
   private final PerspectiveCamera m_camera;
   private final Helium m_engine;
   private static PlayerController m_instance;

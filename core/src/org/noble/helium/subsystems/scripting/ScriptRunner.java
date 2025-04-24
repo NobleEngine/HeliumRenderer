@@ -11,6 +11,7 @@ public class ScriptRunner extends Subsystem {
   private ScriptRunner() {
     m_scripts = new ArrayList<>();
   }
+
   public static ScriptRunner getInstance() {
     if(m_instance == null) {
       m_instance = new ScriptRunner();

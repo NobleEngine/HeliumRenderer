@@ -62,6 +62,7 @@ public class LevelHandler {
     }
 //    m_userInterface.clear();
     m_modelHandler.clear();
+    TextureHandler.getInstance().clear();
     m_objectHandler.clear();
     m_helium.setScreen(level);
     if (m_currentLevel != null) {
