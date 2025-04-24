@@ -5,7 +5,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import org.noble.helium.handling.TextureHandler;
@@ -30,7 +33,7 @@ public class UserInterface extends Subsystem {
     m_labels = new HashMap<>();
     m_rectangles = new HashMap<>();
     m_sprites = new HashMap<>();
-    m_2dStage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+    m_2dStage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
     m_shapeRenderer = new ShapeRenderer();
     HeliumTelemetry.getInstance().println("User Interface subsystem initialized");
   }
@@ -98,6 +101,7 @@ public class UserInterface extends Subsystem {
 
   @Override
   public void update() {
+    m_2dStage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
     for(UIRectangle rect : m_rectangles.values()) {
       m_shapeRenderer.setColor(rect.getColor());
       m_shapeRenderer.begin(rect.getType());
