@@ -3,7 +3,6 @@ package org.noble.helium.actors;
 import com.badlogic.gdx.math.Vector3;
 import org.noble.helium.Helium;
 import org.noble.helium.rendering.HeliumModelInstance;
-import org.noble.helium.subsystems.telemetry.LogEntry;
 import org.noble.helium.world.WorldObject;
 
 import java.util.ArrayList;
@@ -74,10 +73,5 @@ public class Enemy extends Actor {
     super.setPosition(position);
     m_model.setPosition(position);
     m_worldObject.setPosition(position);
-  }
-
-  @Override
-  public ArrayList<LogEntry> getLogEntries() {
-    return null;
   }
 }

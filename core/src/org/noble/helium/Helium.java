@@ -60,7 +60,6 @@ public class Helium extends Game {
   @Override
   public void create() {
     m_telemetry = HeliumTelemetry.getInstance();
-    m_telemetry.addLoggedItem(PlayerController.getInstance());
     m_modelHandler = ModelHandler.getInstance();
     m_player = PlayerController.getInstance();
     m_userInterface = UserInterface.getInstance();
@@ -68,10 +67,6 @@ public class Helium extends Game {
     m_subsystems.add(ScriptRunner.getInstance());
     m_subsystems.add(InputProcessing.getInstance());
     m_subsystems.add(m_userInterface);
-    m_subsystems.add(m_telemetry);
-
-    m_telemetry.setDumpInterval(10);
-    m_telemetry.setPollInterval(5);
 
     m_userInterface.addLabel("Engine-FPS", "FPS: " + Gdx.graphics.getFramesPerSecond(), 0, 0, 100, 25, Color.WHITE);
     m_userInterface.addLabel("PlayerController-Position", "", 0, 30, 100, 25, Color.WHITE);

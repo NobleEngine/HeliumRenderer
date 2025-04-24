@@ -12,9 +12,7 @@ import org.noble.helium.Helium;
 import org.noble.helium.handling.ModelHandler;
 import org.noble.helium.handling.ObjectHandler;
 import org.noble.helium.math.Dimensions2;
-import org.noble.helium.subsystems.input.InputProcessing;
 import org.noble.helium.math.Dimensions3;
-import org.noble.helium.subsystems.telemetry.LogEntry;
 import org.noble.helium.subsystems.ui.UserInterface;
 import org.noble.helium.world.WorldObject;
 
@@ -30,6 +28,7 @@ public class PlayerController extends Actor {
   private final PlayerType m_playerType;
 
   private boolean m_wantsToJump = false;
+  String m_loggedName;
 
   private PlayerController() {
     super(new Vector3(), 100, 8f, null);
@@ -258,14 +257,6 @@ public class PlayerController extends Actor {
 
   @Override
   public void dispose() {
-  }
-
-  @Override
-  public ArrayList<LogEntry> getLogEntries() {
-    ArrayList<LogEntry> logs = new ArrayList<>();
-    logs.add(new LogEntry(Timestamp.from(Instant.now()), "Player Position", getPosition().toString()));
-    logs.add(new LogEntry(Timestamp.from(Instant.now()), "Player Direction", getCamera().direction.toString()));
-    return logs;
   }
 
   public enum PlayerType {
