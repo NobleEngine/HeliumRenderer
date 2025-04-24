@@ -1,27 +1,26 @@
 package org.noble.helium.world;
 
 import com.badlogic.gdx.math.Vector3;
-import org.noble.helium.logic.OrientedBoundingBox;
 import org.noble.helium.rendering.HeliumModelInstance;
 import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
 
 public class WorldObject {
   private final HeliumModelInstance m_modelInstance;
-  private OrientedBoundingBox m_boundingBox;
+  private AxisOrientedBoundingBox m_boundingBox;
   private final int m_collisionType;
 
   public WorldObject(HeliumModelInstance modelInstance, int collision) {
     m_modelInstance = modelInstance;
     m_collisionType = collision;
 
-    m_boundingBox = new OrientedBoundingBox(modelInstance.getPosition(), modelInstance.getDimensions(), modelInstance.getAngles());
+    m_boundingBox = new AxisOrientedBoundingBox(modelInstance.getPosition(), modelInstance.getDimensions(), modelInstance.getAngles());
   }
 
   public HeliumModelInstance getModelInstance() {
     return m_modelInstance;
   }
 
-  public OrientedBoundingBox getBoundingBox() {
+  public AxisOrientedBoundingBox getBoundingBox() {
     return m_boundingBox;
   }
 
@@ -71,7 +70,7 @@ public class WorldObject {
   }
 
   public void update() {
-    m_boundingBox = new OrientedBoundingBox(m_modelInstance.getPosition(), m_modelInstance.getDimensions(), m_modelInstance.getAngles());
+    m_boundingBox = new AxisOrientedBoundingBox(m_modelInstance.getPosition(), m_modelInstance.getDimensions(), m_modelInstance.getAngles());
   }
 
   public interface CollisionType {
