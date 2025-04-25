@@ -26,7 +26,7 @@ public class LDAParser {
       }
     });
     worldElements.forEach((key, value) -> {
-      HeliumTelemetry.getInstance().println("Adding world object: " + key);
+      HeliumTelemetry.getInstance().println("Level Data Archive","Adding world object: " + key);
       JsonObject object = value.getAsJsonObject();
       ModelHandler modelHandler = ModelHandler.getInstance();
       if (object.get("type").getAsString().equals("shape")) {
@@ -57,7 +57,7 @@ public class LDAParser {
         return ModelHandler.Shape.SPHERE;
       }
       default -> {
-        HeliumTelemetry.getInstance().printErrorln("Unknown shape type: " + type);
+        HeliumTelemetry.getInstance().printErrorln("Level Data Archive", "Unknown shape type: " + type);
         return ModelHandler.Shape.CUBE;
       }
     }

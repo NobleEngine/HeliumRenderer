@@ -5,10 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import org.noble.helium.handling.TextureHandler;
@@ -35,7 +32,7 @@ public class UserInterface extends Subsystem {
     m_sprites = new HashMap<>();
     m_2dStage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
     m_shapeRenderer = new ShapeRenderer();
-    HeliumTelemetry.getInstance().println("User Interface subsystem initialized");
+    HeliumTelemetry.getInstance().println("User Interface", "User Interface subsystem initialized");
   }
 
   public static UserInterface getInstance() {

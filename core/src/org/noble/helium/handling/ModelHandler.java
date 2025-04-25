@@ -35,7 +35,7 @@ public class ModelHandler {
     m_GLTFLoader = new GLTFLoader();
     m_objLoader = new ObjLoader();
     m_textureHandler = TextureHandler.getInstance();
-    HeliumTelemetry.getInstance().println("Model handler initialized");
+    HeliumTelemetry.getInstance().println("Model Handler","Model handler initialized");
   }
 
   public static ModelHandler getInstance() {

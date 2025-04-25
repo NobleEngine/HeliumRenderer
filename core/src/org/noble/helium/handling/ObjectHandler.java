@@ -12,7 +12,7 @@ public class ObjectHandler {
 
   private ObjectHandler() {
     m_objects = new HashMap<>();
-    HeliumTelemetry.getInstance().println("Object handler initialized");
+    HeliumTelemetry.getInstance().println("Object Handler", "Object handler initialized");
   }
 
   public static ObjectHandler getInstance() {

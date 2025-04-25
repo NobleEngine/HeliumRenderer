@@ -49,7 +49,7 @@ public class BaseScreen implements Screen {
   public void render(float delta) {
     if(m_batch.isWorking()) {
       m_batch.end();
-      HeliumTelemetry.getInstance().printErrorln("Model batch was not ended last cycle");
+      HeliumTelemetry.getInstance().printErrorln("Renderer", "Model batch was not ended last cycle");
     }
 
     if(m_game.getStatus() == Helium.State.PLAY) {

@@ -32,7 +32,7 @@ public class ParsedLevel extends HeliumLevel {
   public void render(float delta) {
     super.render(delta);
     if(ScriptRunner.getInstance().m_scripts.isEmpty()) {
-      HeliumTelemetry.getInstance().printErrorln("There are no scripts running while in a parsed level!");
+      HeliumTelemetry.getInstance().printErrorln("Scripts", "There are no scripts running while in a parsed level!");
     }
 
   }

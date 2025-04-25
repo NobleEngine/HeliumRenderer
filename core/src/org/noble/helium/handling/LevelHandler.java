@@ -27,8 +27,9 @@ public class LevelHandler {
     m_modelHandler = ModelHandler.getInstance();
     m_objectHandler = ObjectHandler.getInstance();
     m_telemetry = HeliumTelemetry.getInstance();
-    changeScreen("test.lda");
-    HeliumTelemetry.getInstance().println("Level handler initialized");
+//    changeScreen("test.lda");
+    changeScreen(new PhysicsTest());
+    HeliumTelemetry.getInstance().println("Level Handler","Level handler initialized");
   }
 
   public static LevelHandler getInstance() {
@@ -56,9 +57,9 @@ public class LevelHandler {
 
   public void changeScreen(HeliumLevel level) {
     if (m_currentLevel != null) {
-      m_telemetry.println("Changing screen to " + level.getClass().getSimpleName());
+      m_telemetry.println("Level Handler", "Changing screen to " + level.getClass().getSimpleName());
     } else {
-      m_telemetry.println("Starting game on " + level.getClass().getSimpleName());
+      m_telemetry.println("Level Handler","Starting game on " + level.getClass().getSimpleName());
     }
 //    m_userInterface.clear();
     m_modelHandler.clear();

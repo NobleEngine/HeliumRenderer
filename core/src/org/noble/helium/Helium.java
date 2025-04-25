@@ -75,7 +75,7 @@ public class Helium extends Game {
     m_userInterface.addLabel("PlayerController-Health", "", 0, 120, 100, 25, Color.WHITE);
 
     m_modelBatch = new HeliumModelBatch();
-    m_telemetry.println("Ready to render!");
+    m_telemetry.println("Helium", "Ready to render!");
   }
 
   @Override
@@ -123,7 +123,7 @@ public class Helium extends Game {
       case PAUSE -> Gdx.input.setCursorCatched(false);
     }
 
-    m_telemetry.println("Game state set to " + state);
+    m_telemetry.println("Helium", "Game state set to " + state);
   }
 
   public enum State {
