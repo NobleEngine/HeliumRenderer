@@ -69,6 +69,9 @@ public class Helium extends Game {
 
     m_modelBatch = new HeliumModelBatch();
     m_telemetry.println(Constants.Engine.k_prettyName, "Ready to render!");
+    m_telemetry.println(Constants.Engine.k_prettyName, "Initializing subsystems...", HeliumTelemetry.printType.WARNING);
+    m_telemetry.println(Constants.Engine.k_prettyName, "Subsystems initialized!", HeliumTelemetry.printType.ERROR);
+    m_telemetry.error(Constants.Engine.k_prettyName, new Exception("oops"), HeliumTelemetry.ErrorType.NONFATAL, true);
   }
 
   @Override
