@@ -8,7 +8,7 @@ import com.google.gson.JsonObject;
 import org.noble.helium.handling.ModelHandler;
 import org.noble.helium.handling.ObjectHandler;
 import org.noble.helium.math.Dimensions3;
-import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
+import org.noble.helium.subsystems.HeliumTelemetry;
 import org.noble.helium.world.WorldObject;
 
 import java.util.HashMap;

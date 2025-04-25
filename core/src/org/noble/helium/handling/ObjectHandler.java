@@ -1,6 +1,6 @@
 package org.noble.helium.handling;
 
-import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
+import org.noble.helium.subsystems.HeliumTelemetry;
 import org.noble.helium.world.WorldObject;
 
 import java.util.ArrayList;

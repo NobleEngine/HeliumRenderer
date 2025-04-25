@@ -13,7 +13,7 @@ import org.noble.helium.handling.ActorHandler;
 import org.noble.helium.handling.ObjectHandler;
 import org.noble.helium.handling.ModelHandler;
 import org.noble.helium.rendering.HeliumModelBatch;
-import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
+import org.noble.helium.subsystems.HeliumTelemetry;
 
 public class BaseScreen implements Screen {
   public final Helium m_game;

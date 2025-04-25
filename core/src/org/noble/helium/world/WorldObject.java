@@ -2,7 +2,7 @@ package org.noble.helium.world;
 
 import com.badlogic.gdx.math.Vector3;
 import org.noble.helium.rendering.HeliumModelInstance;
-import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
+import org.noble.helium.subsystems.HeliumTelemetry;
 
 public class WorldObject {
   private final HeliumModelInstance m_modelInstance;

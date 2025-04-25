@@ -2,18 +2,15 @@ package org.noble.helium;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL32;
-import com.kotcrab.vis.ui.widget.VisLabel;
 import org.noble.helium.actors.PlayerController;
 import org.noble.helium.handling.LevelHandler;
 import org.noble.helium.handling.ModelHandler;
 import org.noble.helium.handling.TextureHandler;
-import org.noble.helium.math.Dimensions2;
 import org.noble.helium.subsystems.input.InputProcessing;
 import org.noble.helium.rendering.HeliumModelBatch;
 import org.noble.helium.subsystems.scripting.ScriptRunner;
-import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
+import org.noble.helium.subsystems.HeliumTelemetry;
 import org.noble.helium.subsystems.Subsystem;
 
 import java.util.ArrayList;
@@ -71,12 +68,13 @@ public class Helium extends Game {
 //    m_userInterface.addLabel("PlayerController-Health", "", 0, 120, 100, 25, Color.WHITE);
 
     m_modelBatch = new HeliumModelBatch();
-    m_telemetry.println("Helium", "Ready to render!");
+    m_telemetry.println(Constants.Engine.k_prettyName, "Ready to render!");
   }
 
   @Override
   public void render() {
     m_delta = Gdx.graphics.getDeltaTime();
+    //TODO: checkOverrun(m_delta);
     Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     Gdx.gl.glClear(GL32.GL_COLOR_BUFFER_BIT | GL32.GL_DEPTH_BUFFER_BIT);
     if(getStatus() == State.PLAY) {

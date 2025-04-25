@@ -2,7 +2,7 @@ package org.noble.helium.screens;
 
 import org.noble.helium.subsystems.scripting.HeliumScript;
 import org.noble.helium.subsystems.scripting.ScriptRunner;
-import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
+import org.noble.helium.subsystems.HeliumTelemetry;
 
 import java.util.List;
 

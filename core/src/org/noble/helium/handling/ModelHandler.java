@@ -16,7 +16,7 @@ import net.mgsx.gltf.loaders.gltf.GLTFLoader;
 import org.noble.helium.math.Dimensions3;
 import org.noble.helium.rendering.HeliumModelInstance;
 import org.noble.helium.rendering.HeliumModelBatch;
-import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
+import org.noble.helium.subsystems.HeliumTelemetry;
 
 import java.util.HashMap;
 import java.util.Map;

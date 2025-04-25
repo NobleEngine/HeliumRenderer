@@ -1,7 +1,7 @@
 package org.noble.helium.subsystems.scripting;
 
 import com.badlogic.gdx.Gdx;
-import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
+import org.noble.helium.subsystems.HeliumTelemetry;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
