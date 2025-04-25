@@ -7,7 +7,6 @@ import org.noble.helium.Constants;
 import java.lang.management.OperatingSystemMXBean;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.Arrays;
 
 public class HeliumTelemetry {
   //TODO: Implement Log4J (or something similar) and proper error handling

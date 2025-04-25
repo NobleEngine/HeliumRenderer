@@ -1,6 +1,5 @@
 package org.noble.helium.subsystems.input;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import org.noble.helium.Constants;
 import org.noble.helium.Helium;

@@ -67,8 +67,7 @@ public class PhysicsTest extends HeliumLevel {
 
     if(m_player.getPosition().y < -100f) {
       m_player.setPosition(new Vector3(m_player.getX(),150,m_player.getZ()));
-//      LevelHandler.getInstance().changeScreen("test.lda");
-      LevelHandler.getInstance().changeScreen(new PhysicsTest());
+      LevelHandler.getInstance().changeScreen("test.lda");
     }
   }
 }
