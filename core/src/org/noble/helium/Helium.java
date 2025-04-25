@@ -15,7 +15,6 @@ import org.noble.helium.rendering.HeliumModelBatch;
 import org.noble.helium.subsystems.scripting.ScriptRunner;
 import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
 import org.noble.helium.subsystems.Subsystem;
-import org.noble.helium.subsystems.ui.UserInterface;
 
 import java.util.ArrayList;
 
@@ -27,7 +26,6 @@ public class Helium extends Game {
   private ModelHandler m_modelHandler;
   private PlayerController m_player;
   private HeliumModelBatch m_modelBatch;
-  private UserInterface m_userInterface;
   private LevelHandler m_screenHandler;
   private HeliumTelemetry m_telemetry;
 
@@ -62,17 +60,15 @@ public class Helium extends Game {
     m_telemetry = HeliumTelemetry.getInstance();
     m_modelHandler = ModelHandler.getInstance();
     m_player = PlayerController.getInstance();
-    m_userInterface = UserInterface.getInstance();
     m_screenHandler = LevelHandler.getInstance();
     m_subsystems.add(ScriptRunner.getInstance());
     m_subsystems.add(InputProcessing.getInstance());
-    m_subsystems.add(m_userInterface);
 
-    m_userInterface.addLabel("Engine-FPS", "FPS: " + Gdx.graphics.getFramesPerSecond(), 0, 0, 100, 25, Color.WHITE);
-    m_userInterface.addLabel("PlayerController-Position", "", 0, 30, 100, 25, Color.WHITE);
-    m_userInterface.addLabel("Engine-Status", "", 0, 60, 100, 25, Color.WHITE);
-    m_userInterface.addLabel("Engine-FrametimeMS", "", 0, 90, 100, 25, Color.WHITE);
-    m_userInterface.addLabel("PlayerController-Health", "", 0, 120, 100, 25, Color.WHITE);
+//    m_userInterface.addLabel("Engine-FPS", "FPS: " + Gdx.graphics.getFramesPerSecond(), 0, 0, 100, 25, Color.WHITE);
+//    m_userInterface.addLabel("PlayerController-Position", "", 0, 30, 100, 25, Color.WHITE);
+//    m_userInterface.addLabel("Engine-Status", "", 0, 60, 100, 25, Color.WHITE);
+//    m_userInterface.addLabel("Engine-FrametimeMS", "", 0, 90, 100, 25, Color.WHITE);
+//    m_userInterface.addLabel("PlayerController-Health", "", 0, 120, 100, 25, Color.WHITE);
 
     m_modelBatch = new HeliumModelBatch();
     m_telemetry.println("Helium", "Ready to render!");
@@ -87,15 +83,15 @@ public class Helium extends Game {
       m_player.update();
     }
 
-    VisLabel FPSLabel = m_userInterface.getLabel("Engine-FPS");
-    m_userInterface.setLabel("Engine-FPS", "FPS: " + Gdx.graphics.getFramesPerSecond(), FPSLabel.getX(),
-        FPSLabel.getY(), new Dimensions2(FPSLabel.getWidth(), FPSLabel.getHeight()), FPSLabel.getColor());
-    VisLabel StatusLabel = m_userInterface.getLabel("Engine-Status");
-    m_userInterface.setLabel("Engine-Status", "Status: " + getStatus(), StatusLabel.getX(),
-        StatusLabel.getY(), new Dimensions2(StatusLabel.getWidth(), StatusLabel.getHeight()), StatusLabel.getColor());
-    VisLabel FrametimeMSLabel = m_userInterface.getLabel("Engine-FrametimeMS");
-    m_userInterface.setLabel("Engine-FrametimeMS", "Frame time: " + getDelta(), FrametimeMSLabel.getX(),
-        FrametimeMSLabel.getY(), new Dimensions2(FrametimeMSLabel.getWidth(), FrametimeMSLabel.getHeight()), FrametimeMSLabel.getColor());
+//    VisLabel FPSLabel = m_userInterface.getLabel("Engine-FPS");
+//    m_userInterface.setLabel("Engine-FPS", "FPS: " + Gdx.graphics.getFramesPerSecond(), FPSLabel.getX(),
+//        FPSLabel.getY(), new Dimensions2(FPSLabel.getWidth(), FPSLabel.getHeight()), FPSLabel.getColor());
+//    VisLabel StatusLabel = m_userInterface.getLabel("Engine-Status");
+//    m_userInterface.setLabel("Engine-Status", "Status: " + getStatus(), StatusLabel.getX(),
+//        StatusLabel.getY(), new Dimensions2(StatusLabel.getWidth(), StatusLabel.getHeight()), StatusLabel.getColor());
+//    VisLabel FrametimeMSLabel = m_userInterface.getLabel("Engine-FrametimeMS");
+//    m_userInterface.setLabel("Engine-FrametimeMS", "Frame time: " + getDelta(), FrametimeMSLabel.getX(),
+//        FrametimeMSLabel.getY(), new Dimensions2(FrametimeMSLabel.getWidth(), FrametimeMSLabel.getHeight()), FrametimeMSLabel.getColor());
 
     super.render();
     m_subsystems.forEach(Subsystem::update);

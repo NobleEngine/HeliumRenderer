@@ -6,14 +6,11 @@ import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
-import com.kotcrab.vis.ui.widget.VisLabel;
 import org.noble.helium.Constants;
 import org.noble.helium.Helium;
 import org.noble.helium.handling.ModelHandler;
 import org.noble.helium.handling.ObjectHandler;
-import org.noble.helium.math.Dimensions2;
 import org.noble.helium.math.Dimensions3;
-import org.noble.helium.subsystems.ui.UserInterface;
 import org.noble.helium.world.WorldObject;
 
 import java.util.ArrayList;
@@ -245,13 +242,6 @@ public class PlayerController extends Actor {
     translate();
     m_camera.update();
     m_worldObject.update();
-    
-    VisLabel PosLabel = UserInterface.getInstance().getLabel("PlayerController-Position");
-    UserInterface.getInstance().setLabel("PlayerController-Position", "Position: " + getX() + ", " + getY() +
-        ", " + getZ(), PosLabel.getX(), PosLabel.getY(), new Dimensions2(PosLabel.getWidth(), PosLabel.getHeight()), PosLabel.getColor());
-    VisLabel HealthLabel = UserInterface.getInstance().getLabel("PlayerController-Health");
-    UserInterface.getInstance().setLabel("PlayerController-Health", "Health: " + getHealth(), HealthLabel.getX(), HealthLabel.getY(),
-        new Dimensions2(HealthLabel.getWidth(), HealthLabel.getHeight()), HealthLabel.getColor());
   }
 
   @Override
