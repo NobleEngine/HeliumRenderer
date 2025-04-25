@@ -1,7 +1,7 @@
 package org.noble.helium;
 
+@SuppressWarnings("unused")
 public class ConsoleColors {
-  @SuppressWarnings("unused")
   // Reset
   public static final String RESET = "\033[0m";  // Text Reset
   // Regular Colors
