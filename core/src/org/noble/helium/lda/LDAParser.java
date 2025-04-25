@@ -57,7 +57,7 @@ public class LDAParser {
         return ModelHandler.Shape.SPHERE;
       }
       default -> {
-        HeliumTelemetry.getInstance().printErrorln("Level Data Archive", "Unknown shape type: " + type);
+        HeliumTelemetry.getInstance().println("Level Data Archive", "Unknown shape type: " + type, HeliumTelemetry.printType.ERROR);
         return ModelHandler.Shape.CUBE;
       }
     }

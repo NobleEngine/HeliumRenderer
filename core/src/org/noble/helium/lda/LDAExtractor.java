@@ -20,7 +20,7 @@ public class LDAExtractor {
     try {
       return InMemoryClassCompiler.unzipAndCompile(LDA);
     } catch (Exception e) {
-      HeliumTelemetry.getInstance().printErrorln("Level Data Archive", e.getMessage());
+      HeliumTelemetry.getInstance().error("Level Data Archive", e, HeliumTelemetry.ErrorType.NONFATAL, true);
       return Collections.emptyList();
     }
   }

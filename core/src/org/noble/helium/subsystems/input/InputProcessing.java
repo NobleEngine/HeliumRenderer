@@ -17,7 +17,6 @@ public class InputProcessing extends Subsystem {
   private final Helium m_helium;
 
   private InputProcessing() { //Default binds go here
-    Gdx.input.setCursorCatched(true);
     m_keyBindings = new ArrayList<>();
     m_player = PlayerController.getInstance();
     m_helium = Helium.getInstance();
