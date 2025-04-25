@@ -45,6 +45,9 @@ public class LevelHandler {
 
   public void changeScreen(String LDAName) {
     List<Class<?>> scripts = LDAExtractor.getScripts(Gdx.files.internal("levels/" + LDAName));
+    if(scripts.isEmpty()) {
+      HeliumTelemetry.getInstance().error("Level Handler",new NoSuchMethodException("No scripts found in level " + LDAName), HeliumTelemetry.ErrorType.FATAL, true);
+    }
     changeScreen(new ParsedLevel(scripts));
     Map<String, JsonElement> ldaElements;
     try {
