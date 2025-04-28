@@ -13,7 +13,7 @@ public class TextureHandler {
 
   private TextureHandler() {
     m_textures = new HashMap<>();
-    HeliumTelemetry.getInstance().println("Texture Handler","Texture handler initialized");
+    HeliumTelemetry.println("Texture Handler","Texture handler initialized");
   }
 
   public static TextureHandler getInstance() {

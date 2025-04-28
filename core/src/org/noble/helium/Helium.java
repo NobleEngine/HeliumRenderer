@@ -13,6 +13,7 @@ import org.noble.helium.subsystems.scripting.ScriptRunner;
 import org.noble.helium.subsystems.HeliumTelemetry;
 import org.noble.helium.subsystems.Subsystem;
 
+import java.lang.management.OperatingSystemMXBean;
 import java.util.ArrayList;
 
 public class Helium extends Game {
@@ -24,7 +25,6 @@ public class Helium extends Game {
   private PlayerController m_player;
   private HeliumModelBatch m_modelBatch;
   private LevelHandler m_screenHandler;
-  private HeliumTelemetry m_telemetry;
 
   private Helium() {
     m_subsystems = new ArrayList<>();
@@ -54,7 +54,12 @@ public class Helium extends Game {
 
   @Override
   public void create() {
-    m_telemetry = HeliumTelemetry.getInstance();
+    OperatingSystemMXBean osBean = java.lang.management.ManagementFactory.getOperatingSystemMXBean();
+    HeliumTelemetry.println(Constants.Engine.k_prettyName, Constants.Engine.k_build + " running for " + osBean.getArch() + " " + osBean.getVersion());
+    HeliumTelemetry.println(Constants.Engine.k_prettyName, Gdx.graphics.getGLVersion().getRendererString()); //TODO: Move this to UI (an F3 menu like Minecraft?)
+    HeliumTelemetry.println("Telemetry", "Warnings look like this", HeliumTelemetry.printType.WARNING);
+    HeliumTelemetry.println("Telemetry", "Errors look like this", HeliumTelemetry.printType.ERROR);
+
     m_modelHandler = ModelHandler.getInstance();
     m_player = PlayerController.getInstance();
     m_screenHandler = LevelHandler.getInstance();
@@ -68,7 +73,7 @@ public class Helium extends Game {
 //    m_userInterface.addLabel("PlayerController-Health", "", 0, 120, 100, 25, Color.WHITE);
 
     m_modelBatch = new HeliumModelBatch();
-    m_telemetry.println(Constants.Engine.k_prettyName, "Ready to render!");
+    HeliumTelemetry.println(Constants.Engine.k_prettyName, "Ready to render!");
   }
 
   @Override
@@ -117,7 +122,7 @@ public class Helium extends Game {
       case PAUSE -> Gdx.input.setCursorCatched(false);
     }
 
-    m_telemetry.println("Helium", "Game state set to " + state);
+    HeliumTelemetry.println("Helium", "Game state set to " + state);
   }
 
   public enum State {

@@ -20,16 +20,14 @@ public class LevelHandler {
   private final Helium m_helium;
   private final ModelHandler m_modelHandler;
   private final ObjectHandler m_objectHandler;
-  private final HeliumTelemetry m_telemetry;
 
   private LevelHandler() {
     m_helium = Helium.getInstance();
     m_modelHandler = ModelHandler.getInstance();
     m_objectHandler = ObjectHandler.getInstance();
-    m_telemetry = HeliumTelemetry.getInstance();
 //    changeScreen("test.lda");
     changeScreen(new PhysicsTest());
-    HeliumTelemetry.getInstance().println("Level Handler","Level handler initialized");
+    HeliumTelemetry.println("Level Handler","Level handler initialized");
   }
 
   public static LevelHandler getInstance() {
@@ -46,7 +44,7 @@ public class LevelHandler {
   public void changeScreen(String LDAName) {
     List<Class<?>> scripts = LDAExtractor.getScripts(Gdx.files.internal("levels/" + LDAName));
     if(scripts.isEmpty()) {
-      HeliumTelemetry.getInstance().error("Level Handler",new NoSuchMethodException("No scripts found in level " + LDAName), HeliumTelemetry.ErrorType.FATAL, true);
+      HeliumTelemetry.error("Level Handler",new NoSuchMethodException("No scripts found in level " + LDAName), HeliumTelemetry.ErrorType.FATAL, true);
     }
     changeScreen(new ParsedLevel(scripts));
     Map<String, JsonElement> ldaElements;
@@ -60,9 +58,9 @@ public class LevelHandler {
 
   public void changeScreen(HeliumLevel level) {
     if (m_currentLevel != null) {
-      m_telemetry.println("Level Handler", "Changing screen to " + level.getClass().getSimpleName());
+      HeliumTelemetry.println("Level Handler", "Changing screen to " + level.getClass().getSimpleName());
     } else {
-      m_telemetry.println("Level Handler","Starting game on " + level.getClass().getSimpleName());
+      HeliumTelemetry.println("Level Handler","Starting game on " + level.getClass().getSimpleName());
     }
 //    m_userInterface.clear();
     m_modelHandler.clear();

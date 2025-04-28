@@ -20,7 +20,7 @@ public class LDAExtractor {
     try {
       return InMemoryClassCompiler.unzipAndCompile(LDA);
     } catch (Exception e) {
-      HeliumTelemetry.getInstance().error("Level Data Archive", e, HeliumTelemetry.ErrorType.NONFATAL, true);
+      HeliumTelemetry.error("Level Data Archive", e, HeliumTelemetry.ErrorType.NONFATAL, true);
       return Collections.emptyList();
     }
   }
@@ -46,7 +46,7 @@ public class LDAExtractor {
     }
 
     for (Map.Entry<String, JsonElement> entry : jsonFiles.entrySet()) {
-      HeliumTelemetry.getInstance().println("Level Data Archive", "Found Element - " + entry.getKey() + ": " + entry.getValue().getAsJsonObject());
+      HeliumTelemetry.println("Level Data Archive", "Found Element - " + entry.getKey() + ": " + entry.getValue().getAsJsonObject());
     }
 
     return jsonFiles;

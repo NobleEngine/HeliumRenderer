@@ -10,26 +10,11 @@ import java.time.Instant;
 
 public class HeliumTelemetry {
   //TODO: Implement Log4J (or something similar) and proper error handling
-  private static HeliumTelemetry m_instance;
-
-  private HeliumTelemetry() {
-    OperatingSystemMXBean osBean = java.lang.management.ManagementFactory.getOperatingSystemMXBean();
-    println(Constants.Engine.k_prettyName, Constants.Engine.k_build + " running for " + osBean.getArch() + " " + osBean.getVersion());
-    println("Telemetry", "Telemetry subsystem initialized");
-  }
-
-  public static HeliumTelemetry getInstance() {
-    if (m_instance == null) {
-      m_instance = new HeliumTelemetry();
-    }
-    return m_instance;
-  }
-
-  public void println(String tag, String message) {
+  public static void println(String tag, String message) {
     println(tag, message, printType.INFO);
   }
 
-  public void println(String tag, String message, printType type) {
+  public static void println(String tag, String message, printType type) {
     Timestamp timestamp = Timestamp.from(Instant.now());
     String time = timestamp.toString().substring(11, 19);
     String printType = type.toString();
@@ -53,7 +38,7 @@ public class HeliumTelemetry {
     }
   }
 
-  public void error(String tag, Exception exception, ErrorType type, boolean printStackTrace) {
+  public static void error(String tag, Exception exception, ErrorType type, boolean printStackTrace) {
     println(tag, exception.getMessage(), printType.ERROR);
     if (printStackTrace) {
       StackTraceElement[] stackTrace = exception.getStackTrace();

@@ -18,13 +18,13 @@ public class HeliumScript {
     try {
       updateMethod = m_externalClass.getMethod("update", float.class);
     } catch (NoSuchMethodException e) {
-      HeliumTelemetry.getInstance().error("Script Handler", e, HeliumTelemetry.ErrorType.NONFATAL, true);
+      HeliumTelemetry.error("Script Handler", e, HeliumTelemetry.ErrorType.NONFATAL, true);
       return;
     }
     try {
       updateMethod.invoke(m_externalClass.getDeclaredConstructor().newInstance(), Gdx.graphics.getDeltaTime());
     } catch (IllegalAccessException | InvocationTargetException | InstantiationException | NoSuchMethodException e) {
-      HeliumTelemetry.getInstance().error("Script Handler", e, HeliumTelemetry.ErrorType.NONFATAL, true);
+      HeliumTelemetry.error("Script Handler", e, HeliumTelemetry.ErrorType.NONFATAL, true);
     }
   }
 }

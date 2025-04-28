@@ -58,7 +58,7 @@ public class WorldObject {
 
   public boolean isColliding(WorldObject object) {
     if(object == null) {
-      HeliumTelemetry.getInstance().println("Physics", "WorldObject is null", HeliumTelemetry.printType.ERROR);
+      HeliumTelemetry.println("Physics", "WorldObject is null", HeliumTelemetry.printType.ERROR);
       return false;
     }
 

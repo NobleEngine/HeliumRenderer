@@ -9,6 +9,8 @@ import java.util.List;
 public class ParsedLevel extends HeliumLevel {
   private final ScriptRunner m_scriptRunner;
   private final List<Class<?>> m_scripts;
+  private boolean m_warnForNoScipts = true;
+
   public ParsedLevel(List<Class<?>> scripts) {
     super();
     m_scriptRunner = ScriptRunner.getInstance();
@@ -19,8 +21,8 @@ public class ParsedLevel extends HeliumLevel {
   public void init() {
     super.init();
 
-    for(Class<?> script : m_scripts) {
-      if(script.getSimpleName().equals("start")) {
+    for (Class<?> script : m_scripts) {
+      if (script.getSimpleName().equals("start")) {
         new HeliumScript(script).update();
       } else {
         m_scriptRunner.addScript(new HeliumScript(script));
@@ -31,9 +33,11 @@ public class ParsedLevel extends HeliumLevel {
   @Override
   public void render(float delta) {
     super.render(delta);
-    if(ScriptRunner.getInstance().m_scripts.isEmpty()) {
-      HeliumTelemetry.getInstance().println("Scripts", "There are no scripts running while in a parsed level!", HeliumTelemetry.printType.ERROR);
+    if (ScriptRunner.getInstance().m_scripts.isEmpty()) {
+      if (m_warnForNoScipts) {
+        HeliumTelemetry.println("Scripts", "There are no scripts running while in a parsed level!", HeliumTelemetry.printType.ERROR);
+        m_warnForNoScipts = false;
+      }
     }
-
   }
 }
