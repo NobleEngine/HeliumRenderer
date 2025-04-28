@@ -1,6 +1,6 @@
 package org.noble.helium.handling;
 
-import org.noble.helium.subsystems.HeliumTelemetry;
+import org.noble.helium.PrintUtils;
 import org.noble.helium.world.WorldObject;
 
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ public class ObjectHandler {
 
   private ObjectHandler() {
     m_objects = new HashMap<>();
-    HeliumTelemetry.println("Object Handler", "Object handler initialized");
+    PrintUtils.println("Object Handler", "Object handler initialized");
   }
 
   public static ObjectHandler getInstance() {

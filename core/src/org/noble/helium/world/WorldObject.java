@@ -2,7 +2,7 @@ package org.noble.helium.world;
 
 import com.badlogic.gdx.math.Vector3;
 import org.noble.helium.rendering.HeliumModelInstance;
-import org.noble.helium.subsystems.HeliumTelemetry;
+import org.noble.helium.PrintUtils;
 
 public class WorldObject {
   private final HeliumModelInstance m_modelInstance;
@@ -14,10 +14,6 @@ public class WorldObject {
     m_collisionType = collision;
 
     m_boundingBox = new AxisOrientedBoundingBox(modelInstance.getPosition(), modelInstance.getDimensions(), modelInstance.getAngles());
-  }
-
-  public HeliumModelInstance getModelInstance() {
-    return m_modelInstance;
   }
 
   public AxisOrientedBoundingBox getBoundingBox() {
@@ -58,7 +54,7 @@ public class WorldObject {
 
   public boolean isColliding(WorldObject object) {
     if(object == null) {
-      HeliumTelemetry.println("Physics", "WorldObject is null", HeliumTelemetry.printType.ERROR);
+      PrintUtils.println("Physics", "WorldObject is null", PrintUtils.printType.ERROR);
       return false;
     }
 

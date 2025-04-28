@@ -2,7 +2,7 @@ package org.noble.helium.screens;
 
 import org.noble.helium.subsystems.scripting.HeliumScript;
 import org.noble.helium.subsystems.scripting.ScriptRunner;
-import org.noble.helium.subsystems.HeliumTelemetry;
+import org.noble.helium.PrintUtils;
 
 import java.util.List;
 
@@ -35,7 +35,7 @@ public class ParsedLevel extends HeliumLevel {
     super.render(delta);
     if (ScriptRunner.getInstance().m_scripts.isEmpty()) {
       if (m_warnForNoScipts) {
-        HeliumTelemetry.println("Scripts", "There are no scripts running while in a parsed level!", HeliumTelemetry.printType.ERROR);
+        PrintUtils.println("Scripts", "There are no scripts running while in a parsed level!", PrintUtils.printType.ERROR);
         m_warnForNoScipts = false;
       }
     }

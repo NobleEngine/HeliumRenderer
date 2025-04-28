@@ -10,7 +10,6 @@ import org.noble.helium.handling.TextureHandler;
 import org.noble.helium.subsystems.input.InputProcessing;
 import org.noble.helium.rendering.HeliumModelBatch;
 import org.noble.helium.subsystems.scripting.ScriptRunner;
-import org.noble.helium.subsystems.HeliumTelemetry;
 import org.noble.helium.subsystems.Subsystem;
 
 import java.lang.management.OperatingSystemMXBean;
@@ -55,10 +54,10 @@ public class Helium extends Game {
   @Override
   public void create() {
     OperatingSystemMXBean osBean = java.lang.management.ManagementFactory.getOperatingSystemMXBean();
-    HeliumTelemetry.println(Constants.Engine.k_prettyName, Constants.Engine.k_build + " running for " + osBean.getArch() + " " + osBean.getVersion());
-    HeliumTelemetry.println(Constants.Engine.k_prettyName, Gdx.graphics.getGLVersion().getRendererString()); //TODO: Move this to UI (an F3 menu like Minecraft?)
-    HeliumTelemetry.println("Telemetry", "Warnings look like this", HeliumTelemetry.printType.WARNING);
-    HeliumTelemetry.println("Telemetry", "Errors look like this", HeliumTelemetry.printType.ERROR);
+    PrintUtils.println(Constants.Engine.k_prettyName, Constants.Engine.k_build + " running for " + osBean.getArch() + " " + osBean.getVersion());
+    PrintUtils.println(Constants.Engine.k_prettyName, Gdx.graphics.getGLVersion().getRendererString()); //TODO: Move this to UI (an F3 menu like Minecraft?)
+    PrintUtils.println("Telemetry", "Warnings look like this", PrintUtils.printType.WARNING);
+    PrintUtils.println("Telemetry", "Errors look like this", PrintUtils.printType.ERROR);
 
     m_modelHandler = ModelHandler.getInstance();
     m_player = PlayerController.getInstance();
@@ -73,7 +72,7 @@ public class Helium extends Game {
 //    m_userInterface.addLabel("PlayerController-Health", "", 0, 120, 100, 25, Color.WHITE);
 
     m_modelBatch = new HeliumModelBatch();
-    HeliumTelemetry.println(Constants.Engine.k_prettyName, "Ready to render!");
+    PrintUtils.println(Constants.Engine.k_prettyName, "Ready to render!");
   }
 
   @Override
@@ -122,7 +121,7 @@ public class Helium extends Game {
       case PAUSE -> Gdx.input.setCursorCatched(false);
     }
 
-    HeliumTelemetry.println("Helium", "Game state set to " + state);
+    PrintUtils.println("Helium", "Game state set to " + state);
   }
 
   public enum State {

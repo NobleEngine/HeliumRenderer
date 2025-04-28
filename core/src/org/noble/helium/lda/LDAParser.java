@@ -8,7 +8,7 @@ import com.google.gson.JsonObject;
 import org.noble.helium.handling.ModelHandler;
 import org.noble.helium.handling.ObjectHandler;
 import org.noble.helium.math.Dimensions3;
-import org.noble.helium.subsystems.HeliumTelemetry;
+import org.noble.helium.PrintUtils;
 import org.noble.helium.world.WorldObject;
 
 import java.util.HashMap;
@@ -26,22 +26,28 @@ public class LDAParser {
       }
     });
     worldElements.forEach((key, value) -> {
-      HeliumTelemetry.println("Level Data Archive","Adding world object: " + key);
-      JsonObject object = value.getAsJsonObject();
       ModelHandler modelHandler = ModelHandler.getInstance();
-      if (object.get("type").getAsString().equals("shape")) {
+      try {
+        PrintUtils.println("Level Data Archive", "Adding world object: " + key);
+        JsonObject object = value.getAsJsonObject();
+        if (object.get("type").getAsString().equals("shape")) {
           modelHandler.addNewShape(
               key + "-model",
               toShapeType(object.get("shape").getAsString()),
               toColor(object.get("color").getAsString()),
               toVector3(object.get("position").getAsJsonArray()),
               new Dimensions3(toVector3(object.get("dimensions").getAsJsonArray())));
-      } else if (object.get("type").getAsString().equals("model")) {
-        modelHandler.addNewOBJModel(
-            key + "-model",
-            object.get("model").getAsString(),
-            toVector3(object.get("position").getAsJsonArray())
-        );
+        } else if (object.get("type").getAsString().equals("model")) {
+          modelHandler.addNewOBJModel(
+              key + "-model",
+              object.get("model").getAsString(),
+              toVector3(object.get("position").getAsJsonArray())
+          );
+        }
+      } catch (Exception e) {
+        PrintUtils.error("Level Data Archive", e, PrintUtils.ErrorType.NONFATAL, true);
+        PrintUtils.println("Level Data Archive", "Failed to add world object: " + key, PrintUtils.printType.ERROR);
+        return;
       }
       objects.put(key + "-object",new WorldObject(modelHandler.get(key + "-model"), WorldObject.CollisionType.STANDARD));
     });
@@ -57,7 +63,7 @@ public class LDAParser {
         return ModelHandler.Shape.SPHERE;
       }
       default -> {
-        HeliumTelemetry.println("Level Data Archive", "Unknown shape type: " + type, HeliumTelemetry.printType.ERROR);
+        PrintUtils.println("Level Data Archive", "Unknown shape type: " + type, PrintUtils.printType.ERROR);
         return ModelHandler.Shape.CUBE;
       }
     }

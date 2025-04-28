@@ -2,7 +2,7 @@ package org.noble.helium.handling;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import org.noble.helium.subsystems.HeliumTelemetry;
+import org.noble.helium.PrintUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +13,7 @@ public class TextureHandler {
 
   private TextureHandler() {
     m_textures = new HashMap<>();
-    HeliumTelemetry.println("Texture Handler","Texture handler initialized");
+    PrintUtils.println("Texture Handler","Texture handler initialized");
   }
 
   public static TextureHandler getInstance() {

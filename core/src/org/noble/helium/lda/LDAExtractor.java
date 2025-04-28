@@ -3,7 +3,7 @@ package org.noble.helium.lda;
 import com.badlogic.gdx.files.FileHandle;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import org.noble.helium.subsystems.HeliumTelemetry;
+import org.noble.helium.PrintUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -20,7 +20,7 @@ public class LDAExtractor {
     try {
       return InMemoryClassCompiler.unzipAndCompile(LDA);
     } catch (Exception e) {
-      HeliumTelemetry.error("Level Data Archive", e, HeliumTelemetry.ErrorType.NONFATAL, true);
+      PrintUtils.error("Level Data Archive", e, PrintUtils.ErrorType.NONFATAL, true);
       return Collections.emptyList();
     }
   }
@@ -46,7 +46,7 @@ public class LDAExtractor {
     }
 
     for (Map.Entry<String, JsonElement> entry : jsonFiles.entrySet()) {
-      HeliumTelemetry.println("Level Data Archive", "Found Element - " + entry.getKey() + ": " + entry.getValue().getAsJsonObject());
+      PrintUtils.println("Level Data Archive", "Found Element - " + entry.getKey() + ": " + entry.getValue().getAsJsonObject());
     }
 
     return jsonFiles;

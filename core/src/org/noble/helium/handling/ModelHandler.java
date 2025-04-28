@@ -16,7 +16,7 @@ import net.mgsx.gltf.loaders.gltf.GLTFLoader;
 import org.noble.helium.math.Dimensions3;
 import org.noble.helium.rendering.HeliumModelInstance;
 import org.noble.helium.rendering.HeliumModelBatch;
-import org.noble.helium.subsystems.HeliumTelemetry;
+import org.noble.helium.PrintUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +35,7 @@ public class ModelHandler {
     m_GLTFLoader = new GLTFLoader();
     m_objLoader = new ObjLoader();
     m_textureHandler = TextureHandler.getInstance();
-    HeliumTelemetry.println("Model Handler","Model handler initialized");
+    PrintUtils.println("Model Handler","Model handler initialized");
   }
 
   public static ModelHandler getInstance() {

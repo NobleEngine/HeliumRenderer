@@ -1,14 +1,11 @@
-package org.noble.helium.subsystems;
+package org.noble.helium;
 
 import com.badlogic.gdx.Gdx;
-import org.noble.helium.ConsoleColors;
-import org.noble.helium.Constants;
 
-import java.lang.management.OperatingSystemMXBean;
 import java.sql.Timestamp;
 import java.time.Instant;
 
-public class HeliumTelemetry {
+public class PrintUtils {
   //TODO: Implement Log4J (or something similar) and proper error handling
   public static void println(String tag, String message) {
     println(tag, message, printType.INFO);
@@ -22,17 +19,17 @@ public class HeliumTelemetry {
     switch (type) {
       case INFO -> Gdx.app.log(tag + "] [" + time, printType + ": " + message);
       case WARNING -> {
-        tag = ConsoleColors.YELLOW_BRIGHT + tag + ConsoleColors.RESET;
-        time = ConsoleColors.YELLOW_BRIGHT + time + ConsoleColors.RESET;
-        message = ConsoleColors.YELLOW_BRIGHT + message + ConsoleColors.RESET;
-        printType = ConsoleColors.YELLOW_BRIGHT + printType + ConsoleColors.RESET;
+        tag = ASCIIColors.YELLOW_BRIGHT + tag + ASCIIColors.RESET;
+        time = ASCIIColors.YELLOW_BRIGHT + time + ASCIIColors.RESET;
+        message = ASCIIColors.YELLOW_BRIGHT + message + ASCIIColors.RESET;
+        printType = ASCIIColors.YELLOW_BRIGHT + printType + ASCIIColors.RESET;
         Gdx.app.log(tag + "] [" + time, printType + ": " + message);
       }
       case ERROR -> {
-        tag = ConsoleColors.RED_BRIGHT + tag + ConsoleColors.RESET;
-        time = ConsoleColors.RED_BRIGHT + time + ConsoleColors.RESET;
-        message = ConsoleColors.RED_BRIGHT + message + ConsoleColors.RESET;
-        printType = ConsoleColors.RED_BRIGHT + printType + ConsoleColors.RESET;
+        tag = ASCIIColors.RED_BRIGHT + tag + ASCIIColors.RESET;
+        time = ASCIIColors.RED_BRIGHT + time + ASCIIColors.RESET;
+        message = ASCIIColors.RED_BRIGHT + message + ASCIIColors.RESET;
+        printType = ASCIIColors.RED_BRIGHT + printType + ASCIIColors.RESET;
         Gdx.app.log(tag + "] [" + time, printType + ": " + message);
       }
     }
