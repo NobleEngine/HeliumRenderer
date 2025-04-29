@@ -3,15 +3,16 @@ package org.noble.helium.actors;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import org.noble.helium.Constants;
 import org.noble.helium.Helium;
-import org.noble.helium.handling.ModelHandler;
 import org.noble.helium.handling.ObjectHandler;
 import org.noble.helium.handling.TextureHandler;
 import org.noble.helium.math.Dimensions3;
+import org.noble.helium.rendering.HeliumModelBuilder;
 import org.noble.helium.world.WorldObject;
 
 import java.util.ArrayList;
@@ -28,16 +29,15 @@ public class PlayerController extends Actor {
   String m_loggedName;
 
   private PlayerController() {
-    super(new Vector3(), 100, 8f, null);
+    super(null, 100, 8f);
     m_loggedName = "PlayerController";
     m_playerType = PlayerType.STANDARD;
     m_engine = Helium.getInstance();
 
-    ModelHandler.getInstance().addNewShape(m_loggedName + "-model", ModelHandler.Shape.SPHERE, TextureHandler.getInstance().getTexture(Color.WHITE),
-        new Vector3(), new Dimensions3(5f,15f,5f));
-    m_model = ModelHandler.getInstance().get(m_loggedName + "-model");
-
-    m_worldObject = new WorldObject(m_model, WorldObject.CollisionType.STANDARD);
+    HeliumModelBuilder modelBuilder = HeliumModelBuilder.getInstance();
+    TextureHandler textureHandler = TextureHandler.getInstance();
+    Model model = modelBuilder.create(HeliumModelBuilder.Shape.CUBE, textureHandler.getTexture(Color.WHITE), new Dimensions3(5f,15f,5f));
+    m_worldObject = new WorldObject(model, new Vector3(), WorldObject.CollisionType.STANDARD);
 
     m_camera = new PerspectiveCamera();
     m_camera.fieldOfView = 95;
@@ -80,7 +80,7 @@ public class PlayerController extends Actor {
 
   private ArrayList<WorldObject> getCollisions() {
     ArrayList<WorldObject> collisions = new ArrayList<>();
-    for (WorldObject object : ObjectHandler.getInstance().getAllObjects().values()) {
+    for (WorldObject object : ObjectHandler.getInstance().getAllObjects()) {
       if (!object.equals(m_worldObject) && m_worldObject.getBoundingBox().isColliding(object.getBoundingBox())) {
         collisions.add(object);
       }
@@ -158,8 +158,8 @@ public class PlayerController extends Actor {
     boolean shouldCalculate = true;
     for (WorldObject collision : collisions) {
       if (collision.getCollisionType() == WorldObject.CollisionType.CLIMBABLE) {
-        float topFaceOfObj = collision.getY() + collision.getHeight() / 2f;
-        float translation = topFaceOfObj + m_worldObject.getHeight() / 2f;
+        float topFaceOfObj = collision.getPosition().y + collision.getDimensions().getHeight() / 2f;
+        float translation = topFaceOfObj + m_worldObject.getDimensions().getHeight() / 2f;
         float movementSpeed = (m_engine.getDelta() * 2f);
         float yMovement = translation - nextPos.y;
         if (translation > nextPos.y) {
@@ -172,32 +172,32 @@ public class PlayerController extends Actor {
         setVerticalVelocity(0f);
         m_wantsToJump = false;
       }
-      float extentA_x = m_worldObject.getWidth() / 2.0f;
-      float extentA_y = m_worldObject.getHeight() / 2.0f;
-      float extentA_z = m_worldObject.getDepth() / 2.0f;
+      float extentA_x = m_worldObject.getDimensions().getWidth() / 2.0f;
+      float extentA_y = m_worldObject.getDimensions().getHeight() / 2.0f;
+      float extentA_z = m_worldObject.getDimensions().getDepth() / 2.0f;
 
-      float extentB_x = collision.getWidth() / 2.0f;
-      float extentB_y = collision.getHeight() / 2.0f;
-      float extentB_z = collision.getDepth() / 2.0f;
+      float extentB_x = collision.getDimensions().getWidth() / 2.0f;
+      float extentB_y = collision.getDimensions().getHeight() / 2.0f;
+      float extentB_z = collision.getDimensions().getDepth() / 2.0f;
 
-      float overlapX = (extentA_x + extentB_x) - Math.abs(m_worldObject.getX() - collision.getX());
-      float overlapY = (extentA_y + extentB_y) - Math.abs(m_worldObject.getY() - collision.getY());
-      float overlapZ = (extentA_z + extentB_z) - Math.abs(m_worldObject.getZ() - collision.getZ());
+      float overlapX = (extentA_x + extentB_x) - Math.abs(m_worldObject.getPosition().x - collision.getPosition().x);
+      float overlapY = (extentA_y + extentB_y) - Math.abs(m_worldObject.getPosition().y - collision.getPosition().y);
+      float overlapZ = (extentA_z + extentB_z) - Math.abs(m_worldObject.getPosition().z - collision.getPosition().z);
 
       if (shouldCalculate) {
         if (overlapX < overlapY && overlapX < overlapZ) {
           // Smallest overlap is in the x-axis
-          if (m_worldObject.getX() < collision.getX()) {
-            nextPos.x = collision.getX() - (extentA_x + extentB_x);
+          if (m_worldObject.getPosition().x < collision.getPosition().x) {
+            nextPos.x = collision.getPosition().x - (extentA_x + extentB_x);
           } else {
-            nextPos.x = collision.getX() + (extentA_x + extentB_x);
+            nextPos.x = collision.getPosition().x + (extentA_x + extentB_x);
           }
         } else if (overlapY < overlapX && overlapY < overlapZ) {
           // Smallest overlap is in the y-axis
-          if (m_worldObject.getY() < collision.getY()) {
-            nextPos.y = collision.getY() - (extentA_y + extentB_y);
+          if (m_worldObject.getPosition().y < collision.getPosition().y) {
+            nextPos.y = collision.getPosition().y - (extentA_y + extentB_y);
           } else {
-            nextPos.y = collision.getY() + (extentA_y + extentB_y);
+            nextPos.y = collision.getPosition().y + (extentA_y + extentB_y);
           }
           nextPos.y -= 0.0005f;
           setVerticalVelocity(0);
@@ -207,10 +207,10 @@ public class PlayerController extends Actor {
           m_wantsToJump = false;
         } else {
           // Smallest overlap is in the z-axis
-          if (m_worldObject.getZ() < collision.getZ()) {
-            nextPos.z = collision.getZ() - (extentA_z + extentB_z);
+          if (m_worldObject.getPosition().z < collision.getPosition().z) {
+            nextPos.z = collision.getPosition().z - (extentA_z + extentB_z);
           } else {
-            nextPos.z = collision.getZ() + (extentA_z + extentB_z);
+            nextPos.z = collision.getPosition().z + (extentA_z + extentB_z);
           }
         }
       }

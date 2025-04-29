@@ -1,16 +1,19 @@
 package org.noble.helium.handling;
 
+import com.badlogic.gdx.graphics.g3d.Environment;
 import org.noble.helium.PrintUtils;
+import org.noble.helium.rendering.HeliumModelBatch;
 import org.noble.helium.world.WorldObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ObjectHandler {
   private static ObjectHandler m_instance;
-  private final HashMap<String, WorldObject> m_objects;
+  private final ArrayList<WorldObject> m_objects;
 
   private ObjectHandler() {
-    m_objects = new HashMap<>();
+    m_objects = new ArrayList<>();
     PrintUtils.println("Object Handler", "Object handler initialized");
   }
 
@@ -21,21 +24,27 @@ public class ObjectHandler {
     return m_instance;
   }
 
-  public void add(String name, WorldObject object) {
-    m_objects.put(name, object);
+  public void add(WorldObject object) {
+    m_objects.add(object);
   }
 
-  public HashMap<String, WorldObject> getAllObjects() {
+  public ArrayList<WorldObject> getAllObjects() {
     return m_objects;
   }
 
   public void clear() {
+    for(WorldObject object : m_objects) {
+      object.dispose();
+    }
     m_objects.clear();
   }
 
-  public void update() {
-    for(WorldObject object : m_objects.values()) {
+  public void update(HeliumModelBatch batch, Environment environment) {
+    for(WorldObject object : m_objects) {
       object.update();
+      if(object.shouldRender()) {
+        batch.render(object, environment);
+      }
     }
   }
 }

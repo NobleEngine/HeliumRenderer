@@ -18,12 +18,10 @@ public class LevelHandler {
   private static LevelHandler m_instance;
   private HeliumLevel m_currentLevel;
   private final Helium m_helium;
-  private final ModelHandler m_modelHandler;
   private final ObjectHandler m_objectHandler;
 
   private LevelHandler() {
     m_helium = Helium.getInstance();
-    m_modelHandler = ModelHandler.getInstance();
     m_objectHandler = ObjectHandler.getInstance();
 //    changeScreen("test.lda");
     changeScreen(new PhysicsTest());
@@ -67,7 +65,6 @@ public class LevelHandler {
       PrintUtils.println("Level Handler","Starting game on " + level.getClass().getSimpleName());
     }
 //    m_userInterface.clear();
-    m_modelHandler.clear();
     TextureHandler.getInstance().clear();
     m_objectHandler.clear();
     m_helium.setScreen(level);

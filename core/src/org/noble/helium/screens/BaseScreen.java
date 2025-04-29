@@ -11,17 +11,17 @@ import org.noble.helium.Helium;
 import org.noble.helium.actors.PlayerController;
 import org.noble.helium.handling.ActorHandler;
 import org.noble.helium.handling.ObjectHandler;
-import org.noble.helium.handling.ModelHandler;
 import org.noble.helium.handling.TextureHandler;
 import org.noble.helium.rendering.HeliumModelBatch;
 import org.noble.helium.PrintUtils;
+import org.noble.helium.rendering.HeliumModelBuilder;
 
 public class BaseScreen implements Screen {
   public final Helium m_game;
   public final HeliumModelBatch m_batch;
   public final PlayerController m_player;
-  public final ModelHandler m_modelHandler;
   public final TextureHandler m_textureHandler;
+  public final HeliumModelBuilder m_modelBuilder;
   public final ObjectHandler m_objectHandler;
   public final ActorHandler m_actorHandler;
   private final Viewport m_viewport;
@@ -31,7 +31,7 @@ public class BaseScreen implements Screen {
     m_game = Helium.getInstance();
     m_batch = m_game.getModelBatch();
     m_player = PlayerController.getInstance();
-    m_modelHandler = ModelHandler.getInstance();
+    m_modelBuilder = HeliumModelBuilder.getInstance();
     m_objectHandler = ObjectHandler.getInstance();
     m_actorHandler = ActorHandler.getInstance();
     m_textureHandler = TextureHandler.getInstance();
@@ -55,14 +55,14 @@ public class BaseScreen implements Screen {
       PrintUtils.println("Renderer", "Model batch was not ended last cycle", PrintUtils.printType.ERROR);
     }
 
+    m_batch.begin(m_player.getCamera());
+    m_objectHandler.update(m_batch, m_environment);
+
     if(m_game.getStatus() == Helium.State.PLAY) {
       m_player.update();
-      m_objectHandler.update();
       m_actorHandler.update();
     }
 
-    m_batch.begin(m_player.getCamera());
-    m_modelHandler.render(m_batch, m_environment);
   }
 
   @Override
@@ -92,7 +92,6 @@ public class BaseScreen implements Screen {
 
   @Override
   public void dispose() {
-    m_modelHandler.clear();
     m_objectHandler.clear();
     m_actorHandler.clear();
   }

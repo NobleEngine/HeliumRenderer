@@ -5,7 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL32;
 import org.noble.helium.actors.PlayerController;
 import org.noble.helium.handling.LevelHandler;
-import org.noble.helium.handling.ModelHandler;
+import org.noble.helium.handling.ObjectHandler;
 import org.noble.helium.handling.TextureHandler;
 import org.noble.helium.math.Units;
 import org.noble.helium.subsystems.input.InputProcessing;
@@ -24,7 +24,6 @@ public class Helium extends Game {
   private String m_windowTitle;
   private static Helium m_instance;
   private final ArrayList<Subsystem> m_subsystems;
-  private ModelHandler m_modelHandler;
   private PlayerController m_player;
   private HeliumModelBatch m_modelBatch;
   private LevelHandler m_levelHandler;
@@ -63,7 +62,6 @@ public class Helium extends Game {
     PrintUtils.println("Telemetry", "Warnings look like this", PrintUtils.printType.WARNING);
     PrintUtils.println("Telemetry", "Errors look like this", PrintUtils.printType.ERROR);
 
-    m_modelHandler = ModelHandler.getInstance();
     m_player = PlayerController.getInstance();
     m_levelHandler = LevelHandler.getInstance();
     m_subsystems.add(ScriptRunner.getInstance());
@@ -76,7 +74,7 @@ public class Helium extends Game {
 
   @Override
   public void render() {
-    setTitle(Constants.Engine.k_prettyName + " - " + m_levelHandler.getLevelName());
+    setTitle(Constants.Engine.k_prettyName + " - " + m_levelHandler.getLevelName() + " - " + getStatus());
     m_delta = Gdx.graphics.getDeltaTime();
     double startTime = Units.nanosecondsToSeconds(System.nanoTime()); //in seconds
 
@@ -97,6 +95,7 @@ public class Helium extends Game {
 
     while (Units.nanosecondsToSeconds(System.nanoTime()) - startTime < m_targetTime) {
       try {
+        // This warning is not problematic.
         Thread.sleep(0);
       } catch (InterruptedException e) {
         PrintUtils.error(Constants.Engine.k_prettyName, e, PrintUtils.ErrorType.FATAL, true);
@@ -106,9 +105,7 @@ public class Helium extends Game {
 
   public void setWindowMode(WindowMode windowMode) {
     switch(windowMode) {
-      //TODO: Implement these modes, go into Windowed or Fullscreen for now
       case WINDOWED -> Gdx.graphics.setWindowedMode(1280, 720);
-      case BORDERLESS -> Gdx.graphics.setWindowedMode(1280, 720);
       case FULLSCREEN -> Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
       case MAXIMIZED -> Gdx.graphics.setWindowedMode(Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
     }
@@ -151,7 +148,7 @@ public class Helium extends Game {
   @Override
   public void dispose() {
     TextureHandler.getInstance().clear();
-    m_modelHandler.clear();
+    ObjectHandler.getInstance().clear();
     m_subsystems.forEach(Subsystem::dispose);
     m_levelHandler.dispose();
   }
