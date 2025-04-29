@@ -14,16 +14,18 @@ import org.noble.helium.subsystems.Subsystem;
 
 import java.lang.management.OperatingSystemMXBean;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Helium extends Game {
   private State m_state;
   private float m_delta;
+  private String m_windowTitle;
   private static Helium m_instance;
   private final ArrayList<Subsystem> m_subsystems;
   private ModelHandler m_modelHandler;
   private PlayerController m_player;
   private HeliumModelBatch m_modelBatch;
-  private LevelHandler m_screenHandler;
+  private LevelHandler m_levelHandler;
 
   private Helium() {
     m_subsystems = new ArrayList<>();
@@ -61,7 +63,7 @@ public class Helium extends Game {
 
     m_modelHandler = ModelHandler.getInstance();
     m_player = PlayerController.getInstance();
-    m_screenHandler = LevelHandler.getInstance();
+    m_levelHandler = LevelHandler.getInstance();
     m_subsystems.add(ScriptRunner.getInstance());
     m_subsystems.add(InputProcessing.getInstance());
 
@@ -77,6 +79,7 @@ public class Helium extends Game {
 
   @Override
   public void render() {
+    setTitle(Constants.Engine.k_prettyName + " - " + m_levelHandler.getLevelName() + " - " + getStatus());
     m_delta = Gdx.graphics.getDeltaTime();
     //TODO: checkOverrun(m_delta);
     Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -124,6 +127,13 @@ public class Helium extends Game {
     PrintUtils.println("Helium", "Game state set to " + state);
   }
 
+  public void setTitle(String title) {
+    if(!Objects.equals(title, m_windowTitle)) {
+      m_windowTitle = title;
+      Gdx.graphics.setTitle(m_windowTitle);
+    }
+  }
+
   public enum State {
     PLAY, PAUSE
   }
@@ -137,6 +147,6 @@ public class Helium extends Game {
     TextureHandler.getInstance().clear();
     m_modelHandler.clear();
     m_subsystems.forEach(Subsystem::dispose);
-    m_screenHandler.dispose();
+    m_levelHandler.dispose();
   }
 }

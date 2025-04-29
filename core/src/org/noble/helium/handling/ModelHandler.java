@@ -29,6 +29,7 @@ public class ModelHandler {
   private final ObjLoader m_objLoader;
   private final HashMap<String, HeliumModelInstance> m_modelInstances;
 
+  //TODO: Merge ModelHandler and ObjectHandler. Everything should be considered a WorldObject.
   private ModelHandler() {
     m_modelBuilder = new ModelBuilder();
     m_modelInstances = new HashMap<>();
@@ -62,38 +63,17 @@ public class ModelHandler {
     return null;
   }
 
-  public void addNewShape(String name, Shape shape, Color color, Vector3 position, Dimensions3 dimensions) {
+  public void addNewShape(String name, Shape shape, Texture texture, Vector3 position, Dimensions3 dimensions) {
     Model model = null;
 
     switch(shape) {
       case CUBE -> model = m_modelBuilder.createBox(
           dimensions.getWidth(), dimensions.getHeight(), dimensions.getDepth(),
-          new Material(ColorAttribute.createDiffuse(color)),
-          VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
-      case SPHERE -> model = m_modelBuilder.createSphere(
-          dimensions.getWidth(), dimensions.getHeight(), dimensions.getDepth(), 100, 100,
-          new Material(ColorAttribute.createDiffuse(color)),
-          VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
-    }
-
-    HeliumModelInstance instance = new HeliumModelInstance(model, position);
-
-    m_modelInstances.put(name, instance);
-  }
-
-  public void addNewShape(String name, Shape shape, String textureName, Vector3 position, Dimensions3 dimensions) {
-    Model model = null;
-    Texture texture = m_textureHandler.getTexture(textureName);
-
-    switch(shape) {
-      //FIXME: Textures
-      case CUBE -> model = m_modelBuilder.createBox(
-          dimensions.getWidth(), dimensions.getHeight(), dimensions.getDepth(),
-          new Material(ColorAttribute.createDiffuse(Color.WHITE), TextureAttribute.createDiffuse(texture)),
+          new Material(TextureAttribute.createDiffuse(texture)),
           VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates);
       case SPHERE -> model = m_modelBuilder.createSphere(
           dimensions.getWidth(), dimensions.getHeight(), dimensions.getDepth(), 100, 100,
-          new Material(ColorAttribute.createDiffuse(Color.WHITE), TextureAttribute.createNormal(texture)),
+          new Material(TextureAttribute.createNormal(texture)),
           VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates);
     }
 

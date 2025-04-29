@@ -7,6 +7,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.noble.helium.handling.ModelHandler;
 import org.noble.helium.handling.ObjectHandler;
+import org.noble.helium.handling.TextureHandler;
 import org.noble.helium.math.Dimensions3;
 import org.noble.helium.PrintUtils;
 import org.noble.helium.world.WorldObject;
@@ -19,7 +20,7 @@ public class LDAParser {
     Map<String, JsonElement> worldElements = new HashMap<>();
     Map<String, WorldObject> objects = new HashMap<>();
     elements.forEach((key, value) -> {
-      if(key.startsWith("world/")) {
+      if (key.startsWith("world/")) {
         String fileName = key.substring(key.lastIndexOf('/') + 1)
             .replace(".json", ""); // Remove folder and .json from name
         worldElements.put(fileName, value);
@@ -34,7 +35,7 @@ public class LDAParser {
           modelHandler.addNewShape(
               key + "-model",
               toShapeType(object.get("shape").getAsString()),
-              toColor(object.get("color").getAsString()),
+              TextureHandler.getInstance().getTexture(toColor(object.get("color").getAsString())),
               toVector3(object.get("position").getAsJsonArray()),
               new Dimensions3(toVector3(object.get("dimensions").getAsJsonArray())));
         } else if (object.get("type").getAsString().equals("model")) {
@@ -49,13 +50,13 @@ public class LDAParser {
         PrintUtils.println("Level Data Archive", "Failed to add world object: " + key, PrintUtils.printType.ERROR);
         return;
       }
-      objects.put(key + "-object",new WorldObject(modelHandler.get(key + "-model"), WorldObject.CollisionType.STANDARD));
+      objects.put(key + "-object", new WorldObject(modelHandler.get(key + "-model"), WorldObject.CollisionType.STANDARD));
     });
     objects.forEach((key, value) -> ObjectHandler.getInstance().add(key + "-object", value));
   }
 
   private static ModelHandler.Shape toShapeType(String type) {
-    switch(type) {
+    switch (type) {
       case "rectangle" -> {
         return ModelHandler.Shape.CUBE;
       }

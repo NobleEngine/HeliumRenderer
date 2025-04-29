@@ -1,6 +1,8 @@
 package org.noble.helium.handling;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import org.noble.helium.PrintUtils;
 
@@ -32,6 +34,15 @@ public class TextureHandler {
   public Texture getTexture(String textureName) {
     loadTexture(textureName);
     return m_textures.get(textureName);
+  }
+
+  public Texture getTexture(Color color) {
+    Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+    pixmap.setColor(color);
+    pixmap.fill();
+    Texture texture = new Texture(pixmap);
+    pixmap.dispose();
+    return texture;
   }
 
   public void clear() {

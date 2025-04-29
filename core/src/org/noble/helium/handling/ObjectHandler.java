@@ -26,26 +26,12 @@ public class ObjectHandler {
     m_objects.put(name, object);
   }
 
-  public WorldObject get(String name) {
-    return m_objects.get(name);
-  }
-
   public HashMap<String, WorldObject> getAllObjects() {
     return m_objects;
   }
 
   public void clear() {
     m_objects.clear();
-  }
-
-  public ArrayList<WorldObject> getCollidingObjects(WorldObject object) {
-    ArrayList<WorldObject> collisions = new ArrayList<>();
-    for(WorldObject obj : getAllObjects().values()) {
-      if(obj.isColliding(object)) {
-        collisions.add(obj);
-      }
-    }
-    return collisions;
   }
 
   public void update() {

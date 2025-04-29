@@ -12,40 +12,41 @@ import org.noble.helium.world.WorldObject;
 
 public class PhysicsTest extends HeliumLevel {
   Enemy enemy;
+
   public PhysicsTest() {
     super();
   }
 
   @Override
   public void init() {
-    m_modelHandler.addNewShape("enemy", ModelHandler.Shape.CUBE, Color.RED, new Vector3(100,5,0), new Dimensions3(2,2,2));
-    enemy = new Enemy(new Vector3(100,5,0),10,10,5f, m_modelHandler.get("enemy"), m_player);
+    m_modelHandler.addNewShape("enemy", ModelHandler.Shape.CUBE, m_textureHandler.getTexture(Color.RED), new Vector3(100, 5, 0), new Dimensions3(2, 2, 2));
+    enemy = new Enemy(new Vector3(100, 5, 0), 10, 10, 5f, m_modelHandler.get("enemy"), m_player);
     m_actorHandler.addActor(enemy);
 
     m_modelHandler.addNewShape(
-        "wall-01", ModelHandler.Shape.CUBE, Color.CORAL,
-        new Vector3(0, 10, 20), new Dimensions3(50,100,5));
+        "wall-01", ModelHandler.Shape.CUBE, m_textureHandler.getTexture(Color.CORAL),
+        new Vector3(0, 10, 20), new Dimensions3(50, 100, 5));
 
     m_modelHandler.addNewShape(
-        "cube-01", ModelHandler.Shape.CUBE, Color.FIREBRICK,
-        new Vector3(), new Dimensions3(30f,10f,50f));
+        "cube-01", ModelHandler.Shape.CUBE, m_textureHandler.getTexture(Color.FIREBRICK),
+        new Vector3(), new Dimensions3(30f, 10f, 50f));
 
     m_modelHandler.addNewShape(
-        "cube-02", ModelHandler.Shape.CUBE, Color.OLIVE,
-        new Vector3(50f,0f,0f), new Dimensions3(30f,1f,50f));
+        "cube-02", ModelHandler.Shape.CUBE, m_textureHandler.getTexture(Color.OLIVE),
+        new Vector3(50f, 0f, 0f), new Dimensions3(30f, 1f, 50f));
     m_modelHandler.addNewShape(
-        "cube-03", ModelHandler.Shape.CUBE, Color.CHARTREUSE,
-        new Vector3(90f,0f,0f), new Dimensions3(30f,1f,50f));
+        "cube-03", ModelHandler.Shape.CUBE, m_textureHandler.getTexture(Color.CHARTREUSE),
+        new Vector3(90f, 0f, 0f), new Dimensions3(30f, 1f, 50f));
     m_modelHandler.addNewShape(
-        "cube-04", ModelHandler.Shape.CUBE, "textures/dirt.png",
-        new Vector3(130f,0f,0f), new Dimensions3(30f,30f,30f));
+        "cube-04", ModelHandler.Shape.CUBE, m_textureHandler.getTexture("textures/dirt.png"),
+        new Vector3(130f, 0f, 0f), new Dimensions3(30f, 30f, 30f));
     m_modelHandler.addNewShape(
-        "ladder", ModelHandler.Shape.CUBE, Color.WHITE,
-        new Vector3(5,10,25), new Dimensions3(5f,100.1f,16f));
+        "ladder", ModelHandler.Shape.CUBE, m_textureHandler.getTexture(Color.WHITE),
+        new Vector3(5, 10, 25), new Dimensions3(5f, 100.1f, 16f));
 
-    for(int i = 0; i < 200; i++) {
+    for (int i = 0; i < 200; i++) {
       m_modelHandler.addNewShape(
-          "stair-" + i, ModelHandler.Shape.CUBE, Color.BLUE,
+          "stair-" + i, ModelHandler.Shape.CUBE, m_textureHandler.getTexture(Color.BLUE),
           new Vector3(170 + (i), i, 0), new Dimensions3(2, 1, 30));
       m_objectHandler.add("stair" + i, new WorldObject(m_modelHandler.get("stair-" + i), WorldObject.CollisionType.CLIMBABLE));
     }
@@ -57,7 +58,7 @@ public class PhysicsTest extends HeliumLevel {
     m_objectHandler.add("floor3", new WorldObject(m_modelHandler.get("cube-03"), WorldObject.CollisionType.STANDARD));
     m_objectHandler.add("floor4", new WorldObject(m_modelHandler.get("cube-04"), WorldObject.CollisionType.STANDARD));
 
-    m_player.setPosition(new Vector3(0,50,0));
+    m_player.setPosition(new Vector3(0, 50, 0));
     super.init();
   }
 
@@ -65,8 +66,8 @@ public class PhysicsTest extends HeliumLevel {
   public void render(float delta) {
     super.render(delta);
 
-    if(m_player.getPosition().y < -100f) {
-      m_player.setPosition(new Vector3(m_player.getX(),150,m_player.getZ()));
+    if (m_player.getPosition().y < -100f) {
+      m_player.setPosition(new Vector3(m_player.getX(), 150, m_player.getZ()));
       LevelHandler.getInstance().changeScreen("test.lda");
     }
   }

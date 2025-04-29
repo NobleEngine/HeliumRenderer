@@ -37,6 +37,10 @@ public class LevelHandler {
     return m_instance;
   }
 
+  public String getLevelName() {
+    return m_currentLevel.getClass().getSimpleName();
+  }
+
   public void dispose() {
     m_currentLevel.dispose();
   }

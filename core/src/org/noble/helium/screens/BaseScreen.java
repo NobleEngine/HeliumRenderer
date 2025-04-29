@@ -12,6 +12,7 @@ import org.noble.helium.actors.PlayerController;
 import org.noble.helium.handling.ActorHandler;
 import org.noble.helium.handling.ObjectHandler;
 import org.noble.helium.handling.ModelHandler;
+import org.noble.helium.handling.TextureHandler;
 import org.noble.helium.rendering.HeliumModelBatch;
 import org.noble.helium.PrintUtils;
 
@@ -20,6 +21,7 @@ public class BaseScreen implements Screen {
   public final HeliumModelBatch m_batch;
   public final PlayerController m_player;
   public final ModelHandler m_modelHandler;
+  public final TextureHandler m_textureHandler;
   public final ObjectHandler m_objectHandler;
   public final ActorHandler m_actorHandler;
   private final Viewport m_viewport;
@@ -32,6 +34,7 @@ public class BaseScreen implements Screen {
     m_modelHandler = ModelHandler.getInstance();
     m_objectHandler = ObjectHandler.getInstance();
     m_actorHandler = ActorHandler.getInstance();
+    m_textureHandler = TextureHandler.getInstance();
     m_game.setState(Helium.State.PLAY);
 
     m_viewport = new ScreenViewport(m_player.getCamera());

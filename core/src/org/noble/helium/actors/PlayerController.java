@@ -10,6 +10,7 @@ import org.noble.helium.Constants;
 import org.noble.helium.Helium;
 import org.noble.helium.handling.ModelHandler;
 import org.noble.helium.handling.ObjectHandler;
+import org.noble.helium.handling.TextureHandler;
 import org.noble.helium.math.Dimensions3;
 import org.noble.helium.world.WorldObject;
 
@@ -32,7 +33,7 @@ public class PlayerController extends Actor {
     m_playerType = PlayerType.STANDARD;
     m_engine = Helium.getInstance();
 
-    ModelHandler.getInstance().addNewShape(m_loggedName + "-model", ModelHandler.Shape.SPHERE, Color.WHITE,
+    ModelHandler.getInstance().addNewShape(m_loggedName + "-model", ModelHandler.Shape.SPHERE, TextureHandler.getInstance().getTexture(Color.WHITE),
         new Vector3(), new Dimensions3(5f,15f,5f));
     m_model = ModelHandler.getInstance().get(m_loggedName + "-model");
 
