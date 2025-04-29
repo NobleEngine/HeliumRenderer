@@ -7,6 +7,7 @@ import org.noble.helium.actors.PlayerController;
 import org.noble.helium.handling.LevelHandler;
 import org.noble.helium.handling.ModelHandler;
 import org.noble.helium.handling.TextureHandler;
+import org.noble.helium.math.Units;
 import org.noble.helium.subsystems.input.InputProcessing;
 import org.noble.helium.rendering.HeliumModelBatch;
 import org.noble.helium.subsystems.scripting.ScriptRunner;
@@ -19,6 +20,7 @@ import java.util.Objects;
 public class Helium extends Game {
   private State m_state;
   private float m_delta;
+  private double m_targetTime;
   private String m_windowTitle;
   private static Helium m_instance;
   private final ArrayList<Subsystem> m_subsystems;
@@ -66,12 +68,7 @@ public class Helium extends Game {
     m_levelHandler = LevelHandler.getInstance();
     m_subsystems.add(ScriptRunner.getInstance());
     m_subsystems.add(InputProcessing.getInstance());
-
-//    m_userInterface.addLabel("Engine-FPS", "FPS: " + Gdx.graphics.getFramesPerSecond(), 0, 0, 100, 25, Color.WHITE);
-//    m_userInterface.addLabel("PlayerController-Position", "", 0, 30, 100, 25, Color.WHITE);
-//    m_userInterface.addLabel("Engine-Status", "", 0, 60, 100, 25, Color.WHITE);
-//    m_userInterface.addLabel("Engine-FrametimeMS", "", 0, 90, 100, 25, Color.WHITE);
-//    m_userInterface.addLabel("PlayerController-Health", "", 0, 120, 100, 25, Color.WHITE);
+    setTargetFPS(Gdx.graphics.getDisplayMode().refreshRate);
 
     m_modelBatch = new HeliumModelBatch();
     PrintUtils.println(Constants.Engine.k_prettyName, "Ready to render!");
@@ -79,27 +76,32 @@ public class Helium extends Game {
 
   @Override
   public void render() {
-    setTitle(Constants.Engine.k_prettyName + " - " + m_levelHandler.getLevelName() + " - " + getStatus());
+    setTitle(Constants.Engine.k_prettyName + " - " + m_levelHandler.getLevelName());
     m_delta = Gdx.graphics.getDeltaTime();
-    //TODO: checkOverrun(m_delta);
+    double startTime = Units.nanosecondsToSeconds(System.nanoTime()); //in seconds
+
+    if(m_delta > m_targetTime + 0.1) {
+      PrintUtils.println(Constants.Engine.k_prettyName, "Loop overrun by " +
+          String.valueOf(m_delta - m_targetTime).substring(0,6) + " seconds!", PrintUtils.printType.WARNING);
+    }
+
     Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     Gdx.gl.glClear(GL32.GL_COLOR_BUFFER_BIT | GL32.GL_DEPTH_BUFFER_BIT);
+
     if(getStatus() == State.PLAY) {
       m_player.update();
     }
 
-//    VisLabel FPSLabel = m_userInterface.getLabel("Engine-FPS");
-//    m_userInterface.setLabel("Engine-FPS", "FPS: " + Gdx.graphics.getFramesPerSecond(), FPSLabel.getX(),
-//        FPSLabel.getY(), new Dimensions2(FPSLabel.getWidth(), FPSLabel.getHeight()), FPSLabel.getColor());
-//    VisLabel StatusLabel = m_userInterface.getLabel("Engine-Status");
-//    m_userInterface.setLabel("Engine-Status", "Status: " + getStatus(), StatusLabel.getX(),
-//        StatusLabel.getY(), new Dimensions2(StatusLabel.getWidth(), StatusLabel.getHeight()), StatusLabel.getColor());
-//    VisLabel FrametimeMSLabel = m_userInterface.getLabel("Engine-FrametimeMS");
-//    m_userInterface.setLabel("Engine-FrametimeMS", "Frame time: " + getDelta(), FrametimeMSLabel.getX(),
-//        FrametimeMSLabel.getY(), new Dimensions2(FrametimeMSLabel.getWidth(), FrametimeMSLabel.getHeight()), FrametimeMSLabel.getColor());
-
     super.render();
     m_subsystems.forEach(Subsystem::update);
+
+    while (Units.nanosecondsToSeconds(System.nanoTime()) - startTime < m_targetTime) {
+      try {
+        Thread.sleep(0);
+      } catch (InterruptedException e) {
+        PrintUtils.error(Constants.Engine.k_prettyName, e, PrintUtils.ErrorType.FATAL, true);
+      }
+    }
   }
 
   public void setWindowMode(WindowMode windowMode) {
@@ -125,6 +127,10 @@ public class Helium extends Game {
     }
 
     PrintUtils.println("Helium", "Game state set to " + state);
+  }
+
+  public void setTargetFPS(int fps) {
+    m_targetTime = 1.0 / fps;
   }
 
   public void setTitle(String title) {

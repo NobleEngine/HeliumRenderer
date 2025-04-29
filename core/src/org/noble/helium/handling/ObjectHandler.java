@@ -3,7 +3,6 @@ package org.noble.helium.handling;
 import org.noble.helium.PrintUtils;
 import org.noble.helium.world.WorldObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ObjectHandler {
