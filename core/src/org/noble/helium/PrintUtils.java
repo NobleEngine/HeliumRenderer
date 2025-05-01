@@ -19,17 +19,17 @@ public class PrintUtils {
     switch (type) {
       case INFO -> Gdx.app.log(tag + "] [" + time, printType + ": " + message);
       case WARNING -> {
-        tag = ASCIIColors.YELLOW_BRIGHT + tag + ASCIIColors.RESET;
-        time = ASCIIColors.YELLOW_BRIGHT + time + ASCIIColors.RESET;
-        message = ASCIIColors.YELLOW_BRIGHT + message + ASCIIColors.RESET;
-        printType = ASCIIColors.YELLOW_BRIGHT + printType + ASCIIColors.RESET;
+        tag = ANSIColors.YELLOW_BRIGHT + tag + ANSIColors.RESET;
+        time = ANSIColors.YELLOW_BRIGHT + time + ANSIColors.RESET;
+        message = ANSIColors.YELLOW_BRIGHT + message + ANSIColors.RESET;
+        printType = ANSIColors.YELLOW_BRIGHT + printType + ANSIColors.RESET;
         Gdx.app.log(tag + "] [" + time, printType + ": " + message);
       }
       case ERROR -> {
-        tag = ASCIIColors.RED_BRIGHT + tag + ASCIIColors.RESET;
-        time = ASCIIColors.RED_BRIGHT + time + ASCIIColors.RESET;
-        message = ASCIIColors.RED_BRIGHT + message + ASCIIColors.RESET;
-        printType = ASCIIColors.RED_BRIGHT + printType + ASCIIColors.RESET;
+        tag = ANSIColors.RED_BRIGHT + tag + ANSIColors.RESET;
+        time = ANSIColors.RED_BRIGHT + time + ANSIColors.RESET;
+        message = ANSIColors.RED_BRIGHT + message + ANSIColors.RESET;
+        printType = ANSIColors.RED_BRIGHT + printType + ANSIColors.RESET;
         Gdx.app.log(tag + "] [" + time, printType + ": " + message);
       }
     }

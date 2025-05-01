@@ -1,7 +1,7 @@
 package org.noble.helium;
 
 @SuppressWarnings("unused")
-public class ASCIIColors {
+public class ANSIColors {
   public static final String RESET = "\033[0m";
 
   public static final String BLACK = "\033[0;30m";
