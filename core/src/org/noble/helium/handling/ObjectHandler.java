@@ -6,7 +6,6 @@ import org.noble.helium.rendering.HeliumModelBatch;
 import org.noble.helium.world.WorldObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ObjectHandler {
   private static ObjectHandler m_instance;

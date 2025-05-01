@@ -31,18 +31,25 @@ public class TextureHandler {
     }
   }
 
+  private void loadTexture(Color color) {
+    if(m_textures.get(color.toString()) == null) {
+      Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+      pixmap.setColor(color);
+      pixmap.fill();
+      Texture texture = new Texture(pixmap);
+      pixmap.dispose();
+      m_textures.put(color.toString(), texture);
+    }
+  }
+
   public Texture getTexture(String textureName) {
     loadTexture(textureName);
     return m_textures.get(textureName);
   }
 
   public Texture getTexture(Color color) {
-    Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-    pixmap.setColor(color);
-    pixmap.fill();
-    Texture texture = new Texture(pixmap);
-    pixmap.dispose();
-    return texture;
+    loadTexture(color);
+    return m_textures.get(color.toString());
   }
 
   public void clear() {

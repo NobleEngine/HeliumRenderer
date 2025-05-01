@@ -4,14 +4,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import org.noble.helium.handling.ObjectHandler;
-import org.noble.helium.handling.TextureHandler;
-import org.noble.helium.math.Dimensions3;
 import org.noble.helium.PrintUtils;
-import org.noble.helium.world.WorldObject;
+import org.noble.helium.rendering.HeliumModelBuilder;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class LDAParser {
@@ -54,20 +49,20 @@ public class LDAParser {
 //    objects.forEach((key, value) -> ObjectHandler.getInstance().add(key + "-object", value));
   }
 
-//  private static ModelHandler.Shape toShapeType(String type) {
-//    switch (type) {
-//      case "rectangle" -> {
-//        return ModelHandler.Shape.CUBE;
-//      }
-//      case "sphere" -> {
-//        return ModelHandler.Shape.SPHERE;
-//      }
-//      default -> {
-//        PrintUtils.println("Level Data Archive", "Unknown shape type: " + type, PrintUtils.printType.ERROR);
-//        return ModelHandler.Shape.CUBE;
-//      }
-//    }
-//  }
+  private static HeliumModelBuilder.Shape toShapeType(String type) {
+    switch (type) {
+      case "rectangle" -> {
+        return HeliumModelBuilder.Shape.CUBE;
+      }
+      case "sphere" -> {
+        return HeliumModelBuilder.Shape.SPHERE;
+      }
+      default -> {
+        PrintUtils.println("Level Data Archive", "Unknown shape type: " + type, PrintUtils.printType.ERROR);
+        return HeliumModelBuilder.Shape.CUBE;
+      }
+    }
+  }
 
   private static Color toColor(String color) {
     if (color.startsWith("rgba(")) {
