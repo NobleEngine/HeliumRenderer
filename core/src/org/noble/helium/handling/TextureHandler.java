@@ -27,12 +27,14 @@ public class TextureHandler {
 
   private void loadTexture(String textureName) {
     if (m_textures.get(textureName) == null) {
+      PrintUtils.println("Texture Handler","Loading texture: " + textureName);
       m_textures.put(textureName, new Texture(Gdx.files.internal(textureName)));
     }
   }
 
   private void loadTexture(Color color) {
     if(m_textures.get(color.toString()) == null) {
+      PrintUtils.println("Texture Handler","Loading texture: " + color);
       Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
       pixmap.setColor(color);
       pixmap.fill();
