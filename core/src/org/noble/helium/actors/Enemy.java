@@ -26,7 +26,7 @@ public class Enemy extends Actor {
       return;
     }
 
-    if (!m_worldObject.isColliding(target)) {
+    if (!m_worldObject.getBoundingBox().isColliding(target.getBoundingBox())) {
       if (target.getPosition().x > getX()) {
         nextPosition.x += getSpeed() * delta;
       } else if (target.getPosition().x < getX()) {

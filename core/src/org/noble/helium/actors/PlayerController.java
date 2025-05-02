@@ -81,7 +81,7 @@ public class PlayerController extends Actor {
   private ArrayList<WorldObject> getCollisions() {
     ArrayList<WorldObject> collisions = new ArrayList<>();
     for (WorldObject object : ObjectHandler.getInstance().getAllObjects()) {
-      if (!object.equals(m_worldObject) && m_worldObject.getBoundingBox().isColliding(object.getBoundingBox())) {
+      if (!object.equals(m_worldObject) && m_worldObject.isColliding(object)) {//getBoundingBox().isColliding(object.getBoundingBox())) {
         collisions.add(object);
       }
     }

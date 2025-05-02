@@ -94,11 +94,11 @@ public class LDAParser {
 
   private static Color toColor(String color) {
     if (color.startsWith("rgba(")) {
-      return parseRGBA(color);  // Parse rgba() format
+      return parseRGBA(color);
     } else if (color.startsWith("#")) {
-      return Color.valueOf(color);  // Parse hex format
+      return Color.valueOf(color);
     }
-    return null;  // Return null for invalid formats
+    return null;
   }
 
   private static Color parseRGBA(String rgbaColor) {
