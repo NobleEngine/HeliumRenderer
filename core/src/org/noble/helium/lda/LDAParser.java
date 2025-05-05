@@ -31,7 +31,7 @@ public class LDAParser {
         PrintUtils.println("Level Data Archive", "Adding world object: " + key);
         JsonObject object = value.getAsJsonObject();
         Texture texture;
-        Model model;
+        Model model = null;
         Dimensions3 dimensions;
         Vector3 position;
 
@@ -60,14 +60,14 @@ public class LDAParser {
         if (object.get("type").getAsString().equals("shape")) {
           model = HeliumModelBuilder.getInstance().create(toShapeType(object.get("shape").getAsString()), texture, dimensions);
         } else if (object.get("type").getAsString().equals("model")) {
-          model = HeliumModelBuilder.getInstance().create(object.get("model").getAsString(), HeliumModelBuilder.ModelType.OBJ); //TODO: wrong
+//          model = HeliumModelBuilder.getInstance().create(object.get("model").getAsString(), HeliumModelBuilder.ModelType.OBJ); //TODO: wrong
         } else {
           model = null;
         }
 
-        if(model == null || position == null || dimensions == null ) {
+//        if(model == null || position == null || dimensions == null ) {
 //          PrintUtils.error("Level Data Archive", new IllegalArgumentException("World object " + key + " has missing required fields"), PrintUtils.ErrorType.FATAL, true);
-        }
+//        }
 
         new WorldObject(model, position, WorldObject.CollisionType.STANDARD);
       } catch (Exception e) {

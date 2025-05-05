@@ -52,7 +52,7 @@ public class HeliumModelBuilder {
     }
   }
 
-  public Model create(String path, ModelType type) {
+  public Model create(String path, Texture texture, ModelType type) {
     switch(type) {
       case GLTF -> {
         return m_GLTFLoader.load(Gdx.files.internal(path)).scene.model;
@@ -61,7 +61,8 @@ public class HeliumModelBuilder {
         return m_objLoader.loadModel(Gdx.files.internal(path));
       }
       default -> {
-        PrintUtils.println("Model Builder", "Unknown model type: " + type, PrintUtils.printType.ERROR);
+        PrintUtils.error("Model Builder", new IllegalArgumentException("Unknown model type " + type),
+            PrintUtils.ErrorType.FATAL_CLOSE_IMMEDIATELY, true);
         return null;
       }
     }

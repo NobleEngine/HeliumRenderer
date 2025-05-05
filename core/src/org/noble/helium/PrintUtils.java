@@ -43,8 +43,11 @@ public class PrintUtils {
         println(tag, element.toString(), printType.ERROR);
       }
     }
-    if (type == ErrorType.FATAL) {
+    if (type == ErrorType.FATAL_CLOSE_GRACEFUL) {
       Gdx.app.exit();
+    }
+    if(type == ErrorType.FATAL_CLOSE_IMMEDIATELY) {
+      System.exit(1);
     }
   }
 
@@ -53,6 +56,6 @@ public class PrintUtils {
   }
 
   public enum ErrorType {
-    FATAL, NONFATAL
+    FATAL_CLOSE_GRACEFUL, FATAL_CLOSE_IMMEDIATELY, NONFATAL
   }
 }

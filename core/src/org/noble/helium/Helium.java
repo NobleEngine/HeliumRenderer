@@ -2,7 +2,9 @@ package org.noble.helium;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL32;
+import com.badlogic.gdx.utils.ScreenUtils;
 import org.noble.helium.actors.PlayerController;
 import org.noble.helium.handling.LevelHandler;
 import org.noble.helium.handling.ObjectHandler;
@@ -22,6 +24,7 @@ public class Helium extends Game {
   private float m_delta;
   private double m_targetTime;
   private String m_windowTitle;
+  private Color m_backgroundColor;
   private static Helium m_instance;
   private final ArrayList<Subsystem> m_subsystems;
   private PlayerController m_player;
@@ -54,6 +57,10 @@ public class Helium extends Game {
     return m_delta;
   }
 
+  public Color getBackgroundColor() {
+    return m_backgroundColor;
+  }
+
   @Override
   public void create() {
     OperatingSystemMXBean osBean = java.lang.management.ManagementFactory.getOperatingSystemMXBean();
@@ -61,6 +68,7 @@ public class Helium extends Game {
     PrintUtils.println(Constants.Engine.k_prettyName, Gdx.graphics.getGLVersion().getRendererString()); //TODO: Move this to UI (an F3 menu like Minecraft?)
     PrintUtils.println("Telemetry", "Warnings look like this", PrintUtils.printType.WARNING);
     PrintUtils.println("Telemetry", "Errors look like this", PrintUtils.printType.ERROR);
+    setBackgroundColor(Color.WHITE);
 
     m_player = PlayerController.getInstance();
     m_levelHandler = LevelHandler.getInstance();
@@ -85,6 +93,8 @@ public class Helium extends Game {
 
     Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     Gdx.gl.glClear(GL32.GL_COLOR_BUFFER_BIT | GL32.GL_DEPTH_BUFFER_BIT);
+    ScreenUtils.clear(getBackgroundColor());
+//    Gdx.gl.glClearColor(1,0,0,0);
 
     if(getStatus() == State.PLAY) {
       m_player.update();
@@ -98,7 +108,7 @@ public class Helium extends Game {
         // This warning is not problematic.
         Thread.sleep(0);
       } catch (InterruptedException e) {
-        PrintUtils.error(Constants.Engine.k_prettyName, e, PrintUtils.ErrorType.FATAL, true);
+        PrintUtils.error(Constants.Engine.k_prettyName, e, PrintUtils.ErrorType.FATAL_CLOSE_GRACEFUL, true);
       }
     }
   }
@@ -124,6 +134,10 @@ public class Helium extends Game {
     }
 
     PrintUtils.println("Helium", "Game state set to " + state);
+  }
+
+  public void setBackgroundColor(Color color) {
+    m_backgroundColor = color;
   }
 
   public void setTargetFPS(int fps) {

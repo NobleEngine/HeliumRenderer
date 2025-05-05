@@ -46,7 +46,8 @@ public class LevelHandler {
   public void changeScreen(String LDAName) {
     List<Class<?>> scripts = LDAExtractor.getScripts(Gdx.files.internal("levels/" + LDAName));
     if(scripts.isEmpty()) {
-      PrintUtils.error("Level Handler",new NoSuchMethodException("No scripts found in level " + LDAName), PrintUtils.ErrorType.FATAL, true);
+      PrintUtils.error("Level Handler",new NoSuchMethodException("No scripts found in level " + LDAName),
+          PrintUtils.ErrorType.FATAL_CLOSE_GRACEFUL, true);
     }
     changeScreen(new ParsedLevel(scripts));
     Map<String, JsonElement> ldaElements;

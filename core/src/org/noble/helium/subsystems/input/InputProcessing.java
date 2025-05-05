@@ -1,6 +1,7 @@
 package org.noble.helium.subsystems.input;
 
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import org.noble.helium.Constants;
 import org.noble.helium.Helium;
 import org.noble.helium.actors.PlayerController;
@@ -61,8 +62,14 @@ public class InputProcessing extends Subsystem {
         case STRAFE_BACKWARD -> m_player.strafeBackward();
         case MOVE_FASTER -> m_player.setSpeed(Constants.Player.k_fastSpeed); //16
         case MOVE_STANDARD -> m_player.setSpeed(Constants.Player.k_defaultSpeed); //8
-        case PAUSE -> m_helium.setState(Helium.State.PAUSE);
-        case RESUME -> m_helium.setState(Helium.State.PLAY);
+        case PAUSE -> {
+          m_helium.setState(Helium.State.PAUSE);
+          m_helium.setBackgroundColor(Color.RED);
+        }
+        case RESUME -> {
+          m_helium.setState(Helium.State.PLAY);
+          m_helium.setBackgroundColor(Color.WHITE);
+        }
         case FULLSCREEN_MODE -> m_helium.setWindowMode(Helium.WindowMode.FULLSCREEN);
         case WINDOWED_MODE -> m_helium.setWindowMode(Helium.WindowMode.WINDOWED);
       }

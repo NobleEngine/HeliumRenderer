@@ -97,7 +97,6 @@ public class WorldObject extends ModelInstance {
   }
 
   public void dispose() {
-    //TODO: I think there's a slow memory leak here?
     this.model.dispose();
   }
 
