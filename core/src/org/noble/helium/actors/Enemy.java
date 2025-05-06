@@ -2,21 +2,16 @@ package org.noble.helium.actors;
 
 import com.badlogic.gdx.math.Vector3;
 import org.noble.helium.Helium;
-import org.noble.helium.rendering.HeliumModelInstance;
-import org.noble.helium.subsystems.telemetry.LogEntry;
 import org.noble.helium.world.WorldObject;
-
-import java.util.ArrayList;
 
 public class Enemy extends Actor {
   private final Actor m_followingActor;
   private final int m_strength;
   private float m_timer;
 
-  public Enemy(Vector3 startingPos, int startingHealth, int strength, float speed, HeliumModelInstance model, Actor followingActor) {
-    super(startingPos, startingHealth, speed, model);
+  public Enemy(WorldObject object, int startingHealth, int strength, float speed, Actor followingActor) {
+    super(object, startingHealth, speed);
     m_strength = strength;
-    m_worldObject = new WorldObject(m_model, WorldObject.CollisionType.STANDARD);
     m_followingActor = followingActor;
     m_timer = 0.0f;
   }
@@ -31,22 +26,22 @@ public class Enemy extends Actor {
       return;
     }
 
-    if (!m_worldObject.isColliding(target)) {
-      if (target.getX() > getX()) {
+    if (!m_worldObject.getBoundingBox().isColliding(target.getBoundingBox())) {
+      if (target.getPosition().x > getX()) {
         nextPosition.x += getSpeed() * delta;
-      } else if (target.getX() < getX()) {
+      } else if (target.getPosition().x < getX()) {
         nextPosition.x -= getSpeed() * delta;
       }
 
-      if (target.getY() - target.getDepth() > getY() - this.getWorldObject().getDepth()) {
+      if (target.getPosition().y - target.getDimensions().getDepth() > getY() - this.getWorldObject().getDimensions().getDepth()) {
         nextPosition.y += getSpeed() * delta;
-      } else if (target.getY() - target.getDepth() < getY() - this.getWorldObject().getDepth()) {
+      } else if (target.getPosition().y - target.getDimensions().getDepth() < getY() - this.getWorldObject().getDimensions().getDepth()) {
         nextPosition.y -= getSpeed() * delta;
       }
 
-      if (target.getZ() > getZ()) {
+      if (target.getPosition().z > getZ()) {
         nextPosition.z += getSpeed() * delta;
-      } else if (target.getZ() < getZ()) {
+      } else if (target.getPosition().z < getZ()) {
         nextPosition.z -= getSpeed() * delta;
       }
       m_timer = 1.0f;
@@ -72,12 +67,6 @@ public class Enemy extends Actor {
   @Override
   public void setPosition(Vector3 position) {
     super.setPosition(position);
-    m_model.setPosition(position);
     m_worldObject.setPosition(position);
-  }
-
-  @Override
-  public ArrayList<LogEntry> getLogEntries() {
-    return null;
   }
 }
