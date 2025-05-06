@@ -68,7 +68,7 @@ public class Helium extends Game {
     PrintUtils.println(Constants.Engine.k_prettyName, Gdx.graphics.getGLVersion().getRendererString()); //TODO: Move this to UI (an F3 menu like Minecraft?)
     PrintUtils.println("Telemetry", "Warnings look like this", PrintUtils.printType.WARNING);
     PrintUtils.println("Telemetry", "Errors look like this", PrintUtils.printType.ERROR);
-    setBackgroundColor(Color.WHITE);
+    setBackgroundColor(Color.BLACK);
 
     m_player = PlayerController.getInstance();
     m_levelHandler = LevelHandler.getInstance();

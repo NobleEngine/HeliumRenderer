@@ -60,15 +60,15 @@ public class InputProcessing extends Subsystem {
         case STRAFE_RIGHT -> m_player.strafeRight();
         case STRAFE_FORWARD -> m_player.strafeForward();
         case STRAFE_BACKWARD -> m_player.strafeBackward();
-        case MOVE_FASTER -> m_player.setSpeed(Constants.Player.k_fastSpeed); //16
-        case MOVE_STANDARD -> m_player.setSpeed(Constants.Player.k_defaultSpeed); //8
+        case MOVE_FASTER -> m_player.setSpeed(Constants.Player.k_fastSpeed);
+        case MOVE_STANDARD -> m_player.setSpeed(Constants.Player.k_defaultSpeed);
         case PAUSE -> {
           m_helium.setState(Helium.State.PAUSE);
-          m_helium.setBackgroundColor(Color.RED);
+          m_helium.setBackgroundColor(Color.DARK_GRAY);
         }
         case RESUME -> {
           m_helium.setState(Helium.State.PLAY);
-          m_helium.setBackgroundColor(Color.WHITE);
+          m_helium.setBackgroundColor(Color.BLACK);
         }
         case FULLSCREEN_MODE -> m_helium.setWindowMode(Helium.WindowMode.FULLSCREEN);
         case WINDOWED_MODE -> m_helium.setWindowMode(Helium.WindowMode.WINDOWED);

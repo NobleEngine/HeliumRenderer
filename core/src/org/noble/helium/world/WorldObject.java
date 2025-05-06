@@ -22,6 +22,7 @@ public class WorldObject extends ModelInstance {
     setPosition(position);
     m_collisionType = collision;
     m_shouldRender = true;
+    m_angles = new EulerAngles(0f,0f,0f);
     m_boundingBox = new AxisOrientedBoundingBox(getPosition(), getDimensions(), getAngles());
     ObjectHandler.getInstance().add(this);
   }
@@ -52,9 +53,6 @@ public class WorldObject extends ModelInstance {
   }
 
   public EulerAngles getAngles() {
-    if(m_angles == null) {
-      return new EulerAngles(0,0,0);
-    }
     return m_angles;
   }
 
@@ -68,6 +66,7 @@ public class WorldObject extends ModelInstance {
   }
 
   public void setRotation(EulerAngles angles) {
+    m_angles = angles;
     transform.setFromEulerAnglesRad(angles.getYaw(), angles.getPitch(), angles.getRoll());
   }
 
