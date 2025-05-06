@@ -1,7 +1,7 @@
 package org.noble.helium.handling;
 
 import com.badlogic.gdx.graphics.g3d.Environment;
-import org.noble.helium.PrintUtils;
+import org.noble.helium.HeliumIO;
 import org.noble.helium.rendering.HeliumModelBatch;
 import org.noble.helium.world.WorldObject;
 
@@ -13,7 +13,7 @@ public class ObjectHandler {
 
   private ObjectHandler() {
     m_objects = new ArrayList<>();
-    PrintUtils.println("Object Handler", "Object handler initialized");
+    HeliumIO.println("Object Handler", "Object handler initialized");
   }
 
   public static ObjectHandler getInstance() {

@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.loader.ObjLoader;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import net.mgsx.gltf.loaders.gltf.GLTFLoader;
-import org.noble.helium.PrintUtils;
+import org.noble.helium.HeliumIO;
 import org.noble.helium.math.Dimensions3;
 
 public class HeliumModelBuilder {
@@ -46,7 +46,7 @@ public class HeliumModelBuilder {
             VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates);
       }
       default -> {
-        PrintUtils.println("Model Builder", "Unknown shape type: " + shape, PrintUtils.printType.ERROR);
+        HeliumIO.println("Model Builder", "Unknown shape type: " + shape, HeliumIO.printType.ERROR);
         return null;
       }
     }
@@ -61,8 +61,8 @@ public class HeliumModelBuilder {
         return m_objLoader.loadModel(Gdx.files.internal(path));
       }
       default -> {
-        PrintUtils.error("Model Builder", new IllegalArgumentException("Unknown model type " + type),
-            PrintUtils.ErrorType.FATAL_CLOSE_IMMEDIATELY, true);
+        HeliumIO.error("Model Builder", new IllegalArgumentException("Unknown model type " + type),
+            HeliumIO.ErrorType.FATAL_CLOSE_IMMEDIATELY, true);
         return null;
       }
     }

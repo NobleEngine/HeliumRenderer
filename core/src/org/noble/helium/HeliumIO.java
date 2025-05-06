@@ -5,7 +5,7 @@ import com.badlogic.gdx.Gdx;
 import java.sql.Timestamp;
 import java.time.Instant;
 
-public class PrintUtils {
+public class HeliumIO {
   //TODO: Implement Log4J (or something similar) and proper error handling
   public static void println(String tag, String message) {
     println(tag, message, printType.INFO);

@@ -8,7 +8,7 @@ import org.noble.helium.lda.LDAParser;
 import org.noble.helium.screens.HeliumLevel;
 import org.noble.helium.screens.ParsedLevel;
 import org.noble.helium.screens.tests.PhysicsTest;
-import org.noble.helium.PrintUtils;
+import org.noble.helium.HeliumIO;
 
 import java.io.IOException;
 import java.util.List;
@@ -25,7 +25,7 @@ public class LevelHandler {
     m_objectHandler = ObjectHandler.getInstance();
 //    changeScreen("test.lda");
     changeScreen(new PhysicsTest());
-    PrintUtils.println("Level Handler","Level handler initialized");
+    HeliumIO.println("Level Handler","Level handler initialized");
   }
 
   public static LevelHandler getInstance() {
@@ -46,8 +46,8 @@ public class LevelHandler {
   public void changeScreen(String LDAName) {
     List<Class<?>> scripts = LDAExtractor.getScripts(Gdx.files.internal("levels/" + LDAName));
     if(scripts.isEmpty()) {
-      PrintUtils.error("Level Handler",new NoSuchMethodException("No scripts found in level " + LDAName),
-          PrintUtils.ErrorType.FATAL_CLOSE_GRACEFUL, true);
+      HeliumIO.error("Level Handler",new NoSuchMethodException("No scripts found in level " + LDAName),
+          HeliumIO.ErrorType.FATAL_CLOSE_GRACEFUL, true);
     }
     changeScreen(new ParsedLevel(scripts));
     Map<String, JsonElement> ldaElements;
@@ -61,9 +61,9 @@ public class LevelHandler {
 
   public void changeScreen(HeliumLevel level) {
     if (m_currentLevel != null) {
-      PrintUtils.println("Level Handler", "Changing screen to " + level.getClass().getSimpleName());
+      HeliumIO.println("Level Handler", "Changing screen to " + level.getClass().getSimpleName());
     } else {
-      PrintUtils.println("Level Handler","Starting game on " + level.getClass().getSimpleName());
+      HeliumIO.println("Level Handler","Starting game on " + level.getClass().getSimpleName());
     }
 //    m_userInterface.clear();
     TextureHandler.getInstance().clear();

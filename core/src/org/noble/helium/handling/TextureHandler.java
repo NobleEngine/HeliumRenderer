@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import org.noble.helium.PrintUtils;
+import org.noble.helium.HeliumIO;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +15,7 @@ public class TextureHandler {
 
   private TextureHandler() {
     m_textures = new HashMap<>();
-    PrintUtils.println("Texture Handler","Texture handler initialized");
+    HeliumIO.println("Texture Handler","Texture handler initialized");
   }
 
   public static TextureHandler getInstance() {
@@ -27,14 +27,14 @@ public class TextureHandler {
 
   private void loadTexture(String textureName) {
     if (m_textures.get(textureName) == null) {
-      PrintUtils.println("Texture Handler","Loading texture: " + textureName);
+      HeliumIO.println("Texture Handler","Loading texture: " + textureName);
       m_textures.put(textureName, new Texture(Gdx.files.internal(textureName)));
     }
   }
 
   private void loadTexture(Color color) {
     if(m_textures.get(color.toString()) == null) {
-      PrintUtils.println("Texture Handler","Loading texture: " + color);
+      HeliumIO.println("Texture Handler","Loading texture: " + color);
       Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
       pixmap.setColor(color);
       pixmap.fill();

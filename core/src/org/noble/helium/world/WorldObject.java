@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.collision.BoundingBox;
 import org.noble.helium.handling.ObjectHandler;
 import org.noble.helium.math.Dimensions3;
 import org.noble.helium.math.EulerAngles;
-import org.noble.helium.PrintUtils;
+import org.noble.helium.HeliumIO;
 
 public class WorldObject extends ModelInstance {
   private AxisOrientedBoundingBox m_boundingBox;
@@ -80,7 +80,7 @@ public class WorldObject extends ModelInstance {
 
   public boolean isColliding(WorldObject object) {
     if(object == null) {
-      PrintUtils.println("Physics", "WorldObject is null", PrintUtils.printType.ERROR);
+      HeliumIO.println("Physics", "WorldObject is null", HeliumIO.printType.ERROR);
       return false;
     }
 

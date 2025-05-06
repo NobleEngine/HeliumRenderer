@@ -64,10 +64,10 @@ public class Helium extends Game {
   @Override
   public void create() {
     OperatingSystemMXBean osBean = java.lang.management.ManagementFactory.getOperatingSystemMXBean();
-    PrintUtils.println(Constants.Engine.k_prettyName, Constants.Engine.k_build + " running for " + osBean.getArch() + " " + osBean.getVersion());
-    PrintUtils.println(Constants.Engine.k_prettyName, Gdx.graphics.getGLVersion().getRendererString()); //TODO: Move this to UI (an F3 menu like Minecraft?)
-    PrintUtils.println("Telemetry", "Warnings look like this", PrintUtils.printType.WARNING);
-    PrintUtils.println("Telemetry", "Errors look like this", PrintUtils.printType.ERROR);
+    HeliumIO.println(Constants.Engine.k_prettyName, Constants.Engine.k_build + " running for " + osBean.getArch() + " " + osBean.getVersion());
+    HeliumIO.println(Constants.Engine.k_prettyName, Gdx.graphics.getGLVersion().getRendererString()); //TODO: Move this to UI (an F3 menu like Minecraft?)
+    HeliumIO.println("Telemetry", "Warnings look like this", HeliumIO.printType.WARNING);
+    HeliumIO.println("Telemetry", "Errors look like this", HeliumIO.printType.ERROR);
     setBackgroundColor(Color.BLACK);
 
     m_player = PlayerController.getInstance();
@@ -77,7 +77,7 @@ public class Helium extends Game {
     setTargetFPS(Gdx.graphics.getDisplayMode().refreshRate);
 
     m_modelBatch = new HeliumModelBatch();
-    PrintUtils.println(Constants.Engine.k_prettyName, "Ready to render!");
+    HeliumIO.println(Constants.Engine.k_prettyName, "Ready to render!");
   }
 
   @Override
@@ -87,8 +87,8 @@ public class Helium extends Game {
     double startTime = Units.nanosecondsToSeconds(System.nanoTime()); //in seconds
 
     if(m_delta > m_targetTime + 0.1) {
-      PrintUtils.println(Constants.Engine.k_prettyName, "Loop overrun by " +
-          String.valueOf(m_delta - m_targetTime).substring(0,6) + " seconds!", PrintUtils.printType.WARNING);
+      HeliumIO.println(Constants.Engine.k_prettyName, "Loop overrun by " +
+          String.valueOf(m_delta - m_targetTime).substring(0,6) + " seconds!", HeliumIO.printType.WARNING);
     }
 
     Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -108,7 +108,7 @@ public class Helium extends Game {
         // This warning is not problematic.
         Thread.sleep(0);
       } catch (InterruptedException e) {
-        PrintUtils.error(Constants.Engine.k_prettyName, e, PrintUtils.ErrorType.FATAL_CLOSE_GRACEFUL, true);
+        HeliumIO.error(Constants.Engine.k_prettyName, e, HeliumIO.ErrorType.FATAL_CLOSE_GRACEFUL, true);
       }
     }
   }
@@ -133,7 +133,7 @@ public class Helium extends Game {
       case PAUSE -> Gdx.input.setCursorCatched(false);
     }
 
-    PrintUtils.println("Helium", "Game state set to " + state);
+    HeliumIO.println("Helium", "Game state set to " + state);
   }
 
   public void setBackgroundColor(Color color) {

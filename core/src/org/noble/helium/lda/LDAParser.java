@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import org.noble.helium.PrintUtils;
+import org.noble.helium.HeliumIO;
 import org.noble.helium.handling.TextureHandler;
 import org.noble.helium.math.Dimensions3;
 import org.noble.helium.rendering.HeliumModelBuilder;
@@ -28,7 +28,7 @@ public class LDAParser {
     });
     worldElements.forEach((key, value) -> {
       try {
-        PrintUtils.println("Level Data Archive", "Adding world object: " + key);
+        HeliumIO.println("Level Data Archive", "Adding world object: " + key);
         JsonObject object = value.getAsJsonObject();
         Texture texture;
         Model model = null;
@@ -46,14 +46,14 @@ public class LDAParser {
         if(object.has("dimensions")) {
           dimensions = new Dimensions3(toVector3(object.get("dimensions").getAsJsonArray()));
         } else {
-          PrintUtils.println("Level Data Archive", "World object " + key + " has no dimensions", PrintUtils.printType.ERROR);
+          HeliumIO.println("Level Data Archive", "World object " + key + " has no dimensions", HeliumIO.printType.ERROR);
           dimensions = null;
         }
 
         if(object.has("position")) {
           position = toVector3(object.get("position").getAsJsonArray());
         } else {
-          PrintUtils.println("Level Data Archive", "World object " + key + " has no position", PrintUtils.printType.ERROR);
+          HeliumIO.println("Level Data Archive", "World object " + key + " has no position", HeliumIO.printType.ERROR);
           position = null;
         }
 
@@ -71,8 +71,8 @@ public class LDAParser {
 
         new WorldObject(model, position, WorldObject.CollisionType.STANDARD);
       } catch (Exception e) {
-        PrintUtils.error("Level Data Archive", e, PrintUtils.ErrorType.NONFATAL, true);
-        PrintUtils.println("Level Data Archive", "Failed to add world object: " + key, PrintUtils.printType.ERROR);
+        HeliumIO.error("Level Data Archive", e, HeliumIO.ErrorType.NONFATAL, true);
+        HeliumIO.println("Level Data Archive", "Failed to add world object: " + key, HeliumIO.printType.ERROR);
       }
     });
   }
@@ -86,7 +86,7 @@ public class LDAParser {
         return HeliumModelBuilder.Shape.SPHERE;
       }
       default -> {
-        PrintUtils.println("Level Data Archive", "Unknown shape type: " + type, PrintUtils.printType.ERROR);
+        HeliumIO.println("Level Data Archive", "Unknown shape type: " + type, HeliumIO.printType.ERROR);
         return HeliumModelBuilder.Shape.CUBE;
       }
     }
