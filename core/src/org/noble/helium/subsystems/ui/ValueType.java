@@ -1,0 +1,5 @@
+package org.noble.helium.subsystems.ui;
+
+public enum ValueType {
+  PLAYER_HEALTH, PLAYER_SPEED, PLAYER_POSITION_X, PLAYER_POSITION_Y, PLAYER_POSITION_Z, GAME_STATE, GAME_FRAMETIME, GAME_FPS
+}

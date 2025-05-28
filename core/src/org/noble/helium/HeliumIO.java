@@ -1,6 +1,9 @@
 package org.noble.helium;
 
 import com.badlogic.gdx.Gdx;
+import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisWindow;
+import org.noble.helium.subsystems.ui.UserInterface;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -49,6 +52,17 @@ public class HeliumIO {
     if(type == ErrorType.FATAL_CLOSE_IMMEDIATELY) {
       System.exit(1);
     }
+  }
+
+  public static void notify(String tag, String message) {
+    VisWindow window = new VisWindow(tag);
+    window.add(new VisLabel(message));
+    window.pack();
+    window.centerWindow();
+    window.setMovable(true);
+    window.closeOnEscape();
+    UserInterface.getInstance().addActor(window);
+    Helium.getInstance().setState(Helium.State.PAUSE);
   }
 
   public enum printType {

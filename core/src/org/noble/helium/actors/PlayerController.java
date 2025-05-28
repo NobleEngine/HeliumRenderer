@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import org.noble.helium.Constants;
 import org.noble.helium.Helium;
+import org.noble.helium.HeliumIO;
 import org.noble.helium.handling.ObjectHandler;
 import org.noble.helium.handling.TextureHandler;
 import org.noble.helium.math.Dimensions3;
@@ -243,6 +244,11 @@ public class PlayerController extends Actor {
     translate();
     m_camera.update();
     m_worldObject.update();
+
+    if(getHealth() <= 0) {
+      HeliumIO.notify("Player", "You Died!");
+      setHealth(100);
+    }
   }
 
   @Override

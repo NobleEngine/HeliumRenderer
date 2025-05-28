@@ -1,7 +1,6 @@
 package org.noble.helium.subsystems.input;
 
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
 import org.noble.helium.Constants;
 import org.noble.helium.Helium;
 import org.noble.helium.actors.PlayerController;
@@ -62,14 +61,8 @@ public class InputProcessing extends Subsystem {
         case STRAFE_BACKWARD -> m_player.strafeBackward();
         case MOVE_FASTER -> m_player.setSpeed(Constants.Player.k_fastSpeed);
         case MOVE_STANDARD -> m_player.setSpeed(Constants.Player.k_defaultSpeed);
-        case PAUSE -> {
-          m_helium.setState(Helium.State.PAUSE);
-          m_helium.setBackgroundColor(Color.DARK_GRAY);
-        }
-        case RESUME -> {
-          m_helium.setState(Helium.State.PLAY);
-          m_helium.setBackgroundColor(Color.BLACK);
-        }
+        case PAUSE -> m_helium.setState(Helium.State.PAUSE);
+        case RESUME -> m_helium.setState(Helium.State.PLAY);
         case FULLSCREEN_MODE -> m_helium.setWindowMode(Helium.WindowMode.FULLSCREEN);
         case WINDOWED_MODE -> m_helium.setWindowMode(Helium.WindowMode.WINDOWED);
       }
@@ -82,8 +75,8 @@ public class InputProcessing extends Subsystem {
 
   public ArrayList<Action> getQueuedActions() {
     ArrayList<Action> pressedActions = new ArrayList<>();
-    for(Action action : m_keyBindings) {
-      if(action.shouldFire()) {
+    for (Action action : m_keyBindings) {
+      if (action.shouldFire()) {
         pressedActions.add(action);
       }
     }

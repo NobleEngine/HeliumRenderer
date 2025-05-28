@@ -10,6 +10,7 @@ import org.noble.helium.handling.LevelHandler;
 import org.noble.helium.handling.ObjectHandler;
 import org.noble.helium.handling.TextureHandler;
 import org.noble.helium.math.Units;
+import org.noble.helium.subsystems.ui.UserInterface;
 import org.noble.helium.subsystems.input.InputProcessing;
 import org.noble.helium.rendering.HeliumModelBatch;
 import org.noble.helium.subsystems.scripting.ScriptRunner;
@@ -30,6 +31,7 @@ public class Helium extends Game {
   private PlayerController m_player;
   private HeliumModelBatch m_modelBatch;
   private LevelHandler m_levelHandler;
+  private UserInterface m_userInterface;
 
   private Helium() {
     m_subsystems = new ArrayList<>();
@@ -57,6 +59,10 @@ public class Helium extends Game {
     return m_delta;
   }
 
+  public float getFPS() {
+    return Gdx.graphics.getFramesPerSecond();
+  }
+
   public Color getBackgroundColor() {
     return m_backgroundColor;
   }
@@ -72,8 +78,10 @@ public class Helium extends Game {
 
     m_player = PlayerController.getInstance();
     m_levelHandler = LevelHandler.getInstance();
+    m_userInterface = UserInterface.getInstance();
     m_subsystems.add(ScriptRunner.getInstance());
     m_subsystems.add(InputProcessing.getInstance());
+    m_subsystems.add(m_userInterface);
     setTargetFPS(Gdx.graphics.getDisplayMode().refreshRate);
 
     m_modelBatch = new HeliumModelBatch();
