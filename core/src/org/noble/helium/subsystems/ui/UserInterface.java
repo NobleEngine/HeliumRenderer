@@ -5,7 +5,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kotcrab.vis.ui.VisUI;
-import com.kotcrab.vis.ui.widget.VisWindow;
 import org.noble.helium.Helium;
 import org.noble.helium.subsystems.Subsystem;
 import org.noble.helium.subsystems.ui.elements.HeliumLabel;
@@ -45,6 +44,5 @@ public class UserInterface extends Subsystem {
 
   @Override
   public void dispose() {
-
   }
 }

@@ -31,7 +31,6 @@ public class Helium extends Game {
   private PlayerController m_player;
   private HeliumModelBatch m_modelBatch;
   private LevelHandler m_levelHandler;
-  private UserInterface m_userInterface;
 
   private Helium() {
     m_subsystems = new ArrayList<>();
@@ -69,19 +68,21 @@ public class Helium extends Game {
 
   @Override
   public void create() {
-    OperatingSystemMXBean osBean = java.lang.management.ManagementFactory.getOperatingSystemMXBean();
-    HeliumIO.println(Constants.Engine.k_prettyName, Constants.Engine.k_build + " running for " + osBean.getArch() + " " + osBean.getVersion());
-    HeliumIO.println(Constants.Engine.k_prettyName, Gdx.graphics.getGLVersion().getRendererString()); //TODO: Move this to UI (an F3 menu like Minecraft?)
+    SystemInformation sysInfo = SystemInformation.getInstance();
+    HeliumIO.println(Constants.Engine.k_prettyName, Constants.Engine.k_build + " running for " + sysInfo.getCPUArch() + " " + sysInfo.getOSVersion());
+    HeliumIO.println(Constants.Engine.k_prettyName, sysInfo.getGPUName()); //TODO: Move this to UI (an F3 menu like Minecraft?)
+    HeliumIO.println(Constants.Engine.k_prettyName, "Java version: " + sysInfo.getJavaVersion());
+    HeliumIO.println(Constants.Engine.k_prettyName, "Operating system: " + sysInfo.getOSName());
+    HeliumIO.println(Constants.Engine.k_prettyName, "CPU: " + sysInfo.getCPUName());
     HeliumIO.println("Telemetry", "Warnings look like this", HeliumIO.printType.WARNING);
     HeliumIO.println("Telemetry", "Errors look like this", HeliumIO.printType.ERROR);
     setBackgroundColor(Color.BLACK);
 
     m_player = PlayerController.getInstance();
     m_levelHandler = LevelHandler.getInstance();
-    m_userInterface = UserInterface.getInstance();
     m_subsystems.add(ScriptRunner.getInstance());
     m_subsystems.add(InputProcessing.getInstance());
-    m_subsystems.add(m_userInterface);
+    m_subsystems.add(UserInterface.getInstance());
     setTargetFPS(Gdx.graphics.getDisplayMode().refreshRate);
 
     m_modelBatch = new HeliumModelBatch();
