@@ -10,6 +10,7 @@ public class UpdatableValue {
   private float m_value;
 
   public UpdatableValue(ValueType type) {
+    //TODO: Make a UpdateableValue that returns a String
     m_player = PlayerController.getInstance();
     m_game = Helium.getInstance();
     m_type = type;

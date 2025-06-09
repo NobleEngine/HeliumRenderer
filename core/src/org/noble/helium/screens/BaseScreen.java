@@ -15,6 +15,7 @@ import org.noble.helium.handling.TextureHandler;
 import org.noble.helium.rendering.HeliumModelBatch;
 import org.noble.helium.HeliumIO;
 import org.noble.helium.rendering.HeliumModelBuilder;
+import org.noble.helium.subsystems.ui.UserInterface;
 
 public class BaseScreen implements Screen {
   public final Helium m_game;
@@ -73,6 +74,7 @@ public class BaseScreen implements Screen {
     Vector3 playerPos = m_player.getPosition();
     m_viewport.update(x, y, true);
     m_player.setPosition(playerPos);
+    UserInterface.getInstance().reset();
   }
 
   @Override

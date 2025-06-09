@@ -15,6 +15,7 @@ public class SystemInformation {
   private final String m_gpuName;
   private final String m_gpuVendor;
   private final String m_javaVersion;
+  private final String m_javaVendor;
   private final int m_cpuCores;
   private final int m_ramMB;
   private final int m_glVersionMajor;
@@ -31,6 +32,7 @@ public class SystemInformation {
     m_gpuName = Gdx.graphics.getGLVersion().getRendererString();
     m_gpuVendor = Gdx.graphics.getGLVersion().getVendorString();
     m_javaVersion = System.getProperty("java.version");
+    m_javaVendor = System.getProperty("java.vendor");
     m_ramMB = (int) (Runtime.getRuntime().maxMemory() / 1024 / 1024);
     m_glVersionMajor = Gdx.graphics.getGLVersion().getMajorVersion();
     m_glVersionMinor = Gdx.graphics.getGLVersion().getMinorVersion();
@@ -109,6 +111,10 @@ public class SystemInformation {
 
   public String getJavaVersion() {
     return m_javaVersion;
+  }
+
+  public String getJavaVendor() {
+    return m_javaVendor;
   }
 
   public String getOSVersion() {

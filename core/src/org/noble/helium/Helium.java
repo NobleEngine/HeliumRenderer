@@ -16,7 +16,6 @@ import org.noble.helium.rendering.HeliumModelBatch;
 import org.noble.helium.subsystems.scripting.ScriptRunner;
 import org.noble.helium.subsystems.Subsystem;
 
-import java.lang.management.OperatingSystemMXBean;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -29,6 +28,7 @@ public class Helium extends Game {
   private static Helium m_instance;
   private final ArrayList<Subsystem> m_subsystems;
   private PlayerController m_player;
+  private UserInterface m_userInterface;
   private HeliumModelBatch m_modelBatch;
   private LevelHandler m_levelHandler;
 
@@ -68,21 +68,16 @@ public class Helium extends Game {
 
   @Override
   public void create() {
-    SystemInformation sysInfo = SystemInformation.getInstance();
-    HeliumIO.println(Constants.Engine.k_prettyName, Constants.Engine.k_build + " running for " + sysInfo.getCPUArch() + " " + sysInfo.getOSVersion());
-    HeliumIO.println(Constants.Engine.k_prettyName, sysInfo.getGPUName()); //TODO: Move this to UI (an F3 menu like Minecraft?)
-    HeliumIO.println(Constants.Engine.k_prettyName, "Java version: " + sysInfo.getJavaVersion());
-    HeliumIO.println(Constants.Engine.k_prettyName, "Operating system: " + sysInfo.getOSName());
-    HeliumIO.println(Constants.Engine.k_prettyName, "CPU: " + sysInfo.getCPUName());
     HeliumIO.println("Telemetry", "Warnings look like this", HeliumIO.printType.WARNING);
     HeliumIO.println("Telemetry", "Errors look like this", HeliumIO.printType.ERROR);
     setBackgroundColor(Color.BLACK);
 
     m_player = PlayerController.getInstance();
     m_levelHandler = LevelHandler.getInstance();
+    m_userInterface = UserInterface.getInstance();
     m_subsystems.add(ScriptRunner.getInstance());
     m_subsystems.add(InputProcessing.getInstance());
-    m_subsystems.add(UserInterface.getInstance());
+    m_subsystems.add(m_userInterface);
     setTargetFPS(Gdx.graphics.getDisplayMode().refreshRate);
 
     m_modelBatch = new HeliumModelBatch();
