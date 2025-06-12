@@ -74,7 +74,7 @@ public class UserInterface extends Subsystem {
     javaLabel.setHeight(100);
     addActor(javaLabel);
 
-    HeliumLabel cpuLabel = new HeliumLabel(sysInfo.getCPUName());
+    HeliumLabel cpuLabel = new HeliumLabel(sysInfo.getCPUName().stripTrailing() + " (" + sysInfo.getSystemManufacturer() + ")");
     cpuLabel.setPosition(0, Gdx.graphics.getHeight() - 120);
     cpuLabel.setWidth(100);
     cpuLabel.setHeight(100);

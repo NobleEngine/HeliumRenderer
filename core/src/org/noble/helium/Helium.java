@@ -72,6 +72,7 @@ public class Helium extends Game {
     HeliumIO.println("Telemetry", "Errors look like this", HeliumIO.printType.ERROR);
     setBackgroundColor(Color.BLACK);
 
+    SystemInformation.getInstance();
     m_player = PlayerController.getInstance();
     m_levelHandler = LevelHandler.getInstance();
     m_userInterface = UserInterface.getInstance();

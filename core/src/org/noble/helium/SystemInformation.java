@@ -1,6 +1,12 @@
 package org.noble.helium;
 
 import com.badlogic.gdx.Gdx;
+import oshi.SystemInfo;
+import oshi.hardware.CentralProcessor;
+import oshi.hardware.ComputerSystem;
+import oshi.hardware.Display;
+import oshi.hardware.HardwareAbstractionLayer;
+import oshi.software.os.OperatingSystem;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -11,24 +17,28 @@ public class SystemInformation {
   private final String m_osName;
   private final String m_osVersion;
   private final String m_cpuName;
-  private final String m_cpuArch;
   private final String m_gpuName;
   private final String m_gpuVendor;
   private final String m_javaVersion;
   private final String m_javaVendor;
+  private final String m_manufacturer;
   private final int m_cpuCores;
   private final int m_ramMB;
   private final int m_glVersionMajor;
   private final int m_glVersionMinor;
 
   private SystemInformation() {
-    //TODO: Figure out OSHI to get GPU memory and better CPU stats
-    OperatingSystemMXBean osBean = java.lang.management.ManagementFactory.getOperatingSystemMXBean();
-    m_osName = osBean.getName();
-    m_osVersion = osBean.getVersion();
-    m_cpuName = fetchCPUname();
-    m_cpuArch = osBean.getArch();
-    m_cpuCores = Runtime.getRuntime().availableProcessors();
+    SystemInfo si = new SystemInfo();
+    HardwareAbstractionLayer hal = si.getHardware();
+    OperatingSystem os = si.getOperatingSystem();
+    CentralProcessor cpu = hal.getProcessor();
+    ComputerSystem system = hal.getComputerSystem();
+
+    m_osName = os.getFamily();
+    m_manufacturer = system.getManufacturer();
+    m_osVersion = os.getVersion().getVersion();
+    m_cpuName = cpu.getName();
+    m_cpuCores = cpu.getLogicalProcessorCount();
     m_gpuName = Gdx.graphics.getGLVersion().getRendererString();
     m_gpuVendor = Gdx.graphics.getGLVersion().getVendorString();
     m_javaVersion = System.getProperty("java.version");
@@ -45,34 +55,6 @@ public class SystemInformation {
     return m_instance;
   }
 
-  private String fetchCPUname() {
-    String name = "Unknown";
-    try {
-      if (m_osName.contains("Windows")) {
-        Process process = Runtime.getRuntime().exec("wmic cpu get Name");
-        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        String line;
-        reader.readLine(); // Skip header
-        if ((line = reader.readLine()) != null) {
-          name = line.trim();
-        }
-      } else {
-        Process process = Runtime.getRuntime().exec("lscpu");
-        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        String line;
-        while ((line = reader.readLine()) != null) {
-          if (line.contains("Model name:")) {
-            name = line.split(":")[1].trim();
-            break;
-          }
-        }
-      }
-    } catch (Exception e) {
-      HeliumIO.error("System Information", e, HeliumIO.ErrorType.NONFATAL, true);
-    }
-    return name;
-  }
-
   public String getOSName() {
     return m_osName;
   }
@@ -81,20 +63,12 @@ public class SystemInformation {
     return m_cpuName;
   }
 
-  public String getCPUArch() {
-    return m_cpuArch;
-  }
-
   public String getGPUName() {
     return m_gpuName;
   }
 
   public String getGPUVendor() {
     return m_gpuVendor;
-  }
-
-  public int getCPUCores() {
-    return m_cpuCores;
   }
 
   public int getRAMMB() {
@@ -119,5 +93,9 @@ public class SystemInformation {
 
   public String getOSVersion() {
     return m_osVersion;
+  }
+
+  public String getSystemManufacturer() {
+    return m_manufacturer;
   }
 }
