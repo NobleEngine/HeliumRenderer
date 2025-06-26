@@ -2,24 +2,19 @@ package org.noble.helium.actors;
 
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
-import org.noble.helium.rendering.HeliumModelInstance;
-import org.noble.helium.subsystems.telemetry.Loggable;
 import org.noble.helium.world.WorldObject;
 
-public abstract class Actor extends Loggable implements Disposable {
-  private Vector3 m_position;
+public abstract class Actor implements Disposable {
   private int m_health;
   private float m_speed;
   private boolean m_dead;
-  public HeliumModelInstance m_model;
   public WorldObject m_worldObject;
 
-  public Actor(Vector3 startingPos, int startingHealth, float speed, HeliumModelInstance model) {
-    m_position = startingPos;
+  public Actor(WorldObject object, int startingHealth, float speed) {
     m_health = startingHealth;
     m_speed = speed;
     m_dead = false;
-    m_model = model;
+    m_worldObject = object;
   }
 
   public boolean isDead() {
@@ -35,19 +30,19 @@ public abstract class Actor extends Loggable implements Disposable {
   }
 
   public float getX() {
-    return m_position.x;
+    return m_worldObject.getPosition().x;
   }
 
   public float getY() {
-    return m_position.y;
+    return m_worldObject.getPosition().y;
   }
 
   public float getZ() {
-    return m_position.z;
+    return m_worldObject.getPosition().z;
   }
 
   public Vector3 getPosition() {
-    return m_position;
+    return m_worldObject.getPosition();
   }
 
   public WorldObject getWorldObject() {
@@ -56,7 +51,7 @@ public abstract class Actor extends Loggable implements Disposable {
 
   public void die() {
     m_dead = true;
-    m_model.setShouldRender(false);
+    m_worldObject.setShouldRender(false);
   }
 
   public void setSpeed(float speed) {
@@ -64,7 +59,7 @@ public abstract class Actor extends Loggable implements Disposable {
   }
 
   public void setPosition(Vector3 newPosition) {
-    m_position = newPosition;
+    m_worldObject.setPosition(newPosition);
   }
 
   public void setHealth(int health) {

@@ -1,27 +1,33 @@
 package org.noble.helium.world;
 
+import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.math.Vector3;
-import org.noble.helium.logic.OrientedBoundingBox;
-import org.noble.helium.rendering.HeliumModelInstance;
-import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
+import com.badlogic.gdx.math.collision.BoundingBox;
+import org.noble.helium.handling.ObjectHandler;
+import org.noble.helium.math.Dimensions3;
+import org.noble.helium.math.EulerAngles;
+import org.noble.helium.HeliumIO;
 
-public class WorldObject {
-  private final HeliumModelInstance m_modelInstance;
-  private OrientedBoundingBox m_boundingBox;
+public class WorldObject extends ModelInstance {
+  private AxisOrientedBoundingBox m_boundingBox;
+  private Vector3 m_position;
+  private Dimensions3 m_dimensions;
+  private EulerAngles m_angles;
+  private boolean m_shouldRender;
   private final int m_collisionType;
 
-  public WorldObject(HeliumModelInstance modelInstance, int collision) {
-    m_modelInstance = modelInstance;
+  public WorldObject(Model model, Vector3 position, int collision) {
+    super(model);
+    setPosition(position);
     m_collisionType = collision;
-
-    m_boundingBox = new OrientedBoundingBox(modelInstance.getPosition(), modelInstance.getDimensions(), modelInstance.getAngles());
+    m_shouldRender = true;
+    m_angles = new EulerAngles(0f,0f,0f);
+    m_boundingBox = new AxisOrientedBoundingBox(getPosition(), getDimensions(), getAngles());
+    ObjectHandler.getInstance().add(this);
   }
 
-  public HeliumModelInstance getModelInstance() {
-    return m_modelInstance;
-  }
-
-  public OrientedBoundingBox getBoundingBox() {
+  public AxisOrientedBoundingBox getBoundingBox() {
     return m_boundingBox;
   }
 
@@ -30,36 +36,51 @@ public class WorldObject {
   }
 
   public void setPosition(Vector3 position) {
-    m_modelInstance.setPosition(position);
+    m_position = position;
+    transform.setToTranslation(m_position);
   }
 
-  public float getX() {
-    return m_modelInstance.getPosition().x;
+  public Dimensions3 getDimensions() {
+    if(m_dimensions != null) {
+      return m_dimensions;
+    }
+    BoundingBox boundingBox = new BoundingBox();
+    Vector3 dimensions = new Vector3();
+    this.calculateBoundingBox(boundingBox);
+    boundingBox.getDimensions(dimensions);
+    m_dimensions = new Dimensions3(dimensions.x, dimensions.y, dimensions.z);
+    return m_dimensions;
   }
 
-  public float getY() {
-    return m_modelInstance.getPosition().y;
+  public EulerAngles getAngles() {
+    return m_angles;
   }
 
-  public float getZ() {
-    return m_modelInstance.getPosition().z;
+  public void setPosition(float x, float y, float z) {
+    transform.setToTranslation(x, y, z);
+    m_position = new Vector3(x, y, z);
   }
 
-  public float getWidth() {
-    return m_modelInstance.getDimensions().getWidth();
+  public void setShouldRender(boolean shouldRender) {
+    m_shouldRender = shouldRender;
   }
 
-  public float getHeight() {
-    return m_modelInstance.getDimensions().getHeight();
+  public void setRotation(EulerAngles angles) {
+    m_angles = angles;
+    transform.setFromEulerAnglesRad(angles.getYaw(), angles.getPitch(), angles.getRoll());
   }
 
-  public float getDepth() {
-    return m_modelInstance.getDimensions().getDepth();
+  public boolean shouldRender() {
+    return m_shouldRender;
+  }
+
+  public Vector3 getPosition() {
+    return m_position;
   }
 
   public boolean isColliding(WorldObject object) {
     if(object == null) {
-      HeliumTelemetry.getInstance().printErrorln("WorldObject is null");
+      HeliumIO.println("Physics", "WorldObject is null", HeliumIO.printType.ERROR);
       return false;
     }
 
@@ -71,7 +92,11 @@ public class WorldObject {
   }
 
   public void update() {
-    m_boundingBox = new OrientedBoundingBox(m_modelInstance.getPosition(), m_modelInstance.getDimensions(), m_modelInstance.getAngles());
+    m_boundingBox = new AxisOrientedBoundingBox(getPosition(), getDimensions(), getAngles());
+  }
+
+  public void dispose() {
+    this.model.dispose();
   }
 
   public interface CollisionType {

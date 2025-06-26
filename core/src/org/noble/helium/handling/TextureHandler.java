@@ -1,8 +1,10 @@
 package org.noble.helium.handling;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
+import org.noble.helium.HeliumIO;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +15,7 @@ public class TextureHandler {
 
   private TextureHandler() {
     m_textures = new HashMap<>();
-    HeliumTelemetry.getInstance().println("Texture handler initialized");
+    HeliumIO.println("Texture Handler","Texture handler initialized");
   }
 
   public static TextureHandler getInstance() {
@@ -25,13 +27,31 @@ public class TextureHandler {
 
   private void loadTexture(String textureName) {
     if (m_textures.get(textureName) == null) {
+      HeliumIO.println("Texture Handler","Loading texture: " + textureName);
       m_textures.put(textureName, new Texture(Gdx.files.internal(textureName)));
+    }
+  }
+
+  private void loadTexture(Color color) {
+    if(m_textures.get(color.toString()) == null) {
+      HeliumIO.println("Texture Handler","Loading texture: " + color);
+      Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+      pixmap.setColor(color);
+      pixmap.fill();
+      Texture texture = new Texture(pixmap);
+      pixmap.dispose();
+      m_textures.put(color.toString(), texture);
     }
   }
 
   public Texture getTexture(String textureName) {
     loadTexture(textureName);
     return m_textures.get(textureName);
+  }
+
+  public Texture getTexture(Color color) {
+    loadTexture(color);
+    return m_textures.get(color.toString());
   }
 
   public void clear() {

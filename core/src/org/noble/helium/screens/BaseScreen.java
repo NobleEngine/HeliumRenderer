@@ -11,15 +11,18 @@ import org.noble.helium.Helium;
 import org.noble.helium.actors.PlayerController;
 import org.noble.helium.handling.ActorHandler;
 import org.noble.helium.handling.ObjectHandler;
-import org.noble.helium.handling.ModelHandler;
+import org.noble.helium.handling.TextureHandler;
 import org.noble.helium.rendering.HeliumModelBatch;
-import org.noble.helium.subsystems.telemetry.HeliumTelemetry;
+import org.noble.helium.HeliumIO;
+import org.noble.helium.rendering.HeliumModelBuilder;
+import org.noble.helium.subsystems.ui.UserInterface;
 
 public class BaseScreen implements Screen {
   public final Helium m_game;
   public final HeliumModelBatch m_batch;
   public final PlayerController m_player;
-  public final ModelHandler m_modelHandler;
+  public final TextureHandler m_textureHandler;
+  public final HeliumModelBuilder m_modelBuilder;
   public final ObjectHandler m_objectHandler;
   public final ActorHandler m_actorHandler;
   private final Viewport m_viewport;
@@ -29,9 +32,10 @@ public class BaseScreen implements Screen {
     m_game = Helium.getInstance();
     m_batch = m_game.getModelBatch();
     m_player = PlayerController.getInstance();
-    m_modelHandler = ModelHandler.getInstance();
+    m_modelBuilder = HeliumModelBuilder.getInstance();
     m_objectHandler = ObjectHandler.getInstance();
     m_actorHandler = ActorHandler.getInstance();
+    m_textureHandler = TextureHandler.getInstance();
     m_game.setState(Helium.State.PLAY);
 
     m_viewport = new ScreenViewport(m_player.getCamera());
@@ -49,17 +53,17 @@ public class BaseScreen implements Screen {
   public void render(float delta) {
     if(m_batch.isWorking()) {
       m_batch.end();
-      HeliumTelemetry.getInstance().printErrorln("Model batch was not ended last cycle");
-    }
-
-    if(m_game.getStatus() == Helium.State.PLAY) {
-      m_player.update();
-      m_objectHandler.update();
-      m_actorHandler.update();
+      HeliumIO.println("Renderer", "Model batch was not ended last cycle", HeliumIO.printType.ERROR);
     }
 
     m_batch.begin(m_player.getCamera());
-    m_modelHandler.render(m_batch, m_environment);
+    m_objectHandler.update(m_batch, m_environment);
+
+    if(m_game.getStatus() == Helium.State.PLAY) {
+      m_player.update();
+      m_actorHandler.update();
+    }
+
   }
 
   @Override
@@ -70,6 +74,7 @@ public class BaseScreen implements Screen {
     Vector3 playerPos = m_player.getPosition();
     m_viewport.update(x, y, true);
     m_player.setPosition(playerPos);
+    UserInterface.getInstance().reset();
   }
 
   @Override
@@ -89,7 +94,6 @@ public class BaseScreen implements Screen {
 
   @Override
   public void dispose() {
-    m_modelHandler.clear();
     m_objectHandler.clear();
     m_actorHandler.clear();
   }

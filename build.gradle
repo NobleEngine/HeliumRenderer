@@ -76,6 +76,9 @@ project(":core") {
         // https://mvnrepository.com/artifact/org.apache.poi/poi
         implementation group: 'org.apache.poi', name: 'poi', version: '3.9'
 
+        // https://mvnrepository.com/artifact/com.github.oshi/oshi-core
+        implementation("com.github.oshi:oshi-core:3.4.3")
+
         implementation 'com.google.code.gson:gson:2.10.1'
 
     }
