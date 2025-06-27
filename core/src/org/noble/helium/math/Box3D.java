@@ -3,7 +3,6 @@ package org.noble.helium.math;
 import com.badlogic.gdx.math.Vector3;
 import us.ihmc.euclid.geometry.Pose3D;
 import us.ihmc.euclid.shape.collision.epa.ExpandingPolytopeAlgorithm;
-import us.ihmc.euclid.shape.collision.gjk.GilbertJohnsonKeerthiCollisionDetector;
 
 public class Box3D extends us.ihmc.euclid.shape.primitives.Box3D {
   public Box3D(Vector3 coordinates, Dimensions3 dimensions) {
@@ -12,7 +11,6 @@ public class Box3D extends us.ihmc.euclid.shape.primitives.Box3D {
 
   public boolean intersects(Box3D box) {
     ExpandingPolytopeAlgorithm algorithm = new ExpandingPolytopeAlgorithm();
-    GilbertJohnsonKeerthiCollisionDetector detector = new GilbertJohnsonKeerthiCollisionDetector();
     return algorithm.evaluateCollision(this, box).areShapesColliding();
   }
 

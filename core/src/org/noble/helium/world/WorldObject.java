@@ -7,24 +7,26 @@ import com.badlogic.gdx.math.collision.BoundingBox;
 import org.noble.helium.handling.ObjectHandler;
 import org.noble.helium.math.Box3D;
 import org.noble.helium.math.Dimensions3;
-import org.noble.helium.math.EulerAngles;
 import org.noble.helium.HeliumIO;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 
 public class WorldObject extends ModelInstance {
   private final Box3D m_box;
-  private Dimensions3 m_dimensions;
-  private EulerAngles m_angles;
   private boolean m_shouldRender;
   private final int m_collisionType;
 
   public WorldObject(Model model, Vector3 position, int collision) {
     super(model);
-    m_box = new Box3D(position, getDimensions());
+
+    BoundingBox boundingBox = new BoundingBox();
+    Vector3 dimensions = new Vector3();
+    model.calculateBoundingBox(boundingBox);
+    boundingBox.getDimensions(dimensions);
+    m_box = new Box3D(position, new Dimensions3(dimensions.x, dimensions.y, dimensions.z));
+
     setPosition(position);
     m_collisionType = collision;
     m_shouldRender = true;
-    m_angles = new EulerAngles(0f,0f,0f);
     ObjectHandler.getInstance().add(this);
   }
 
@@ -38,36 +40,15 @@ public class WorldObject extends ModelInstance {
   }
 
   public Dimensions3 getDimensions() {
-    if(m_dimensions != null) {
-      return m_dimensions;
-    }
-    BoundingBox boundingBox = new BoundingBox();
-    Vector3 dimensions = new Vector3();
-    this.calculateBoundingBox(boundingBox);
-    boundingBox.getDimensions(dimensions);
-    m_dimensions = new Dimensions3(dimensions.x, dimensions.y, dimensions.z);
-    return m_dimensions;
+    return new Dimensions3((float) m_box.getSizeX(), (float) m_box.getSizeY(), (float) m_box.getSizeZ());
   }
 
   public Box3D getBox() {
     return m_box;
   }
 
-  public EulerAngles getAngles() {
-    return m_angles;
-  }
-
-  public void setPosition(float x, float y, float z) {
-    setPosition(new Vector3(x, y, z));
-  }
-
   public void setShouldRender(boolean shouldRender) {
     m_shouldRender = shouldRender;
-  }
-
-  public void setRotation(EulerAngles angles) {
-    m_angles = angles;
-    transform.setFromEulerAnglesRad(angles.getYaw(), angles.getPitch(), angles.getRoll());
   }
 
   public boolean shouldRender() {
