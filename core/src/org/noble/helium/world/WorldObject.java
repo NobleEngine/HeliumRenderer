@@ -5,13 +5,14 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import org.noble.helium.handling.ObjectHandler;
+import org.noble.helium.math.Box3D;
 import org.noble.helium.math.Dimensions3;
 import org.noble.helium.math.EulerAngles;
 import org.noble.helium.HeliumIO;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 
 public class WorldObject extends ModelInstance {
-  private AxisOrientedBoundingBox m_boundingBox;
-  private Vector3 m_position;
+  private final Box3D m_box;
   private Dimensions3 m_dimensions;
   private EulerAngles m_angles;
   private boolean m_shouldRender;
@@ -19,16 +20,12 @@ public class WorldObject extends ModelInstance {
 
   public WorldObject(Model model, Vector3 position, int collision) {
     super(model);
+    m_box = new Box3D(position, getDimensions());
     setPosition(position);
     m_collisionType = collision;
     m_shouldRender = true;
     m_angles = new EulerAngles(0f,0f,0f);
-    m_boundingBox = new AxisOrientedBoundingBox(getPosition(), getDimensions(), getAngles());
     ObjectHandler.getInstance().add(this);
-  }
-
-  public AxisOrientedBoundingBox getBoundingBox() {
-    return m_boundingBox;
   }
 
   public int getCollisionType() {
@@ -36,8 +33,8 @@ public class WorldObject extends ModelInstance {
   }
 
   public void setPosition(Vector3 position) {
-    m_position = position;
-    transform.setToTranslation(m_position);
+    m_box.setPosition(position);
+    transform.setToTranslation(position);
   }
 
   public Dimensions3 getDimensions() {
@@ -52,13 +49,16 @@ public class WorldObject extends ModelInstance {
     return m_dimensions;
   }
 
+  public Box3D getBox() {
+    return m_box;
+  }
+
   public EulerAngles getAngles() {
     return m_angles;
   }
 
   public void setPosition(float x, float y, float z) {
-    transform.setToTranslation(x, y, z);
-    m_position = new Vector3(x, y, z);
+    setPosition(new Vector3(x, y, z));
   }
 
   public void setShouldRender(boolean shouldRender) {
@@ -75,7 +75,8 @@ public class WorldObject extends ModelInstance {
   }
 
   public Vector3 getPosition() {
-    return m_position;
+    Point3DBasics position = m_box.getPosition();
+    return new Vector3((float) position.getX(), (float) position.getY(), (float) position.getZ());
   }
 
   public boolean isColliding(WorldObject object) {
@@ -88,11 +89,11 @@ public class WorldObject extends ModelInstance {
       return false;
     }
 
-    return m_boundingBox.isColliding(object.getBoundingBox());
+    return m_box.intersects(object.getBox());
   }
 
   public void update() {
-    m_boundingBox = new AxisOrientedBoundingBox(getPosition(), getDimensions(), getAngles());
+    m_box.set(new Box3D(getPosition(), getDimensions()));
   }
 
   public void dispose() {

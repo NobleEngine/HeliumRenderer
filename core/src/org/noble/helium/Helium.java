@@ -28,7 +28,6 @@ public class Helium extends Game {
   private static Helium m_instance;
   private final ArrayList<Subsystem> m_subsystems;
   private PlayerController m_player;
-  private UserInterface m_userInterface;
   private HeliumModelBatch m_modelBatch;
   private LevelHandler m_levelHandler;
 
@@ -75,10 +74,9 @@ public class Helium extends Game {
     SystemInformation.getInstance();
     m_player = PlayerController.getInstance();
     m_levelHandler = LevelHandler.getInstance();
-    m_userInterface = UserInterface.getInstance();
     m_subsystems.add(ScriptRunner.getInstance());
     m_subsystems.add(InputProcessing.getInstance());
-    m_subsystems.add(m_userInterface);
+    m_subsystems.add(UserInterface.getInstance());
     setTargetFPS(Gdx.graphics.getDisplayMode().refreshRate);
 
     m_modelBatch = new HeliumModelBatch();
@@ -108,6 +106,7 @@ public class Helium extends Game {
     super.render();
     m_subsystems.forEach(Subsystem::update);
 
+    //TODO: This must be flawed in some way, it doesn't hit the frame rate?
     while (Units.nanosecondsToSeconds(System.nanoTime()) - startTime < m_targetTime) {
       try {
         // This warning is not problematic.
