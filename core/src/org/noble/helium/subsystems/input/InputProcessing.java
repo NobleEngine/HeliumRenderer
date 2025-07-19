@@ -49,6 +49,18 @@ public class InputProcessing extends Subsystem {
     m_keyBindings.add(new Action(keyCode, func, type));
   }
 
+  public boolean isAnyPlayerMovementKeyPressed() {
+    ArrayList<Action> pressedActions = getQueuedActions();
+      for (Action action : pressedActions) {
+        return switch (action.getFunction()) {
+          case STRAFE_LEFT, STRAFE_RIGHT, STRAFE_FORWARD, STRAFE_BACKWARD -> true;
+          default -> false;
+        };
+      }
+
+      return false; // default to false
+  }
+
   @Override
   public void update() {
     ArrayList<Action> pressedActions = getQueuedActions();

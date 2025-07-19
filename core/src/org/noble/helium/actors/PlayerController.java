@@ -1,12 +1,14 @@
 package org.noble.helium.actors;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
+import org.noble.helium.Constants;
 import org.noble.helium.Helium;
 import org.noble.helium.HeliumIO;
 import org.noble.helium.handling.TextureHandler;
@@ -17,6 +19,7 @@ import org.noble.helium.subsystems.input.InputProcessing;
 import org.noble.helium.world.WorldObject;
 
 import java.util.ArrayList;
+import java.util.Vector;
 
 public class PlayerController extends Actor {
   private final PerspectiveCamera m_camera;
@@ -24,9 +27,10 @@ public class PlayerController extends Actor {
   private static PlayerController m_instance;
   private float m_cameraPitch, m_cameraYaw;
   private final PlayerType m_playerType;
+  private final Vector3 m_playerVelocity = new Vector3();
 
   private PlayerController() {
-    super(null, 100, 8f);
+    super(null, 100, Constants.Player.k_defaultSpeed);
     m_playerType = PlayerType.STANDARD;
     m_engine = Helium.getInstance();
 
@@ -59,6 +63,10 @@ public class PlayerController extends Actor {
     return m_camera;
   }
 
+  public Vector3 getPlayerVelocity() {
+    return m_playerVelocity;
+  }
+
   @Override
   public void setPosition(Vector3 pos) {
     super.setPosition(pos);
@@ -77,8 +85,8 @@ public class PlayerController extends Actor {
       m_cameraPitch = 0.0f;
     }
 
-    Quaternion quaternion = new Quaternion().setEulerAngles(m_cameraYaw, m_cameraPitch, 0);
-    m_camera.direction.set(Vector3.Z).mul(quaternion);
+    //TODO: If fly mode, set pitch to m_cameraPitch
+    m_camera.direction.set(Vector3.Z).mul(new Quaternion().setEulerAngles(m_cameraYaw, 0, 0));
 
     // Move the camera based on keyboard input
     Vector3 nextPos = m_camera.position.cpy();
@@ -86,22 +94,61 @@ public class PlayerController extends Actor {
     m_camera.update();
     m_worldObject.update();
 
+    float delta = m_engine.getDelta();
+    float speed = (getSpeed() / 0.01f * delta) * delta;
     ArrayList<Action> actions = InputProcessing.getInstance().getQueuedActions();
+
     for(Action action : actions) {
-      if(action.getFunction() == Action.InputFunction.STRAFE_FORWARD) {
-        nextPos.add(tmp.set(m_camera.direction).scl(getSpeed() * m_engine.getDelta()));
+      //TODO: fix actions
+
+      if (!InputProcessing.getInstance().isAnyPlayerMovementKeyPressed()) {
+        float deceleration = Constants.World.k_defaultAcceleration * delta;
+        m_playerVelocity.lerp(Vector3.Zero, deceleration * delta);
       }
-      if(action.getFunction() == Action.InputFunction.STRAFE_BACKWARD) {
-        nextPos.add(tmp.set(m_camera.direction).scl(-getSpeed() * m_engine.getDelta()));
+      else {
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+          m_playerVelocity.x += speed;
+        } else if (m_playerVelocity.x > 0.0f) {
+          m_playerVelocity.x -= speed;
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+          m_playerVelocity.x -= speed;
+        } else if (m_playerVelocity.x < 0.0f) {
+          m_playerVelocity.x += speed;
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+          m_playerVelocity.z -= speed;
+        } else if (m_playerVelocity.z < 0.0f) {
+          m_playerVelocity.z += speed;
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+          m_playerVelocity.z += speed;
+        } else if (m_playerVelocity.z > 0.0f) {
+          m_playerVelocity.z -= speed;
+        }
+
+        m_playerVelocity.x = MathUtils.clamp(m_playerVelocity.x, -getSpeed() * delta, getSpeed() * delta);
+        m_playerVelocity.z = MathUtils.clamp(m_playerVelocity.z, -getSpeed() * delta, getSpeed() * delta);
+
+        if (action.getFunction() == Action.InputFunction.STRAFE_FORWARD && action.getFunction() == Action.InputFunction.STRAFE_BACKWARD) {
+          m_playerVelocity.x = 0.0f;
+        }
+        if (action.getFunction() == Action.InputFunction.STRAFE_RIGHT && action.getFunction() == Action.InputFunction.STRAFE_LEFT) {
+          m_playerVelocity.z = 0.0f;
+        }
       }
-      if(action.getFunction() == Action.InputFunction.STRAFE_LEFT) {
-        nextPos.add(tmp.set(m_camera.direction).crs(m_camera.up).nor().scl(-getSpeed() * m_engine.getDelta()));
-      }
-      if(action.getFunction() == Action.InputFunction.STRAFE_RIGHT) {
-        nextPos.add(tmp.set(m_camera.direction).crs(m_camera.up).nor().scl(getSpeed() * m_engine.getDelta()));
-      }
+
+      nextPos.add(tmp.set(m_camera.direction).scl(m_playerVelocity.x));
+      nextPos.add(tmp.set(m_camera.direction).crs(m_camera.up).nor().scl(m_playerVelocity.z));
     }
     setPosition(nextPos);
+
+    //TODO: If DOOM mode, don't do this
+    m_camera.direction.set(Vector3.Z).mul(new Quaternion().setEulerAngles(m_cameraYaw, m_cameraPitch, 0));
+    m_camera.update();
 
     if(getHealth() <= 0) {
       HeliumIO.notify("Player", "You Died!");
