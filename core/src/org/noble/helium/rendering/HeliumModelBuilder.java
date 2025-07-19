@@ -42,11 +42,12 @@ public class HeliumModelBuilder {
       case SPHERE -> {
         return m_modelBuilder.createSphere(
             dimensions.getWidth(), dimensions.getHeight(), dimensions.getDepth(), 100, 100,
-            new Material(TextureAttribute.createNormal(texture)),
+            new Material(TextureAttribute.createDiffuse(texture)),
             VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates);
       }
       default -> {
-        HeliumIO.println("Model Builder", "Unknown shape type: " + shape, HeliumIO.printType.ERROR);
+        HeliumIO.error("Model Builder", new IllegalArgumentException("Unknown shape type " + shape),
+            HeliumIO.ErrorType.FATAL_CLOSE_IMMEDIATELY, true);
         return null;
       }
     }

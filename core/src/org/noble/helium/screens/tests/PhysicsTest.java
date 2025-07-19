@@ -1,8 +1,11 @@
 package org.noble.helium.screens.tests;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 
 import com.badlogic.gdx.math.Vector3;
+import org.noble.helium.HeliumIO;
 import org.noble.helium.actors.Enemy;
 import org.noble.helium.handling.LevelHandler;
 import org.noble.helium.math.Dimensions3;
@@ -10,8 +13,10 @@ import org.noble.helium.rendering.HeliumModelBuilder;
 import org.noble.helium.screens.HeliumLevel;
 import org.noble.helium.world.WorldObject;
 
-public class PhysicsTest extends HeliumLevel {
+import java.util.ArrayList;
 
+public class PhysicsTest extends HeliumLevel {
+  boolean m_debugDraw = false;
   public PhysicsTest() {
     super();
   }
@@ -48,6 +53,22 @@ public class PhysicsTest extends HeliumLevel {
   @Override
   public void render(float delta) {
     super.render(delta);
+
+    if(!m_debugDraw) {
+      if(Gdx.input.isKeyPressed(Input.Keys.Z)) {
+        m_debugDraw = true;
+        HeliumIO.notify("Physics", "Debug drawing enabled!");
+      }
+    } else {
+      ArrayList<WorldObject> objects = m_objectHandler.getAllObjects();
+      for(WorldObject object : objects) {
+        if(!object.equals(m_player.getWorldObject()) && object.isColliding(m_player.getWorldObject())) {
+          object.setTexture(m_textureHandler.getTexture(Color.RED));
+        } else {
+          object.setTexture(m_textureHandler.getTexture(Color.CORAL));
+        }
+      }
+    }
 
     if (m_player.getPosition().y < -100f) {
       m_player.setPosition(new Vector3(m_player.getX(), 150, m_player.getZ()));

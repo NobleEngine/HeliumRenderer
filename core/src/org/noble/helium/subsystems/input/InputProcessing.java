@@ -49,16 +49,24 @@ public class InputProcessing extends Subsystem {
     m_keyBindings.add(new Action(keyCode, func, type));
   }
 
+  public boolean isAnyPlayerMovementKeyPressed() {
+    ArrayList<Action> pressedActions = getQueuedActions();
+      for (Action action : pressedActions) {
+        return switch (action.getFunction()) {
+          case STRAFE_LEFT, STRAFE_RIGHT, STRAFE_FORWARD, STRAFE_BACKWARD -> true;
+          default -> false;
+        };
+      }
+
+      return false; // default to false
+  }
+
   @Override
   public void update() {
     ArrayList<Action> pressedActions = getQueuedActions();
     for (Action action : pressedActions) {
       switch (action.getFunction()) {
-        case JUMP -> m_player.jump(); //10
-        case STRAFE_LEFT -> m_player.strafeLeft();
-        case STRAFE_RIGHT -> m_player.strafeRight();
-        case STRAFE_FORWARD -> m_player.strafeForward();
-        case STRAFE_BACKWARD -> m_player.strafeBackward();
+        //case JUMP -> m_player.jump(); //10
         case MOVE_FASTER -> m_player.setSpeed(Constants.Player.k_fastSpeed);
         case MOVE_STANDARD -> m_player.setSpeed(Constants.Player.k_defaultSpeed);
         case PAUSE -> m_helium.setState(Helium.State.PAUSE);

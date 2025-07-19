@@ -13,6 +13,7 @@ import org.noble.helium.HeliumIO;
 import org.noble.helium.SystemInformation;
 import org.noble.helium.actors.PlayerController;
 import org.noble.helium.subsystems.Subsystem;
+import org.noble.helium.subsystems.input.InputProcessing;
 
 import java.util.HashMap;
 
@@ -53,6 +54,7 @@ public class UserInterface extends Subsystem {
     }
 
     updateHUD();
+    updateDebug();
   }
 
   public void clearStage() {
@@ -60,10 +62,22 @@ public class UserInterface extends Subsystem {
     m_hudLabels.clear();
   }
 
+  private void updateDebug() {
+    if(m_showDebug) {
+      try {
+        m_hudLabels.get("PLAYER_POSITION").setText("Player Position: " + PlayerController.getInstance().getPosition());
+        m_hudLabels.get("PLAYER_SPEED").setText("Player Speed: " + PlayerController.getInstance().getPlayerVelocity());
+      } catch (NullPointerException e) {
+        HeliumIO.error("User Interface", e, HeliumIO.ErrorType.NONFATAL, false);
+      }
+    }
+  }
+
   private void updateHUD() {
     try {
       m_hudLabels.get("PLAYER_HEALTH").setText("Player Health: " + PlayerController.getInstance().getHealth());
       m_hudLabels.get("GAME_FPS").setText("Game FPS: " + Helium.getInstance().getFPS());
+      m_hudLabels.get("ANY_PLAYER_MOVEMENT_KEYS_PRESSED").setText("Any Player Movement Keys Pressed: " + InputProcessing.getInstance().isAnyPlayerMovementKeyPressed());
     } catch (NullPointerException e) {
       HeliumIO.error("User Interface", e, HeliumIO.ErrorType.NONFATAL, false);
     }
@@ -117,6 +131,27 @@ public class UserInterface extends Subsystem {
     GLLabel.setWidth(100);
     GLLabel.setHeight(100);
     addActor(GLLabel);
+
+    VisLabel PlayerPosLabel = new VisLabel("Player Position: " + PlayerController.getInstance().getPosition());
+    PlayerPosLabel.setPosition(0, Gdx.graphics.getHeight() - 195);
+    PlayerPosLabel.setWidth(100);
+    PlayerPosLabel.setHeight(100);
+    addActor(PlayerPosLabel);
+    m_hudLabels.put("PLAYER_POSITION", PlayerPosLabel);
+
+    VisLabel PlayerSpeedLabel = new VisLabel("Player Speed: " + PlayerController.getInstance().getPlayerVelocity());
+    PlayerSpeedLabel.setPosition(0, Gdx.graphics.getHeight() - 220);
+    PlayerSpeedLabel.setWidth(100);
+    PlayerSpeedLabel.setHeight(100);
+    addActor(PlayerSpeedLabel);
+    m_hudLabels.put("PLAYER_SPEED", PlayerSpeedLabel);
+
+    VisLabel movementKeysPressedLabel = new VisLabel("Any Player Movement Keys Pressed: " + InputProcessing.getInstance().isAnyPlayerMovementKeyPressed());
+    movementKeysPressedLabel.setPosition(0, Gdx.graphics.getHeight() - 245);
+    movementKeysPressedLabel.setWidth(100);
+    movementKeysPressedLabel.setHeight(100);
+    addActor(movementKeysPressedLabel);
+    m_hudLabels.put("ANY_PLAYER_MOVEMENT_KEYS_PRESSED", movementKeysPressedLabel);
   }
 
   public void reset() {

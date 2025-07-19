@@ -1,10 +1,17 @@
 package org.noble.helium.world;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import org.noble.helium.handling.ObjectHandler;
+import org.noble.helium.handling.TextureHandler;
 import org.noble.helium.math.Box3D;
 import org.noble.helium.math.Dimensions3;
 import org.noble.helium.HeliumIO;
@@ -49,6 +56,10 @@ public class WorldObject extends ModelInstance {
 
   public void setShouldRender(boolean shouldRender) {
     m_shouldRender = shouldRender;
+  }
+
+  public void setTexture(Texture texture) {
+    materials.forEach(material -> material.set(new Material(TextureAttribute.createDiffuse(texture))));
   }
 
   public boolean shouldRender() {
