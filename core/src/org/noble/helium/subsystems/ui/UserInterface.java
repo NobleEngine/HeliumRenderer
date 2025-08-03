@@ -12,6 +12,8 @@ import org.noble.helium.Helium;
 import org.noble.helium.HeliumIO;
 import org.noble.helium.SystemInformation;
 import org.noble.helium.actors.PlayerController;
+import org.noble.helium.handling.ObjectHandler;
+import org.noble.helium.math.Units;
 import org.noble.helium.subsystems.Subsystem;
 
 import java.util.HashMap;
@@ -53,6 +55,9 @@ public class UserInterface extends Subsystem {
     }
 
     updateHUD();
+    if(m_showDebug) {
+      updateDebug();
+    }
   }
 
   public void clearStage() {
@@ -63,7 +68,19 @@ public class UserInterface extends Subsystem {
   private void updateHUD() {
     try {
       m_hudLabels.get("PLAYER_HEALTH").setText("Player Health: " + PlayerController.getInstance().getHealth());
-      m_hudLabels.get("GAME_FPS").setText("Game FPS: " + Helium.getInstance().getFPS());
+    } catch (NullPointerException e) {
+      HeliumIO.error("User Interface", e, HeliumIO.ErrorType.NONFATAL, false);
+    }
+  }
+
+  private void updateDebug() {
+    try {
+      m_hudLabels.get("GAME_FPS").setText("Game FPS: " + Helium.getInstance().getFPS() + ", Frametime: " + Helium.getInstance().getDelta());
+      m_hudLabels.get("PLAYER_POSITION").setText("Player Position: " + PlayerController.getInstance().getPosition());
+      m_hudLabels.get("MEMORY").setText(
+          "Allocated memory: " + Units.bytesToMB(Runtime.getRuntime().totalMemory()) + "MB, " +
+          "Free memory: " + Units.bytesToMB(Runtime.getRuntime().freeMemory()) + "MB");
+      m_hudLabels.get("WORLDOBJECT_COUNT").setText("Number of World Objects: " + ObjectHandler.getInstance().getAllObjects().size());
     } catch (NullPointerException e) {
       HeliumIO.error("User Interface", e, HeliumIO.ErrorType.NONFATAL, false);
     }
@@ -76,13 +93,6 @@ public class UserInterface extends Subsystem {
     playerHealth.setHeight(100);
     addActor(playerHealth);
     m_hudLabels.put("PLAYER_HEALTH", playerHealth);
-
-    VisLabel gameFPS = new VisLabel();
-    gameFPS.setPosition(10, 35);
-    gameFPS.setWidth(100);
-    gameFPS.setHeight(100);
-    addActor(gameFPS);
-    m_hudLabels.put("GAME_FPS", gameFPS);
   }
 
   private void addDebug() {
@@ -117,6 +127,34 @@ public class UserInterface extends Subsystem {
     GLLabel.setWidth(100);
     GLLabel.setHeight(100);
     addActor(GLLabel);
+
+    VisLabel gameFPS = new VisLabel();
+    gameFPS.setPosition(0, Gdx.graphics.getHeight() - 195);
+    gameFPS.setWidth(100);
+    gameFPS.setHeight(100);
+    addActor(gameFPS);
+    m_hudLabels.put("GAME_FPS", gameFPS);
+
+    VisLabel playerPosition = new VisLabel();
+    playerPosition.setPosition(0, Gdx.graphics.getHeight() - 220);
+    playerPosition.setWidth(100);
+    playerPosition.setHeight(100);
+    addActor(playerPosition);
+    m_hudLabels.put("PLAYER_POSITION", playerPosition);
+
+    VisLabel memory = new VisLabel();
+    memory.setPosition(0, Gdx.graphics.getHeight() - 245);
+    memory.setWidth(100);
+    memory.setHeight(100);
+    addActor(memory);
+    m_hudLabels.put("MEMORY", memory);
+
+    VisLabel objects = new VisLabel();
+    objects.setPosition(0, Gdx.graphics.getHeight() - 270);
+    objects.setWidth(100);
+    objects.setHeight(100);
+    addActor(objects);
+    m_hudLabels.put("WORLDOBJECT_COUNT", objects);
   }
 
   public void reset() {

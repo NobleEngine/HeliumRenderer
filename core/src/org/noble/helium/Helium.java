@@ -89,7 +89,7 @@ public class Helium extends Game {
     m_delta = Gdx.graphics.getDeltaTime();
     double startTime = Units.nanosecondsToSeconds(System.nanoTime()); //in seconds
 
-    if(m_delta > m_targetTime + 0.1) {
+    if(m_delta > (m_targetTime * 1.3)) {
       HeliumIO.println(Constants.Engine.k_prettyName, "Loop overrun by " +
           String.valueOf(m_delta - m_targetTime).substring(0,6) + " seconds!", HeliumIO.printType.WARNING);
     }

@@ -54,11 +54,6 @@ public class InputProcessing extends Subsystem {
     ArrayList<Action> pressedActions = getQueuedActions();
     for (Action action : pressedActions) {
       switch (action.getFunction()) {
-        case JUMP -> m_player.jump(); //10
-        case STRAFE_LEFT -> m_player.strafeLeft();
-        case STRAFE_RIGHT -> m_player.strafeRight();
-        case STRAFE_FORWARD -> m_player.strafeForward();
-        case STRAFE_BACKWARD -> m_player.strafeBackward();
         case MOVE_FASTER -> m_player.setSpeed(Constants.Player.k_fastSpeed);
         case MOVE_STANDARD -> m_player.setSpeed(Constants.Player.k_defaultSpeed);
         case PAUSE -> m_helium.setState(Helium.State.PAUSE);

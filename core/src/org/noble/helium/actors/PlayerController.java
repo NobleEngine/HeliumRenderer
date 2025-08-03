@@ -14,24 +14,21 @@ import org.noble.helium.handling.ObjectHandler;
 import org.noble.helium.handling.TextureHandler;
 import org.noble.helium.math.Dimensions3;
 import org.noble.helium.rendering.HeliumModelBuilder;
+import org.noble.helium.subsystems.input.Action;
+import org.noble.helium.subsystems.input.InputProcessing;
 import org.noble.helium.world.WorldObject;
 
 import java.util.ArrayList;
 
 public class PlayerController extends Actor {
-  //TODO: Refactor this class LAST
   private final PerspectiveCamera m_camera;
   private final Helium m_engine;
   private static PlayerController m_instance;
   private float m_cameraPitch, m_cameraYaw, m_verticalVelocity;
   private final PlayerType m_playerType;
 
-  private boolean m_wantsToJump = false;
-  String m_loggedName;
-
   private PlayerController() {
     super(null, 100, 8f);
-    m_loggedName = "PlayerController";
     m_playerType = PlayerType.STANDARD;
     m_engine = Helium.getInstance();
 
@@ -104,29 +101,22 @@ public class PlayerController extends Actor {
     m_camera.direction.set(Vector3.Z).mul(quaternion);
   }
 
-  boolean m_strafeForward;
-  boolean m_strafeBackward;
-  boolean m_strafeLeft;
-  boolean m_strafeRight;
-
   private void setVectorFromKeyboard(Vector3 nextPos, Vector3 tmp) {
-    if (m_strafeForward) {
-      nextPos.add(tmp.set(m_camera.direction).scl(getSpeed() * m_engine.getDelta()));
+    ArrayList<Action> actions = InputProcessing.getInstance().getQueuedActions();
+    for(Action a : actions) {
+      if(a.getFunction() == Action.InputFunction.STRAFE_FORWARD) {
+        nextPos.add(tmp.set(m_camera.direction).scl(getSpeed() * m_engine.getDelta()));
+      }
+      if(a.getFunction() == Action.InputFunction.STRAFE_BACKWARD) {
+        nextPos.add(tmp.set(m_camera.direction).scl(-getSpeed() * m_engine.getDelta()));
+      }
+      if(a.getFunction() == Action.InputFunction.STRAFE_LEFT) {
+        nextPos.add(tmp.set(m_camera.direction).crs(m_camera.up).nor().scl(-getSpeed() * m_engine.getDelta()));
+      }
+      if(a.getFunction() == Action.InputFunction.STRAFE_RIGHT) {
+        nextPos.add(tmp.set(m_camera.direction).crs(m_camera.up).nor().scl(getSpeed() * m_engine.getDelta()));
+      }
     }
-    if (m_strafeBackward) {
-      nextPos.add(tmp.set(m_camera.direction).scl(-getSpeed() * m_engine.getDelta()));
-    }
-    if (m_strafeLeft) {
-      nextPos.add(tmp.set(m_camera.direction).crs(m_camera.up).nor().scl(-getSpeed() * m_engine.getDelta()));
-    }
-    if (m_strafeRight) {
-      nextPos.add(tmp.set(m_camera.direction).crs(m_camera.up).nor().scl(getSpeed() * m_engine.getDelta()));
-    }
-
-    m_strafeForward = false;
-    m_strafeBackward = false;
-    m_strafeLeft = false;
-    m_strafeRight = false;
   }
 
   private void translate() {
@@ -134,10 +124,19 @@ public class PlayerController extends Actor {
     Vector3 nextPos = m_camera.position.cpy();
     Vector3 tmp = new Vector3();
     ArrayList<WorldObject> collisions = getCollisions();
+    boolean shouldJump = false;
+
+    ArrayList<Action> actions = InputProcessing.getInstance().getQueuedActions();
+    for(Action a : actions) {
+      if(a.getFunction() == Action.InputFunction.JUMP) {
+        shouldJump = true;
+        break;
+      }
+    }
 
     switch(m_playerType) {
       case STANDARD, DOOM -> {
-        calculateCollisions(nextPos, collisions);
+        calculateCollisions(nextPos, collisions, shouldJump);
         setVerticalVelocity(getVerticalVelocity() - 15f * m_engine.getDelta());
 
         float tempY = nextPos.y;
@@ -145,7 +144,7 @@ public class PlayerController extends Actor {
         nextPos.y = tempY + (getVerticalVelocity() * m_engine.getDelta());
       }
       case FLY -> {
-        calculateCollisions(nextPos, collisions);
+        calculateCollisions(nextPos, collisions, shouldJump);
         setVectorFromKeyboard(nextPos, tmp);
       }
       case GHOST -> setVectorFromKeyboard(nextPos, tmp);
@@ -155,88 +154,83 @@ public class PlayerController extends Actor {
 
   }
 
-  private void calculateCollisions(Vector3 nextPos, ArrayList<WorldObject> collisions) {
+  private void calculateCollisions(Vector3 nextPos, ArrayList<WorldObject> collisions, boolean wantsToJump) {
     boolean shouldCalculate = true;
+    boolean hasClimbable = false;
+
     for (WorldObject collision : collisions) {
+      Vector3 objPos = collision.getPosition();
+      Dimensions3 objDims = collision.getDimensions();
+      Vector3 myPos = m_worldObject.getPosition();
+      Dimensions3 myDims = m_worldObject.getDimensions();
+
+      // Handle climbable surfaces
       if (collision.getCollisionType() == WorldObject.CollisionType.CLIMBABLE) {
-        float topFaceOfObj = collision.getPosition().y + collision.getDimensions().getHeight() / 2f;
-        float translation = topFaceOfObj + m_worldObject.getDimensions().getHeight() / 2f;
-        float movementSpeed = (m_engine.getDelta() * 2f);
-        float yMovement = translation - nextPos.y;
-        if (translation > nextPos.y) {
-          if (yMovement < 3f) {
-            movementSpeed *= 4f;
-            shouldCalculate = false;
-          }
-          nextPos.y += (yMovement) * movementSpeed;
-        }
-        setVerticalVelocity(0f);
-        m_wantsToJump = false;
-      }
-      float extentA_x = m_worldObject.getDimensions().getWidth() / 2.0f;
-      float extentA_y = m_worldObject.getDimensions().getHeight() / 2.0f;
-      float extentA_z = m_worldObject.getDimensions().getDepth() / 2.0f;
+        hasClimbable = true;
 
-      float extentB_x = collision.getDimensions().getWidth() / 2.0f;
-      float extentB_y = collision.getDimensions().getHeight() / 2.0f;
-      float extentB_z = collision.getDimensions().getDepth() / 2.0f;
+        float topOfObject = objPos.y + objDims.getHeight() / 2f;
+        float targetY = topOfObject + myDims.getHeight() / 2f;
+        float yMovement = targetY - nextPos.y;
 
-      float overlapX = (extentA_x + extentB_x) - Math.abs(m_worldObject.getPosition().x - collision.getPosition().x);
-      float overlapY = (extentA_y + extentB_y) - Math.abs(m_worldObject.getPosition().y - collision.getPosition().y);
-      float overlapZ = (extentA_z + extentB_z) - Math.abs(m_worldObject.getPosition().z - collision.getPosition().z);
-
-      if (shouldCalculate) {
-        if (overlapX < overlapY && overlapX < overlapZ) {
-          // Smallest overlap is in the x-axis
-          if (m_worldObject.getPosition().x < collision.getPosition().x) {
-            nextPos.x = collision.getPosition().x - (extentA_x + extentB_x);
-          } else {
-            nextPos.x = collision.getPosition().x + (extentA_x + extentB_x);
-          }
-        } else if (overlapY < overlapX && overlapY < overlapZ) {
-          // Smallest overlap is in the y-axis
-          if (m_worldObject.getPosition().y < collision.getPosition().y) {
-            nextPos.y = collision.getPosition().y - (extentA_y + extentB_y);
-          } else {
-            nextPos.y = collision.getPosition().y + (extentA_y + extentB_y);
-          }
-          nextPos.y -= 0.0005f;
-          setVerticalVelocity(0);
-          if(m_wantsToJump) {
+        if (targetY > nextPos.y && yMovement < 3f) {
+          float speed = m_engine.getDelta() * 8f; // 2f * 4f
+          nextPos.y += yMovement * speed;
+          if (wantsToJump) {
             setVerticalVelocity(Constants.Player.k_jumpVerticalVelocity);
-          }
-          m_wantsToJump = false;
-        } else {
-          // Smallest overlap is in the z-axis
-          if (m_worldObject.getPosition().z < collision.getPosition().z) {
-            nextPos.z = collision.getPosition().z - (extentA_z + extentB_z);
           } else {
-            nextPos.z = collision.getPosition().z + (extentA_z + extentB_z);
+            setVerticalVelocity(0f);
           }
+          shouldCalculate = false;
         }
+      }
+
+      // Calculate extents
+      float extentA_x = myDims.getWidth() / 2f;
+      float extentB_x = objDims.getWidth() / 2f;
+
+      float extentA_y = myDims.getHeight() / 2f;
+      float extentB_y = objDims.getHeight() / 2f;
+
+      float extentA_z = myDims.getDepth() / 2f;
+      float extentB_z = objDims.getDepth() / 2f;
+
+      // Calculate overlaps
+      float overlapX = (extentA_x + extentB_x) - Math.abs(myPos.x - objPos.x);
+      float overlapY = (extentA_y + extentB_y) - Math.abs(myPos.y - objPos.y);
+      float overlapZ = (extentA_z + extentB_z) - Math.abs(myPos.z - objPos.z);
+
+      if (!shouldCalculate) {
+        continue;
+      }
+
+      // Resolve smallest axis of overlap
+      if (overlapX < overlapY && overlapX < overlapZ) {
+        if (myPos.x < objPos.x) {
+          nextPos.x = objPos.x - (extentA_x + extentB_x);
+        } else {
+          nextPos.x = objPos.x + (extentA_x + extentB_x);
+        }
+      } else if (overlapY < overlapX && overlapY < overlapZ) {
+        if (myPos.y < objPos.y) {
+          nextPos.y = objPos.y - (extentA_y + extentB_y);
+        } else {
+          nextPos.y = objPos.y + (extentA_y + extentB_y);
+        }
+
+        nextPos.y -= 0.0005f;
+        setVerticalVelocity(0f);
+      } else {
+        if (myPos.z < objPos.z) {
+          nextPos.z = objPos.z - (extentA_z + extentB_z);
+        } else {
+          nextPos.z = objPos.z + (extentA_z + extentB_z);
+        }
+      }
+
+      if (wantsToJump && (getVerticalVelocity() == 0.0f || hasClimbable)) {
+        setVerticalVelocity(Constants.Player.k_jumpVerticalVelocity);
       }
     }
-    m_wantsToJump = false;
-  }
-
-  public void jump() {
-    m_wantsToJump = true;
-  }
-
-  public void strafeForward() {
-    m_strafeForward = true;
-  }
-
-  public void strafeBackward() {
-    m_strafeBackward = true;
-  }
-
-  public void strafeLeft() {
-    m_strafeLeft = true;
-  }
-
-  public void strafeRight() {
-    m_strafeRight = true;
   }
 
   public void update() {
