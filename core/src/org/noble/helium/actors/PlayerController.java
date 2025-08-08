@@ -103,6 +103,7 @@ public class PlayerController extends Actor {
 
   private void setVectorFromKeyboard(Vector3 nextPos, Vector3 tmp) {
     ArrayList<Action> actions = InputProcessing.getInstance().getQueuedActions();
+    m_camera.direction.set(Vector3.Z).mul(new Quaternion().setEulerAngles(m_cameraYaw, 0, 0));
     for(Action a : actions) {
       if(a.getFunction() == Action.InputFunction.STRAFE_FORWARD) {
         nextPos.add(tmp.set(m_camera.direction).scl(getSpeed() * m_engine.getDelta()));
@@ -117,6 +118,7 @@ public class PlayerController extends Actor {
         nextPos.add(tmp.set(m_camera.direction).crs(m_camera.up).nor().scl(getSpeed() * m_engine.getDelta()));
       }
     }
+    m_camera.direction.set(Vector3.Z).mul(new Quaternion().setEulerAngles(m_cameraYaw, m_cameraPitch, 0));
   }
 
   private void translate() {
@@ -139,9 +141,8 @@ public class PlayerController extends Actor {
         calculateCollisions(nextPos, collisions, shouldJump);
         setVerticalVelocity(getVerticalVelocity() - 15f * m_engine.getDelta());
 
-        float tempY = nextPos.y;
         setVectorFromKeyboard(nextPos, tmp);
-        nextPos.y = tempY + (getVerticalVelocity() * m_engine.getDelta());
+        nextPos.y += getVerticalVelocity() * m_engine.getDelta();
       }
       case FLY -> {
         calculateCollisions(nextPos, collisions, shouldJump);
