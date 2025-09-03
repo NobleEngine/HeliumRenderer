@@ -21,6 +21,7 @@ import java.util.Objects;
 
 public class Helium extends Game {
   private State m_state;
+  private WindowMode m_windowMode;
   private float m_delta;
   private double m_targetTime;
   private String m_windowTitle;
@@ -49,7 +50,11 @@ public class Helium extends Game {
     return m_modelBatch;
   }
 
-  public State getStatus() {
+  public WindowMode getWindowMode() {
+    return m_windowMode;
+  }
+
+  public State getState() {
     return m_state;
   }
 
@@ -70,6 +75,7 @@ public class Helium extends Game {
     HeliumIO.println("Telemetry", "Warnings look like this", HeliumIO.printType.WARNING);
     HeliumIO.println("Telemetry", "Errors look like this", HeliumIO.printType.ERROR);
     setBackgroundColor(Color.BLACK);
+    setWindowMode(WindowMode.WINDOWED);
 
     SystemInformation.getInstance();
     m_player = PlayerController.getInstance();
@@ -85,7 +91,7 @@ public class Helium extends Game {
 
   @Override
   public void render() {
-    setTitle(Constants.Engine.k_prettyName + " - " + m_levelHandler.getLevelName() + " - " + getStatus());
+    setTitle(Constants.Engine.k_prettyName + " - " + m_levelHandler.getLevelName() + " - " + getState());
     m_delta = Gdx.graphics.getDeltaTime();
     double startTime = Units.nanosecondsToSeconds(System.nanoTime()); //in seconds
 
@@ -99,7 +105,7 @@ public class Helium extends Game {
     ScreenUtils.clear(getBackgroundColor());
 //    Gdx.gl.glClearColor(1,0,0,0);
 
-    if(getStatus() == State.PLAY) {
+    if(getState() == State.PLAY) {
       m_player.update();
     }
 
@@ -123,6 +129,8 @@ public class Helium extends Game {
       case FULLSCREEN -> Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
       case MAXIMIZED -> Gdx.graphics.setWindowedMode(Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
     }
+
+    m_windowMode = windowMode;
   }
 
   public void setState(State state) {

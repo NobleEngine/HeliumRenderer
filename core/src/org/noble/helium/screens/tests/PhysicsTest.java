@@ -31,7 +31,7 @@ public class PhysicsTest extends HeliumLevel {
         new Dimensions3(30f, 10f, 50f)),new Vector3(),WorldObject.CollisionType.STANDARD);
     new WorldObject(m_modelBuilder.create(HeliumModelBuilder.Shape.CUBE, m_textureHandler.getTexture(Color.CHARTREUSE),
         new Dimensions3(30f, 1f, 50f)),new Vector3(90f, 0f, 0f),WorldObject.CollisionType.STANDARD);
-    new WorldObject(m_modelBuilder.create(HeliumModelBuilder.Shape.CUBE, m_textureHandler.getTexture("textures/dirt.png"),
+    new WorldObject(m_modelBuilder.create(HeliumModelBuilder.Shape.CUBE, m_textureHandler.getTexture("textures/Sky/dusan-osmokrovic.jpg"),
         new Dimensions3(30f, 30f, 30f)),new Vector3(130f, 0f, 0f),WorldObject.CollisionType.STANDARD);
     new WorldObject(m_modelBuilder.create(HeliumModelBuilder.Shape.CUBE, m_textureHandler.getTexture(Color.WHITE),
         new Dimensions3(5f, 100.1f, 16f)),new Vector3(5f, 10f, 25f),WorldObject.CollisionType.CLIMBABLE);

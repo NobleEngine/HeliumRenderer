@@ -25,7 +25,7 @@ public class ScriptRunner extends Subsystem {
 
   @Override
   public void update() {
-    if(Helium.getInstance().getStatus() == Helium.State.PLAY) {
+    if(Helium.getInstance().getState() == Helium.State.PLAY) {
       for (HeliumScript script : m_scripts) {
         script.update();
       }
