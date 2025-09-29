@@ -21,10 +21,10 @@ public class InputProcessing extends Subsystem {
     m_helium = Helium.getInstance();
 
     //Player Movement
-    bindKey(Input.Keys.A, InputFunction.STRAFE_LEFT, Action.InputType.PRESSED);
-    bindKey(Input.Keys.D, InputFunction.STRAFE_RIGHT, Action.InputType.PRESSED);
     bindKey(Input.Keys.W, InputFunction.STRAFE_FORWARD, Action.InputType.PRESSED);
+    bindKey(Input.Keys.A, InputFunction.STRAFE_LEFT, Action.InputType.PRESSED);
     bindKey(Input.Keys.S, InputFunction.STRAFE_BACKWARD, Action.InputType.PRESSED);
+    bindKey(Input.Keys.D, InputFunction.STRAFE_RIGHT, Action.InputType.PRESSED);
     bindKey(Input.Keys.SPACE, InputFunction.JUMP, Action.InputType.PRESSED);
 
     //Misc.

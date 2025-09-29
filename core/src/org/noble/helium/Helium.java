@@ -9,7 +9,6 @@ import org.noble.helium.actors.PlayerController;
 import org.noble.helium.handling.LevelHandler;
 import org.noble.helium.handling.ObjectHandler;
 import org.noble.helium.handling.TextureHandler;
-import org.noble.helium.math.Units;
 import org.noble.helium.subsystems.ui.UserInterface;
 import org.noble.helium.subsystems.input.InputProcessing;
 import org.noble.helium.rendering.HeliumModelBatch;
@@ -83,7 +82,6 @@ public class Helium extends Game {
     m_subsystems.add(ScriptRunner.getInstance());
     m_subsystems.add(InputProcessing.getInstance());
     m_subsystems.add(UserInterface.getInstance());
-    setTargetFPS(Gdx.graphics.getDisplayMode().refreshRate);
 
     m_modelBatch = new HeliumModelBatch();
     HeliumIO.println(Constants.Engine.k_prettyName, "Ready to render!");
@@ -93,12 +91,6 @@ public class Helium extends Game {
   public void render() {
     setTitle(Constants.Engine.k_prettyName + " - " + m_levelHandler.getLevelName() + " - " + getState());
     m_delta = Gdx.graphics.getDeltaTime();
-    double startTime = Units.nanosecondsToSeconds(System.nanoTime()); //in seconds
-
-    if(m_delta > (m_targetTime * 1.3)) {
-      HeliumIO.println(Constants.Engine.k_prettyName, "Loop overrun by " +
-          String.valueOf(m_delta - m_targetTime).substring(0,6) + " seconds!", HeliumIO.printType.WARNING);
-    }
 
     Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     Gdx.gl.glClear(GL32.GL_COLOR_BUFFER_BIT | GL32.GL_DEPTH_BUFFER_BIT);
@@ -111,16 +103,6 @@ public class Helium extends Game {
 
     super.render();
     m_subsystems.forEach(Subsystem::update);
-
-    //TODO: This must be flawed in some way, it doesn't hit the frame rate?
-    while (Units.nanosecondsToSeconds(System.nanoTime()) - startTime < m_targetTime) {
-      try {
-        // This warning is not problematic.
-        Thread.sleep(0);
-      } catch (InterruptedException e) {
-        HeliumIO.error(Constants.Engine.k_prettyName, e, HeliumIO.ErrorType.FATAL_CLOSE_GRACEFUL, true);
-      }
-    }
   }
 
   public void setWindowMode(WindowMode windowMode) {
@@ -150,10 +132,6 @@ public class Helium extends Game {
 
   public void setBackgroundColor(Color color) {
     m_backgroundColor = color;
-  }
-
-  public void setTargetFPS(int fps) {
-    m_targetTime = 1.0 / fps;
   }
 
   public void setTitle(String title) {

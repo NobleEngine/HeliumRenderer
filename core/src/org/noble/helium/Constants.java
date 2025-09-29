@@ -9,6 +9,6 @@ public class Constants {
   public static class Player {
     public static final float k_defaultSpeed = 24.0f;
     public static final float k_fastSpeed = 48.0f;
-    public static final float k_jumpVerticalVelocity = 25.0f;
+    public static final float k_jumpVerticalVelocity = 10.0f;
   }
 }
