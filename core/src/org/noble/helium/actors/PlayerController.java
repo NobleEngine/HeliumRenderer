@@ -66,7 +66,9 @@ public class PlayerController extends Actor {
   }
 
   public void setVerticalVelocity(float velocity) {
-    m_verticalVelocity = velocity;
+    if(!(Math.abs(velocity) > 25)) {
+      m_verticalVelocity = velocity;
+    }
   }
 
   @Override
@@ -204,7 +206,7 @@ public class PlayerController extends Actor {
         continue;
       }
 
-      // Resolve smallest axis of overlap
+      // Resolve the smallest axis of overlap
       if (overlapX < overlapY && overlapX < overlapZ) {
         if (myPos.x < objPos.x) {
           nextPos.x = objPos.x - (extentA_x + extentB_x);
@@ -244,6 +246,11 @@ public class PlayerController extends Actor {
       HeliumIO.notify("Player", "You Died!");
       setHealth(100);
     }
+  }
+
+  public void reset() {
+    setVerticalVelocity(0f);
+    setPosition(new Vector3(0f, 0f, 0f));
   }
 
   @Override

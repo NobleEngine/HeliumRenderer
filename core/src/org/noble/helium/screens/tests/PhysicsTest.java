@@ -18,6 +18,7 @@ public class PhysicsTest extends HeliumLevel {
 
   @Override
   public void init() {
+    super.init();
     m_actorHandler.addActor(new Enemy(new WorldObject(m_modelBuilder.create(HeliumModelBuilder.Shape.CUBE,
         m_textureHandler.getTexture(Color.RED), new Dimensions3(2f, 2f, 2f)),
         new Vector3(100f, 5f, 0f), WorldObject.CollisionType.NONE), 10,
@@ -42,7 +43,6 @@ public class PhysicsTest extends HeliumLevel {
     }
 
     m_player.setPosition(new Vector3(0, 50, 0));
-    super.init();
   }
 
   @Override
