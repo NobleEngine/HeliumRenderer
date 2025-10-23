@@ -36,7 +36,7 @@ public class LevelHandler {
   }
 
   public String getLevelName() {
-    return m_currentLevel.getClass().getSimpleName();
+    return m_currentLevel.getSimpleName();
   }
 
   public void dispose() {
@@ -44,28 +44,15 @@ public class LevelHandler {
   }
 
   public void changeScreen(String LDAName) {
-    List<Class<?>> scripts = LDAExtractor.getScripts(Gdx.files.internal("levels/" + LDAName));
-    if(scripts.isEmpty()) {
-      HeliumIO.error("Level Handler",new NoSuchMethodException("No scripts found in level " + LDAName),
-          HeliumIO.ErrorType.FATAL_CLOSE_GRACEFUL, true);
-    }
-    changeScreen(new ParsedLevel(scripts));
-    Map<String, JsonElement> ldaElements;
-    try {
-      ldaElements = LDAExtractor.getLDAElements(Gdx.files.internal("levels/" + LDAName));
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
-    LDAParser.addWorldObjects(ldaElements);
+    changeScreen(new ParsedLevel(LDAName));
   }
 
   public void changeScreen(HeliumLevel level) {
     if (m_currentLevel != null) {
-      HeliumIO.println("Level Handler", "Changing screen to " + level.getClass().getSimpleName());
+      HeliumIO.println("Level Handler", "Changing screen to " + level.getSimpleName());
     } else {
-      HeliumIO.println("Level Handler","Starting game on " + level.getClass().getSimpleName());
+      HeliumIO.println("Level Handler","Starting game on " + level.getSimpleName());
     }
-//    m_userInterface.clear();
     TextureHandler.getInstance().clear();
     m_objectHandler.clear();
     m_helium.setScreen(level);

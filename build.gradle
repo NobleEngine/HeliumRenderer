@@ -1,6 +1,4 @@
 buildscript {
-    
-
     repositories {
         mavenLocal()
         mavenCentral()
@@ -10,7 +8,6 @@ buildscript {
         google()
     }
     dependencies {
-
 
     }
 }
@@ -30,6 +27,7 @@ allprojects {
         gdxControllersVersion = '2.2.1'
         visuiVersion = '1.5.3'
         euclidVersion = '0.22.4'
+        log4jVersion = '2.25.2'
     }
 
     repositories {
@@ -45,7 +43,6 @@ allprojects {
 
 project(":desktop") {
     apply plugin: "java-library"
-
 
     dependencies {
         implementation project(":core")
@@ -77,15 +74,19 @@ project(":core") {
         // https://mvnrepository.com/artifact/org.apache.poi/poi
         implementation group: 'org.apache.poi', name: 'poi', version: '3.9'
 
+        // Euclid
         implementation group: "us.ihmc", name: "euclid", version: "$euclidVersion"
         implementation group: "us.ihmc", name: "euclid-geometry", version: "$euclidVersion"
         implementation group: "us.ihmc", name: "euclid-frame", version: "$euclidVersion"
         implementation group: "us.ihmc", name: "euclid-shape", version: "$euclidVersion"
         implementation group: "us.ihmc", name: "euclid-frame-shape", version: "$euclidVersion"
 
+        // Log4J
+        implementation "org.apache.logging.log4j:log4j-api:$log4jVersion"
+        implementation "org.apache.logging.log4j:log4j-core:$log4jVersion"
 
-        // https://mvnrepository.com/artifact/com.github.oshi/oshi-core
-        implementation("com.github.oshi:oshi-core:3.4.3")
+        // OSHI
+        implementation("com.github.oshi:oshi-core:6.9.1")
 
         implementation 'com.google.code.gson:gson:2.10.1'
 

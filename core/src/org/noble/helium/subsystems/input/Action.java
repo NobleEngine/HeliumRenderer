@@ -18,6 +18,8 @@ public class Action {
       return Gdx.input.isKeyPressed(m_keyCode);
     } else if(m_inputType == InputType.RELEASED) {
       return !Gdx.input.isKeyPressed(m_keyCode);
+    } else if(m_inputType == InputType.JUST_PRESSED) {
+      return Gdx.input.isKeyJustPressed(m_keyCode);
     }
     return false;
   }
@@ -27,7 +29,11 @@ public class Action {
   }
 
   public enum InputFunction {
-    STRAFE_LEFT, STRAFE_RIGHT, STRAFE_FORWARD, STRAFE_BACKWARD, MOVE_FASTER, MOVE_STANDARD, PAUSE, RESUME,
-        FULLSCREEN_MODE, WINDOWED_MODE, JUMP
+    STRAFE_LEFT, STRAFE_RIGHT, STRAFE_FORWARD, STRAFE_BACKWARD, MOVE_FASTER, MOVE_STANDARD, TOGGLE_PAUSE,
+    TOGGLE_FULLSCREEN, JUMP
+  }
+
+  public enum InputType {
+    PRESSED, RELEASED, JUST_PRESSED
   }
 }

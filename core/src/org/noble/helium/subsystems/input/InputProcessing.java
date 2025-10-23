@@ -21,17 +21,17 @@ public class InputProcessing extends Subsystem {
     m_helium = Helium.getInstance();
 
     //Player Movement
-    bindKey(Input.Keys.A, InputFunction.STRAFE_LEFT, InputType.PRESSED);
-    bindKey(Input.Keys.D, InputFunction.STRAFE_RIGHT, InputType.PRESSED);
-    bindKey(Input.Keys.W, InputFunction.STRAFE_FORWARD, InputType.PRESSED);
-    bindKey(Input.Keys.S, InputFunction.STRAFE_BACKWARD, InputType.PRESSED);
-    bindKey(Input.Keys.SPACE, InputFunction.JUMP, InputType.PRESSED);
+    bindKey(Input.Keys.W, InputFunction.STRAFE_FORWARD, Action.InputType.PRESSED);
+    bindKey(Input.Keys.A, InputFunction.STRAFE_LEFT, Action.InputType.PRESSED);
+    bindKey(Input.Keys.S, InputFunction.STRAFE_BACKWARD, Action.InputType.PRESSED);
+    bindKey(Input.Keys.D, InputFunction.STRAFE_RIGHT, Action.InputType.PRESSED);
+    bindKey(Input.Keys.SPACE, InputFunction.JUMP, Action.InputType.PRESSED);
 
     //Misc.
-    bindKey(Input.Keys.SHIFT_LEFT, InputFunction.MOVE_FASTER, InputType.PRESSED);
-    bindKey(Input.Keys.SHIFT_LEFT, InputFunction.MOVE_STANDARD, InputType.RELEASED);
-    bindKeyToggle(Input.Keys.F11, InputFunction.FULLSCREEN_MODE, InputFunction.WINDOWED_MODE);
-    bindKeyToggle(Input.Keys.ESCAPE, InputFunction.PAUSE, InputFunction.RESUME);
+    bindKey(Input.Keys.SHIFT_LEFT, InputFunction.MOVE_FASTER, Action.InputType.PRESSED);
+    bindKey(Input.Keys.SHIFT_LEFT, InputFunction.MOVE_STANDARD, Action.InputType.RELEASED);
+    bindKey(Input.Keys.F11, InputFunction.TOGGLE_FULLSCREEN, Action.InputType.JUST_PRESSED);
+    bindKey(Input.Keys.ESCAPE, InputFunction.TOGGLE_PAUSE, Action.InputType.JUST_PRESSED);
   }
 
   public static InputProcessing getInstance() {
@@ -41,11 +41,7 @@ public class InputProcessing extends Subsystem {
     return m_instance;
   }
 
-  public void bindKeyToggle(int keyCode, InputFunction func1, InputFunction func2) {
-    m_keyBindings.add(new ToggleAction(keyCode, func1, func2));
-  }
-
-  public void bindKey(int keyCode, InputFunction func, InputType type) {
+  public void bindKey(int keyCode, InputFunction func, Action.InputType type) {
     m_keyBindings.add(new Action(keyCode, func, type));
   }
 
@@ -56,10 +52,20 @@ public class InputProcessing extends Subsystem {
       switch (action.getFunction()) {
         case MOVE_FASTER -> m_player.setSpeed(Constants.Player.k_fastSpeed);
         case MOVE_STANDARD -> m_player.setSpeed(Constants.Player.k_defaultSpeed);
-        case PAUSE -> m_helium.setState(Helium.State.PAUSE);
-        case RESUME -> m_helium.setState(Helium.State.PLAY);
-        case FULLSCREEN_MODE -> m_helium.setWindowMode(Helium.WindowMode.FULLSCREEN);
-        case WINDOWED_MODE -> m_helium.setWindowMode(Helium.WindowMode.WINDOWED);
+        case TOGGLE_PAUSE -> {
+          if(m_helium.getState() == Helium.State.PAUSE) {
+            m_helium.setState(Helium.State.PLAY);
+          } else {
+            m_helium.setState(Helium.State.PAUSE);
+          }
+        }
+        case TOGGLE_FULLSCREEN -> {
+          if(m_helium.getWindowMode() == Helium.WindowMode.WINDOWED) {
+            m_helium.setWindowMode(Helium.WindowMode.FULLSCREEN);
+          } else {
+            m_helium.setWindowMode(Helium.WindowMode.WINDOWED);
+          }
+        }
       }
     }
   }

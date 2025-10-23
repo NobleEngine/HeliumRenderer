@@ -36,8 +36,8 @@ public class SystemInformation {
 
     m_osName = os.getFamily();
     m_manufacturer = system.getManufacturer();
-    m_osVersion = os.getVersion().getVersion();
-    m_cpuName = cpu.getName();
+    m_osVersion = os.getVersionInfo().getVersion();
+    m_cpuName = cpu.getProcessorIdentifier().getName();
     m_cpuCores = cpu.getLogicalProcessorCount();
     m_gpuName = Gdx.graphics.getGLVersion().getRendererString();
     m_gpuVendor = Gdx.graphics.getGLVersion().getVendorString();
