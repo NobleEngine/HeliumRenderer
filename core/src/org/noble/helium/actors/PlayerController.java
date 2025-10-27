@@ -66,7 +66,7 @@ public class PlayerController extends Actor {
   }
 
   public void setVerticalVelocity(float velocity) {
-    if(!(Math.abs(velocity) > 25)) {
+    if(!(Math.abs(velocity) > Constants.Player.k_terminalVelocity)) {
       m_verticalVelocity = velocity;
     }
   }
@@ -141,7 +141,7 @@ public class PlayerController extends Actor {
     switch(m_playerType) {
       case STANDARD, DOOM -> {
         calculateCollisions(nextPos, collisions, shouldJump);
-        setVerticalVelocity(getVerticalVelocity() - 15f * m_engine.getDelta());
+        setVerticalVelocity(getVerticalVelocity() - Constants.Player.k_gravity * m_engine.getDelta());
 
         setVectorFromKeyboard(nextPos, tmp);
         nextPos.y += getVerticalVelocity() * m_engine.getDelta();

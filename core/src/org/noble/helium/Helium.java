@@ -95,11 +95,6 @@ public class Helium extends Game {
     Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     Gdx.gl.glClear(GL32.GL_COLOR_BUFFER_BIT | GL32.GL_DEPTH_BUFFER_BIT);
     ScreenUtils.clear(getBackgroundColor());
-//    Gdx.gl.glClearColor(1,0,0,0);
-
-    if(getState() == State.PLAY) {
-      m_player.update();
-    }
 
     super.render();
     m_subsystems.forEach(Subsystem::update);
