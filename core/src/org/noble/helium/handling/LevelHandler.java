@@ -1,18 +1,9 @@
 package org.noble.helium.handling;
 
-import com.badlogic.gdx.Gdx;
-import com.google.gson.JsonElement;
 import org.noble.helium.Helium;
-import org.noble.helium.lda.LDAExtractor;
-import org.noble.helium.lda.LDAParser;
 import org.noble.helium.screens.HeliumLevel;
-import org.noble.helium.screens.ParsedLevel;
 import org.noble.helium.screens.tests.PhysicsTest;
 import org.noble.helium.HeliumIO;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 public class LevelHandler {
   private static LevelHandler m_instance;
@@ -41,10 +32,6 @@ public class LevelHandler {
 
   public void dispose() {
     m_currentLevel.dispose();
-  }
-
-  public void changeScreen(String LDAName) {
-    changeScreen(new ParsedLevel(LDAName));
   }
 
   public void changeScreen(HeliumLevel level) {
